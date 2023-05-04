@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_users_addresses",
+  "info": {
+    "displayName": "address"
+  },
+  "options": {},
+  "attributes": {
+    "location": {
+      "type": "string"
+    },
+    "province": {
+      "type": "enumeration",
+      "enum": [
+        "eastern",
+        "western",
+        "northern",
+        "southern",
+        "north-western",
+        "muchinga",
+        "central",
+        "lusaka",
+        "luapula",
+        "copperbelt"
+      ]
+    },
+    "city": {
+      "type": "string"
+    },
+    "town": {
+      "type": "string"
+    }
+  }
+}

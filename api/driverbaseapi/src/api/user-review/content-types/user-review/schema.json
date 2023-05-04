@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_reviews",
+  "info": {
+    "singularName": "user-review",
+    "pluralName": "user-reviews",
+    "displayName": "UserReview",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "review_body": {
+      "type": "text"
+    },
+    "rating": {
+      "type": "integer"
+    },
+    "userid": {
+      "type": "biginteger"
+    }
+  }
+}

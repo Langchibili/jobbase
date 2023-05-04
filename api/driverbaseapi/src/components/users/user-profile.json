@@ -1,0 +1,73 @@
+{
+  "collectionName": "components_users_user_profiles",
+  "info": {
+    "displayName": "UserProfile",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "firstname": {
+      "type": "string"
+    },
+    "lastname": {
+      "type": "string"
+    },
+    "phone_number": {
+      "type": "integer"
+    },
+    "whatsapp_number": {
+      "type": "integer"
+    },
+    "profile_cover_image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "profile_thumbnail_image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "verified": {
+      "type": "boolean",
+      "default": false
+    },
+    "address": {
+      "displayName": "address",
+      "type": "component",
+      "repeatable": false,
+      "component": "users.address"
+    },
+    "about": {
+      "type": "text"
+    },
+    "gender": {
+      "type": "enumeration",
+      "enum": [
+        "male",
+        "female"
+      ]
+    },
+    "age": {
+      "type": "integer"
+    },
+    "average_rating": {
+      "type": "decimal"
+    },
+    "ratings": {
+      "type": "json"
+    }
+  }
+}

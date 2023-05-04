@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "car_owner_profiles",
+  "info": {
+    "singularName": "car-owner-profile",
+    "pluralName": "car-owner-profiles",
+    "displayName": "CarOwnerProfile",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "userid": {
+      "type": "biginteger"
+    },
+    "details": {
+      "type": "component",
+      "repeatable": false,
+      "component": "users.user-profile"
+    },
+    "jobs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::job.job"
+    }
+  }
+}

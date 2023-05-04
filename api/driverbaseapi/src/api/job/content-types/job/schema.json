@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "jobs",
+  "info": {
+    "singularName": "job",
+    "pluralName": "jobs",
+    "displayName": "Job",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "untitled"
+    },
+    "body": {
+      "type": "text"
+    },
+    "userid": {
+      "type": "biginteger"
+    },
+    "car_owner_profile": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::car-owner-profile.car-owner-profile"
+    },
+    "applicants": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::driver-profile.driver-profile",
+      "inversedBy": "jobs"
+    }
+  }
+}

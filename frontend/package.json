@@ -1,0 +1,38 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.12.1",
+    "filepond": "^4.22.1",
+    "filepond-plugin-file-encode": "^2.1.5",
+    "filepond-plugin-file-metadata": "^1.0.6",
+    "filepond-plugin-file-poster": "^2.3.1",
+    "filepond-plugin-file-validate-size": "^2.2.2",
+    "filepond-plugin-image-crop": "^2.0.4",
+    "filepond-plugin-image-edit": "^1.6.1",
+    "filepond-plugin-image-exif-orientation": "^1.0.9",
+    "filepond-plugin-image-filter": "^1.0.0",
+    "filepond-plugin-image-preview": "^4.6.4",
+    "filepond-plugin-image-resize": "^2.0.7",
+    "filepond-plugin-image-transform": "^3.7.3",
+    "filepond-plugin-image-validate-size": "^1.2.3",
+    "next": "13.2.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-filepond": "^7.0.1",
+    "react-router-dom": "^6.10.0",
+    "strapi-sdk-javascript": "^0.3.3"
+  }
+}
