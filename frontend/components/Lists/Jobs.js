@@ -1,17 +1,18 @@
 import * as React from 'react';
-import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-import { Button } from '@mui/material';
 import Link from 'next/link';
 
 export default class Jobs extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+       carOwnerProfileNames:{}
+    }
   }
   jobBody = (body)=>{
     if(body.length > 50) return body.slice(0,50)+'...'
@@ -26,18 +27,76 @@ export default class Jobs extends React.Component {
      timePart = timePart.split(':')
      return datePart+' '+timePart[0]+ ':'+ timePart[1]
   }
+  
+  showLink = (job)=>{
+    const act = this.props.act
+    if(act === 'edit'){
+       return <Link href={this.props.loggedInUserProfile !== 'logged-out'? '/jobs_manage?type=edit&jid='+job.id : '/login'} className='btn btn-sm btn-info' onClick={this.props.handlePageChange}>Edit</Link>
+    }
+    else if(act === 'delete'){
+      return <Link href={this.props.loggedInUserProfile !== 'logged-out'? '/jobs_manage?type=delete&jid='+job.id : '/login'} className='btn btn-sm btn-danger' onClick={this.props.handlePageChange}>Delete</Link>
+    }
+    return <Link href={this.props.loggedInUserProfile !== 'logged-out'? '/job_application?jid='+job.id : '/login'} className='btn btn-sm btn-danger' onClick={this.props.handlePageChange}>Apply</Link> 
+  }
+   
+  getJobCarOwnersNames = async (jobId,carOwnerProfileNames)=>{
+     const carOwnerProfile = await fetch(this.props.api_url+'/jobs/'+jobId+'/?populate=car_owner_profile',{
+      headers: {
+        'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error));
+
+      if('error' in carOwnerProfile){
+         return carOwnerProfileNames
+      }
+      else{
+        const carOwner = await fetch(this.props.api_url+'/users/'+carOwnerProfile.data.attributes.car_owner_profile.data.attributes.userid+'?populate=carOwnerProfile,carOwnerProfile.details',{
+          headers: {
+            'Content-Type': 'application/json'
+          }
+         }).then(response => response.json())
+          .then(data => data)
+          .catch(error => console.error(error))
+          console.log(carOwner)
+          if(carOwner.profile_update_percentage <= 5){
+            carOwnerProfileNames[jobId] = {
+              firstname:'Unknown',
+              lastname:'CarOwner'
+            }
+          }
+          carOwnerProfileNames[jobId] = {
+            firstname:carOwner.carOwnerProfile.details.firstname, 
+            lastname:carOwner.carOwnerProfile.details.lastname
+          }
+          return carOwnerProfileNames
+      }
+  }
+
   renderJob = ()=> {
     const jobs = this.props.jobs
     if(jobs.length === 0) return <p>Jobs Will Show Soon</p>
     return jobs.map((job)=>{
+      let carOwnerFirstName
+      let carOwnerLastName
+      if(job.id in this.state.carOwnerProfileNames){
+           carOwnerFirstName = this.state.carOwnerProfileNames.firstname
+           carOwnerLastName = this.state.carOwnerProfileNames.lastname
+      }
+      else{
+        carOwnerFirstName = 'Unknown'
+        carOwnerLastName = 'CarOwner'
+      }
+      const carOwnerName = carOwnerFirstName + ' ' +carOwnerLastName
       return (
           <>
-            <ListItem alignItems="flex-start">
+            <ListItem alignItems="flex-start" key={job.id}>
                 <ListItemAvatar>
                   <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
                 </ListItemAvatar>
                 <ListItemText
-                  primary="Summer BBQ"
+                  primary={carOwnerName}
                   secondary={
                     <React.Fragment>
                       <Link href={'/jobs?act=show&jid='+job.id} onClick={this.props.handlePageChange}>
@@ -50,11 +109,13 @@ export default class Jobs extends React.Component {
                           {this.dateCreated(job.attributes.createdAt)}
                         </Typography>
                       </Link>
-                      {" — "+this.jobBody(job.attributes.body)}
+                      <Link href={'/jobs?act=show&jid='+job.id} onClick={this.props.handlePageChange}>
+                       {" — "+this.jobBody(job.attributes.body)}
+                      </Link>
                     </React.Fragment>
                   }
                 />
-              <Link href={this.props.loggedInUserProfile !== 'logged-out'? '/job_application?jid='+job.id : '/login'} className='btn btn-sm btn-danger' onClick={this.props.handlePageChange}>Apply</Link>
+              {this.showLink(job)}
               </ListItem>
               <Divider variant="inset" component="li" />
         </>
@@ -63,6 +124,19 @@ export default class Jobs extends React.Component {
   }
 
   render() {
+    // update car owner profile details#
+    (function (jobs,ctx) {
+      let carOwnerProfileNames = {} 
+      jobs.forEach(async (job)=>{
+        carOwnerProfileNames = await ctx.getJobCarOwnersNames(job.id,carOwnerProfileNames)
+      })
+      ctx.setState({
+         carOwnerProfileNames: carOwnerProfileNames
+      },()=>{
+         console.log(ctx.state.carOwnerProfileNames)
+      })
+    })(this.props.jobs,this)
+
     return <div>{this.renderJob()}</div>
   }
 }

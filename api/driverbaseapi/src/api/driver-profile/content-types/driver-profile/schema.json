@@ -82,18 +82,33 @@
       "default": 10
     },
     "nrc_front": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "nrc_back": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
+    },
+    "driver_category": {
+      "type": "enumeration",
+      "enum": [
+        "truck",
+        "taxi",
+        "tractor",
+        "big-bus",
+        "mini-bus",
+        "canter",
+        "heavy-duty",
+        "noah"
+      ]
     }
   }
 }

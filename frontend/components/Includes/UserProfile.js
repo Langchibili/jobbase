@@ -14,18 +14,15 @@ class UserProfile extends Component {
   render() {
     console.log(this.props.userProfile)
     if(this.props.userProfile === null) return <div>User Not Found</div>
-    
+    if(this.props.userProfile.profile_completion_percentage <= 5) return <div>User Still Making Their Profile</div>
     let profileDetails
     if(this.props.userProfile.type === 'driver') {
-        if(this.props.userProfile.driverProfile === null) return <div><p>Driver Still Buiding Profile, Check Again Soon</p></div>
         profileDetails = this.props.userProfile.driverProfile.details
     }
     if(this.props.userProfile.type === 'car-owner') {
-        if(this.props.userProfile.carOwnerProfile === null) return <div><p>Car Owner Still Buiding Profile, Check Again Soon</p></div>
         profileDetails = this.props.userProfile.carOwnerProfile.details
     }
     
-    const email = this.props.userProfile.email || 'not added'
     const firstname = profileDetails.firstname || 'unknown'
     const lastname = profileDetails.lastname || ' '
     const mobileNumber = profileDetails.phone_number || 'not added'
@@ -34,18 +31,28 @@ class UserProfile extends Component {
     const whatsAppNumber = profileDetails.whatsapp_number || 'not added'
     const about  = profileDetails.about || 'nothing about user added'
     const nameDisplay = firstname ==='unknown'? this.props.userProfile.type : firstname+' '+lastname 
+    const rating = profileDetails.average_rating? profileDetails.average_rating : '0'
+    const reviewsCount = profileDetails.ratings? profileDetails.ratings.length : '0'
 
-    let experience,availability,experience_display,availability_display 
+    let experience,availability,experience_display,availability_display,phone_number 
     if(this.props.userProfile.type === 'driver') {
         // experience and availability stuff
          experience = this.props.userProfile.driverProfile.experience || 'not added'
          availability = this.props.userProfile.driverProfile.available_for_hire
          experience_display = experience === 'not added'? 'not added' : experience.toString() + ' Years Experience'
          availability_display = availability? 'Available For Hire' : 'Unavailable At The Moment'
+         //phone number
+         phone_number = this.props.userProfile.driverProfile.details.phone_number? this.props.userProfile.driverProfile.details.phone_number : '' 
     }
     // profile images stuff
-    const profile_photo = profileDetails.profile_thumbnail_image || '/default-profile.png'
-    const cover_photo = profileDetails.profile_cover_image || '/no-cover-photo.jpg'
+    let cover_photo
+    if(profileDetails.profile_cover_image !== null){
+        const backEndUrl = this.props.api_url.replace('/api','')
+        cover_photo = profileDetails.profile_cover_image.formats? backEndUrl+profileDetails.profile_cover_image.formats.large.url : '/no-cover-photo.jpg'    
+    }
+    else{
+        cover_photo = '/no-cover-photo.jpg' 
+    }
     const coverPhotoStyles = {
         backgroundImage: 'url("'+cover_photo+'")',
         backgroundRepeat: 'no-repeat',
@@ -53,6 +60,16 @@ class UserProfile extends Component {
         backgroundPosition: 'center',
         width: '100%'
     };
+
+    //profile thumbnail stuff
+    let profile_photo
+    if(profileDetails.profile_thumbnail_image !== null){
+        const backEndUrl = this.props.api_url.replace('/api','')
+        profile_photo = profileDetails.profile_thumbnail_image.formats? backEndUrl+profileDetails.profile_thumbnail_image.formats.thumbnail.url : '/default-profile.png'    
+    }
+    else{
+        profile_photo = '/default-profile.png' 
+    }
 
     // address stuff
     let address, province, town, locationDisplay 
@@ -68,6 +85,12 @@ class UserProfile extends Component {
          town  = profileDetails.address.town || 'not added'
          locationDisplay = address === 'not added'? 'Unknown Address' : address 
     }
+    // email stuff
+    let email = this.props.userProfile.email
+    if(email.split('_unset').length > 1){// it mean the email address is not set
+      email = 'unset'
+    }
+
     return (<> 
          <HtmlHead pageTitle={firstname}/>
         <div className="row">
@@ -109,9 +132,9 @@ class UserProfile extends Component {
             <div className="card d-sm-flex flex-xl-column flex-md-row">
             <div className="card-body border-bottom text-center col-xl-12 col-md-6">
                 <div className="d-flex">
-                <Link href={'/reviews?act=add&user_type='+this.props.userProfile.type+'&uid='+this.props.userProfile.id} type="button" className="btn btn-warning me-4">Add Review<span className="btn-icon-end"><i className="fa fa-star" /></span>
-                </Link><a className="contact-icon me-2" href="#"><i className="fa fa-phone" aria-hidden="true" /></a>
-                <a className="contact-icon" href="#"><i className="las la-envelope" /></a>									
+                <Link href={this.props.loggedInUserProfile === 'logged-out' || this.props.loggedInUserProfile === null? '/login' :'/reviews?act=add&user_type='+this.props.userProfile.type+'&uid='+this.props.userProfile.id} type="button" className="btn btn-warning me-4">Add Review<span className="btn-icon-end"><i className="fa fa-star" /></span></Link>
+                {this.props.userProfile.type === 'driver'? <Link className="contact-icon me-2" href={"tel://"+phone_number}><i className="fa fa-phone" aria-hidden="true" /></Link>: ''}
+                {email === 'unset'?'':<Link className="contact-icon" href={"mailto:"+email}><i className="las la-envelope" /></Link>}									
                 </div>
                 <div className="row mt-5">
                 <div className="d-flex flex-wrap col-xl-12">
@@ -126,7 +149,7 @@ class UserProfile extends Component {
                         </svg>
                     </span>
                     <div className="media-body text-left">
-                        <h4 className="fs-18 mb-0 text-black font-w600">100</h4>
+                        <h4 className="fs-18 mb-0 text-black font-w600">{reviewsCount}</h4>
                         <span className="fs-14">Reviews</span>
                     </div>
                     </div>
@@ -137,7 +160,7 @@ class UserProfile extends Component {
                         <path d="M23.2958 17.065L25.0808 20.685C25.1042 20.7325 25.1387 20.7736 25.1814 20.8049C25.224 20.8362 25.2736 20.8569 25.3258 20.865L29.3258 21.445C29.3845 21.4561 29.4391 21.4828 29.4838 21.5225C29.5285 21.5621 29.5616 21.6131 29.5796 21.6701C29.5975 21.7271 29.5997 21.7879 29.5858 21.846C29.572 21.9041 29.5426 21.9573 29.5008 22L26.6108 24.815C26.5728 24.8521 26.5443 24.8979 26.5278 24.9484C26.5113 24.9989 26.5072 25.0526 26.5158 25.105L27.1958 29.105C27.2088 29.1685 27.2029 29.2343 27.1787 29.2944C27.1546 29.3545 27.1133 29.4062 27.06 29.443C27.0067 29.4797 26.9437 29.5 26.879 29.5013C26.8142 29.5025 26.7505 29.4847 26.6958 29.45L23.1258 27.57C23.0787 27.5455 23.0264 27.5327 22.9733 27.5327C22.9202 27.5327 22.8679 27.5455 22.8208 27.57L19.2758 29.435C19.2211 29.4697 19.1574 29.4875 19.0927 29.4863C19.0279 29.485 18.965 29.4647 18.9117 29.428C18.8584 29.3912 18.8171 29.3395 18.7929 29.2794C18.7688 29.2193 18.7628 29.1535 18.7758 29.09L19.4558 25.09C19.4645 25.0376 19.4604 24.9839 19.4439 24.9334C19.4273 24.8829 19.3988 24.8371 19.3608 24.8L16.5008 22C16.4576 21.9571 16.4271 21.9031 16.4127 21.844C16.3983 21.7848 16.4005 21.7228 16.4192 21.6648C16.4378 21.6069 16.4721 21.5552 16.5183 21.5155C16.5645 21.4758 16.6207 21.4497 16.6808 21.44L20.6808 20.86C20.7331 20.8519 20.7827 20.8312 20.8253 20.7999C20.8679 20.7686 20.9024 20.7275 20.9258 20.68L22.7108 17.06C22.7392 17.0068 22.7816 16.9624 22.8334 16.9316C22.8853 16.9008 22.9446 16.8848 23.0048 16.8853C23.0651 16.8858 23.1241 16.9028 23.1754 16.9345C23.2267 16.9662 23.2684 17.0113 23.2958 17.065Z" fill="white" />
                     </svg>
                     <div className="media-body text-left">
-                        <h4 className="fs-18 mb-0 text-black font-w600">4.5</h4>
+                        <h4 className="fs-18 mb-0 text-black font-w600">{rating}</h4>
                         <span className="fs-14">Ratings</span>
                     </div>
                     </div>

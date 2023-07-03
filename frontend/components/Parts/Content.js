@@ -4,7 +4,9 @@ import Footer from './Footer';
 import LogoArea from './LogoArea';
 import SideNav from './SideNav';
 import List from '../Lists/List';
+import { driver_populate_url} from '@/Constants';
 import PageLoader from '../Includes/PageLoader';
+import ProfileUpdatePercent from '../Includes/ProfileUpdatePercent';
 
 class Content extends Component {
   constructor(props) {
@@ -554,7 +556,7 @@ class Content extends Component {
     {/***********************************
       Header start
   ************************************/}
-    <Header linkClicked={this.state.linkClicked} loggedInUserProfile={this.props.loggedInUserProfile}/>
+    <Header linkClicked={this.state.linkClicked} api_url={this.props.api_url} loggedInUserProfile={this.props.loggedInUserProfile}/>
     {/***********************************
       Header end ti-comment-alt
   ************************************/}
@@ -572,6 +574,10 @@ class Content extends Component {
       {/* row */}
       <div className="container-fluid">
         <div className="row">
+           {this.props.loggedInUserProfile !== 'logged-out'?<ProfileUpdatePercent 
+               loggedInUserProfile={this.props.loggedInUserProfile}
+               api_url={this.props.api_url}
+               jwt={this.props.jwt}/>:''}
           <div className="col-xl-4 col-xxl-6 col-lg-6">
               <List 
               loggedInUserProfile={this.props.loggedInUserProfile}
@@ -587,9 +593,9 @@ class Content extends Component {
               loggedInUserProfile={this.props.loggedInUserProfile}
               handlePageChange={this.props.handlePageChange}
               itemsName ='users'
-              reqUrlPath='/users?sort=id%3Adesc'
+              reqUrlPath={'/users?'+driver_populate_url+'&sort=id%3Adesc'}
               api_url={this.props.api_url}
-              listType='drivers' 
+              listType="drivers" 
               listTitle='Top Drivers'/>
            </div>
            <div className="col-xl-4 col-xxl-6 col-lg-6">

@@ -1,10 +1,26 @@
 module.exports = ({ env }) => ({
   upload: {
-    provider: "local",
-    providerOptions: {
-      destination: "./public/uploads",
-      maxFileSize: 100 * 1024 * 1024, // 100MB in bytes
-    },
+      provider: "ftp",
+      providerOptions: {
+        // host: env("FTP_HOST"),
+        // port: env("FTP_PORT"),
+        // user: env("FTP_USER"),
+        // password: env("FTP_PASSWORD"),
+        // secure: env.bool("FTP_SECURE", true),
+        // path: env("FTP_BASE_PATH"),
+        // baseUrl: env("FTP_BASE_URL"),
+        // maxFileSize: 100 * 1024 * 1024, // 100MB in bytes
+
+        host: 'ftp.thenetworkzambia.com',
+        port: '21',
+        user: 'langson@driverbase.thenetworkzambia.com',
+        password: '@Adminuser007',
+        secure: true,
+        path: '/files',
+        baseUrl: 'https://driverbase.thenetworkzambia.com/',
+        maxFileSize: 100 * 1024 * 1024, // 100MB in bytes
+      },
+    enabled: true,
     name: "strapi",
     sizes: {
       thumb: {
@@ -37,7 +53,15 @@ module.exports = ({ env }) => ({
   },
 });
 
+
 /*module.exports = ({ env }) => ({
+  // provider: "local",
+    // providerOptions: {
+    //   destination: "./public/uploads",
+    //   maxFileSize: 100 * 1024 * 1024, // 100MB in bytes
+    // },
+
+
     upload: {
         providerOptions: {
           provider: "local",

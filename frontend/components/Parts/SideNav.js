@@ -10,9 +10,9 @@ class SideNav extends Component {
   render() {
     return (
         <div className="deznav">
-        <div className="deznav-scroll">
+        <div className="deznav-scroll mm-active ps ps--active-y">
           <ul className="metismenu" id="menu">
-            <li className="has-menu"><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                 <i className="flaticon-381-networking" />
                 <span className="nav-text">Dashboard</span>
               </a>
@@ -26,13 +26,13 @@ class SideNav extends Component {
                 <li><a href="statistics.html">Statistics</a></li>
               </ul>
             </li>
-            <li className="has-menu"><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                 <i className="flaticon-381-television" />
                 <span className="nav-text">Apps</span>
               </a>
               <ul aria-expanded="false">
                 <li><a href="app-profile.html">Profile</a></li>
-                <li><a className="has-arrow" href="javascript:void()" aria-expanded="false">Email</a>
+                <li><a className="has-arrow" href="#" aria-expanded="false">Email</a>
                   <ul aria-expanded="false">
                     <li><a href="email-compose.html">Compose</a></li>
                     <li><a href="email-inbox.html">Inbox</a></li>
@@ -40,7 +40,7 @@ class SideNav extends Component {
                   </ul>
                 </li>
                 <li><a href="app-calender.html">Calendar</a></li>
-                <li><a className="has-arrow" href="javascript:void()" aria-expanded="false">Shop</a>
+                <li><a className="has-arrow" href="#" aria-expanded="false">Shop</a>
                   <ul aria-expanded="false">
                     <li><a href="ecom-product-grid.html">Product Grid</a></li>
                     <li><a href="ecom-product-list.html">Product List</a></li>
@@ -53,7 +53,7 @@ class SideNav extends Component {
                 </li>
               </ul>
             </li>
-            <li className="has-menu"><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                 <i className="flaticon-381-controls-3" />
                 <span className="nav-text">Charts</span>
               </a>
@@ -66,7 +66,7 @@ class SideNav extends Component {
                 <li><a href="chart-peity.html">Peity</a></li>
               </ul>
             </li>
-            <li className="has-menu"><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                 <i className="flaticon-381-internet" />
                 <span className="nav-text">Bootstrap</span>
               </a>
@@ -90,7 +90,7 @@ class SideNav extends Component {
                 <li><a href="ui-grid.html">Grid</a></li>
               </ul>
             </li>
-            <li className="has-menu"><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                 <i className="flaticon-381-heart" />
                 <span className="nav-text">Plugins</span>
               </a>
@@ -109,7 +109,7 @@ class SideNav extends Component {
                 <span className="nav-text">Widget</span>
               </a>
             </li>
-            <li className="has-menu"><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                 <i className="flaticon-381-notepad" />
                 <span className="nav-text">Forms</span>
               </a>
@@ -121,7 +121,7 @@ class SideNav extends Component {
                 <li><a href="form-validation-jquery.html">Jquery Validate</a></li>
               </ul>
             </li>
-            <li className="has-menu"><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                 <i className="flaticon-381-network" />
                 <span className="nav-text">Table</span>
               </a>
@@ -130,14 +130,14 @@ class SideNav extends Component {
                 <li><a href="table-datatable-basic.html">Datatable</a></li>
               </ul>
             </li>
-            <li className="has-menu"><a className="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+            <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                 <i className="flaticon-381-layer-1" />
                 <span className="nav-text">Pages</span>
               </a>
               <ul aria-expanded="false">
                 <li><a href="page-register.html">Register</a></li>
                 <li><a href="page-login.html">Login</a></li>
-                <li><a className="has-arrow" href="javascript:void()" aria-expanded="false">Error</a>
+                <li><a className="has-arrow" href="#" aria-expanded="false">Error</a>
                   <ul aria-expanded="false">
                     <li><a href="page-error-400.html">Error 400</a></li>
                     <li><a href="page-error-403.html">Error 403</a></li>

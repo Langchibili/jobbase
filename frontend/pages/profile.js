@@ -70,7 +70,6 @@ async function fetchData(url){
        async function fetchData() {
           let userProfile
           const loggedInUserProfile = await getLoggedInUserData(uid,user_type);
-          console.log(loggedInUserProfile)
           if(uid && user_type) userProfile = await getUserProfile(uid,user_type);
           setData({
             loading: false,
@@ -84,17 +83,17 @@ async function fetchData(url){
 
     if (data.loading) return ( <> <PageLoader/><HtmlHead pageTitle="Profile" /> <ContentLoader text='loading profile...'/><HtmlFoot /> </> );
      
-    if (data.loggedInUserProfile !== null && data.userProfile === null && !uid && !user_type) {
+    if(uid && user_type && data.userProfile !== null && data.userProfile !== 'not-found'){
+      if(user_type !== data.userProfile.type){
+        return ( <> <HtmlHead pageTitle="Profile" /> <div>User Not Found </div><HtmlFoot /> </> );
+      }
+      return (<><UserProfile userProfile={data.userProfile} loggedInUserProfile={data.loggedInUserProfile} api_url={api_url} jwt={getJwt()} /></>);
+    }
+    else {
+      if (data.loggedInUserProfile !== null && data.userProfile === null && !uid && !user_type) {
         if (data.loggedInUserProfile === 'logged-out') window.location = '/login' // you should re-log in
         return (<><HtmlHead pageTitle="Profile" /><ProfileUpdateForm userProfile={data.loggedInUserProfile} jwt={getJwt()} api_url={api_url}/><HtmlFoot /></>);
-    } 
-
-    else if((uid && user_type && data.userProfile === 'not-found') || user_type !== data.userProfile.type){
-      return ( <> <HtmlHead pageTitle="Profile" /> <div>User Not Found </div><HtmlFoot /> </> );
-    }
-
-    else if(uid && user_type && data.userProfile !== null && data.userProfile !== 'not-found'){
-      return (<><UserProfile userProfile={data.userProfile} jwt={getJwt()} /></>);
+      } 
     }
   }
   

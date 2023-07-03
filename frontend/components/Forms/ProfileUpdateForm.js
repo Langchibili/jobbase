@@ -31,6 +31,7 @@ class ProfileUpdateForm extends Component {
     this.age = React.createRef();
     this.gender = React.createRef();
     this.experience = React.createRef();
+    this.category = React.createRef();
   }
 
   componentDidMount(){
@@ -56,17 +57,20 @@ class ProfileUpdateForm extends Component {
         this.gender.current.value = profileDetails.gender
         this.mobileNumber.current.value = profileDetails.phone_number
         this.whatsAppNumber.current.value = profileDetails.whatsapp_number
-        this.address.current.value = profileDetails.address.location
-        this.province.current.value = profileDetails.address.province
-        this.town.current.value = profileDetails.address.town
+        this.address.current.value = profileDetails.address? profileDetails.address.location : ''
+        this.province.current.value =profileDetails.address? profileDetails.address.province : ''
+        this.town.current.value = profileDetails.address? profileDetails.address.town : ''
         this.about.current.value = profileDetails.about
+
+        
         if(this.state.userProfile.type === 'driver'){
             this.experience.current.value = this.state.userProfile.driverProfile.experience
+            this.category.current.value = this.state.userProfile.driverProfile.driver_category
         } 
         
-        this.setState({
+        this.setState({// file upload stuff
             formUpdated: true,
-            townText:  profileDetails.address.town,
+            townText:  profileDetails.address? profileDetails.address.town : '',
             profileId: this.state.userProfile.type === 'driver'? this.state.userProfile.driverProfile.id : this.state.userProfile.carOwnerProfile.id,
             refName: this.state.userProfile.type === 'driver'? "api::driver-profile.driver-profile" : "api::car-owner-profile.car-owner-profile"
         })
@@ -179,10 +183,11 @@ class ProfileUpdateForm extends Component {
         updateRequest(updateObject)
   }
 
+
   handleSubmit = (e)=>{
         e.preventDefault()
         let userProfile = this.state.userProfile
-        let updateObject = { id:null,data:{}}
+        let updateObject = {id:null,data:{}}
         userProfile.email = this.email.current.value 
         
         if(this.state.userProfile.type === 'driver'){
@@ -192,13 +197,26 @@ class ProfileUpdateForm extends Component {
             userProfile.driverProfile.details.gender = this.gender.current.value 
             userProfile.driverProfile.details.phone_number = this.mobileNumber.current.value 
             userProfile.driverProfile.details.whatsapp_number = this.whatsAppNumber.current.value 
-            userProfile.driverProfile.details.address.location = this.address.current.value 
-            userProfile.driverProfile.details.address.province = this.province.current.value 
-            userProfile.driverProfile.details.address.town = this.town.current.value 
-            userProfile.driverProfile.details.address.city = this.town.current.value 
             userProfile.driverProfile.details.about = this.about.current.value 
             userProfile.driverProfile.experience = this.experience.current.value  
+            userProfile.driverProfile.driver_category = this.category.current.value  
             
+            /* ADDRESS  PREPARATIONS */
+           if(userProfile.driverProfile.details.address === null){
+                // initialize address object
+                userProfile.driverProfile.details.address = {id:0, location:'',province:'',town:'',city:''}
+                userProfile.driverProfile.details.address.location = this.address.current.value 
+                userProfile.driverProfile.details.address.province = this.province.current.value 
+                userProfile.driverProfile.details.address.town = this.town.current.value 
+                userProfile.driverProfile.details.address.city = this.town.current.value 
+            }
+            else{
+                userProfile.driverProfile.details.address.location = this.address.current.value 
+                userProfile.driverProfile.details.address.province = this.province.current.value 
+                userProfile.driverProfile.details.address.town = this.town.current.value 
+                userProfile.driverProfile.details.address.city = this.town.current.value 
+            }
+           
             // setting up updateObject
             updateObject.id =  userProfile.driverProfile.id
             updateObject.data = {...userProfile.driverProfile}
@@ -206,15 +224,28 @@ class ProfileUpdateForm extends Component {
         if(this.state.userProfile.type === 'car-owner'){
             userProfile.carOwnerProfile.details.firstname = this.firstName.current.value 
             userProfile.carOwnerProfile.details.lastname =  this.lastName.current.value
-            userProfile.driverProfile.details.age = this.age.current.value 
-            userProfile.driverProfile.details.gender = this.gender.current.value  
+            userProfile.carOwnerProfile.details.age = this.age.current.value 
+            userProfile.carOwnerProfile.details.gender = this.gender.current.value  
             userProfile.carOwnerProfile.details.phone_number = this.mobileNumber.current.value 
             userProfile.carOwnerProfile.details.whatsapp_number = this.whatsAppNumber.current.value 
-            userProfile.carOwnerProfile.details.address.location = this.address.current.value 
-            userProfile.carOwnerProfile.details.address.province = this.province.current.value 
-            userProfile.carOwnerProfile.details.address.town = this.town.current.value 
-            userProfile.carOwnerProfile.details.address.city = this.town.current.value 
             userProfile.carOwnerProfile.details.about = this.about.current.value  
+            
+            /* ADDRESS  PREPARATIONS */
+            if(userProfile.carOwnerProfile.details.address === null){
+                // initialize address object
+                userProfile.carOwnerProfile.details.address = {id:0, location:'',province:'',town:'',city:''}
+                userProfile.carOwnerProfile.details.address.location = this.address.current.value 
+                userProfile.carOwnerProfile.details.address.province = this.province.current.value 
+                userProfile.carOwnerProfile.details.address.town = this.town.current.value 
+                userProfile.carOwnerProfile.details.address.city = this.town.current.value 
+            }
+            else{
+                userProfile.carOwnerProfile.details.address.location = this.address.current.value 
+                userProfile.carOwnerProfile.details.address.province = this.province.current.value 
+                userProfile.carOwnerProfile.details.address.town = this.town.current.value 
+                userProfile.carOwnerProfile.details.address.city = this.town.current.value 
+            }
+            
             // setting up updateObject
              updateObject.id =  userProfile.carOwnerProfile.id
              updateObject.data = {...userProfile.carOwnerProfile}
@@ -229,12 +260,39 @@ class ProfileUpdateForm extends Component {
                 updating: true,
                 submittingText: 'updating...'
              },async ()=>{
-                const updatedJob = await this.updateRequest(this.state.updateObject)
-                if(updatedJob) this.setState({ submittingText: 'updated'})
+                const updatedUser = await this.updateRequest(updateObject)
+                if(updatedUser) this.setState({ submittingText: 'updated'})
             })
         })
   }
+
+
   updateRequest = async (updateObject)=>{
+     delete updateObject.data.id
+     delete updateObject.data.updatedAt
+     delete updateObject.data.createdAt
+     delete updateObject.data.publishedAt
+     delete updateObject.data.driving_license_front
+     delete updateObject.data.drivers_license_back
+     delete updateObject.data.driving_certificate_front
+     delete updateObject.data.driving_certificate_back
+     delete updateObject.data.nrc_front
+     delete updateObject.data.nrc_back
+     delete updateObject.data.driver_category
+     delete updateObject.data.details.profile_cover_image
+     delete updateObject.data.details.profile_thumbnail_image
+    //  delete updateObject.data.details.about
+    //  delete updateObject.data.details.address
+    //  delete updateObject.data.details.age
+    delete updateObject.data.details.average_rating
+    //  delete updateObject.data.details.gender
+    //  delete updateObject.data.details.lastname
+    //  delete updateObject.data.details.firstname
+    delete updateObject.data.details.ratings
+    //  delete updateObject.data.details.verified
+     delete updateObject.data.details.phone_number
+     delete updateObject.data.details.whatsapp_number
+     console.log(updateObject)
      const update_url = this.state.userProfile.type === 'driver'? this.props.api_url+"/driver-profiles/"+this.state.profileId : this.props.api_url+"/car-owner-profiles/"+this.state.profileId
      return await fetch(update_url, {
         method: 'PUT',
@@ -248,6 +306,7 @@ class ProfileUpdateForm extends Component {
       .then(data => data)
       .catch(error => console.error(error));
   }
+  
 
   renderDriverForm = ()=>{
      if(this.state.userProfile.type === 'driver'){
@@ -257,6 +316,33 @@ class ProfileUpdateForm extends Component {
             </div>
             <div className="card-body">
             {this.props.userProfile.type !== null? <div className="mb-5">
+                    <div className="title mb-4"><span className="fs-18 text-black font-w600">Working Experience</span></div>
+                     <div className="row">
+                        <div className="col-xl-4 col-sm-6">
+                            <div className="form-group">
+                                <label>Years Of Experience</label>
+                                <input ref={this.experience} type="number" className="form-control" placeholder="Enter Experience" />
+                            </div>
+                            <div className="form-group">
+                                <label>Type Of Driver You Are &nbsp;</label>
+                                <select ref={this.category} >
+                                    <option value="">-- Select Category --</option>
+                                    <option value="truck">Truck</option>
+                                    <option value="taxi">Taxi</option>
+                                    <option value="tractor">Tractor</option>
+                                    <option value="canter">Canter</option>
+                                    <option value="noah">Noah</option>
+                                    <option value="big-bus">Big-Bus</option>
+                                    <option value=" mini-bus"> Mini-Bus</option>
+                                    <option value="heavy-duty">Heavy-Duty</option>
+                                </select>
+                            </div>
+                            <Button disabled={this.state.updating} onClick={this.handleSubmit} variant="contained" component="label">
+                                  {this.state.submittingText}
+                            </Button> 
+                            </div>
+                        </div>
+                    
                     <div className="title mb-4"><span className="fs-18 text-black font-w600">Profile Images</span></div>
                     <div className="row">
                          <ImageUploader
@@ -372,7 +458,7 @@ class ProfileUpdateForm extends Component {
                             </div>
                             <Button disabled={this.state.updating} onClick={this.handleSubmit} variant="contained" component="label">
                               {this.state.submittingText}
-                        </Button> 
+                            </Button> 
                         </div>
                     </div>
                 </div>
@@ -492,20 +578,7 @@ class ProfileUpdateForm extends Component {
                     </div>            
                     </div>
                 </div>
-                {this.state.userProfile.type === "driver"? <div className="mb-5">
-                <div className="title mb-4"><span className="fs-18 text-black font-w600">Working Experience</span></div>
-                 <div className="row">
-                    <div className="col-xl-4 col-sm-6">
-                        <div className="form-group">
-                        <label>Years Of Experience</label>
-                            <input ref={this.experience} type="number" className="form-control" placeholder="Enter Experience" />
-                            </div>
-                        <Button disabled={this.state.updating} onClick={this.handleSubmit} variant="contained" component="label">
-                              {this.state.submittingText}
-                        </Button> 
-                        </div>
-                    </div>
-                </div> :""}
+               
                 {this.props.userProfile.type !== null? <div className="mb-5">
                     <div className="title mb-4"><span className="fs-18 text-black font-w600">Profile Images</span></div>
                     <div className="row">

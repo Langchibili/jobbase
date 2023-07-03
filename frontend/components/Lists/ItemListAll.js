@@ -36,7 +36,7 @@ class ItemListAll extends Component {
      }).then(response => response.json())
       .then(data => data)
       .catch(error => console.error(error))
-    return newItems;
+    return newItems;``
   }
   
   getReqUrl = ()=>{
@@ -108,7 +108,7 @@ class ItemListAll extends Component {
   
 
   renderList = ()=> {
-    const items = this.state.items
+    const items = this.state.itemsToDisplay
     const itemsName = this.props.itemsName // eg jobs, users
     const listItemBY = this.props.listItemsBy  // eg category, id
     const listType = this.props.listType // eg drivers, car-owners
@@ -118,7 +118,7 @@ class ItemListAll extends Component {
         if(listType === 'car-owners') return <CarOwners carOwners={items} {...this.props} listAll={true}/>     
     }
     else if(itemsName === 'jobs'){
-        if(listType === 'jobs') return <Jobs jobs={items} {...this.props} />
+        if(listType === 'jobs') return <Jobs jobs={items} {...this.props}  act={this.props.act}/>
     }
 
     return <></>

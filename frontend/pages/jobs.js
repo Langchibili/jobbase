@@ -43,6 +43,27 @@ function renderJobView(act,data,jid){
         itemsName='jobs'
         listType='jobs'
         listTitle='Jobs Available'
+        act='show-all'
+        api_url={api_url}
+         />
+  }
+  else if(act === 'edit'){
+    return <ItemListAll
+        loggedInUserProfile={data.loggedInUserProfile}
+        itemsName='jobs'
+        listType='jobs'
+        listTitle='Jobs Available'
+        act='edit'
+        api_url={api_url}
+         />
+  }
+  else if(act === 'delete'){
+    return <ItemListAll
+        loggedInUserProfile={data.loggedInUserProfile}
+        itemsName='jobs'
+        listType='jobs'
+        listTitle='Jobs Available'
+        act='delete'
         api_url={api_url}
          />
   }
@@ -66,7 +87,7 @@ export default function jobs(props) {
           }
           fetchData();
         } 
-        else if(act === 'show' || act === 'show-all'){
+        else if(act === 'show' || act === 'edit' || act === 'delete' || act === 'show-all'){
           setData({ loading: false});
         }
       }, [act]);

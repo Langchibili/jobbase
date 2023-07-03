@@ -5,8 +5,7 @@ import Jobs from './Jobs';
 import Strapi from 'strapi-sdk-javascript'
 import ContentLoader from '../Includes/ContentLoader';
 
-
-class List extends Component {
+class List extends Component {  
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +26,7 @@ class List extends Component {
       .catch(error => console.error(error))
       //meta.pagination
       if(items !== undefined){
-        if('meta' in items){
+        if('data' in items){
           return items.data;
         }
         else if(itemsName === 'users'){
@@ -37,25 +36,30 @@ class List extends Component {
       
       return []
   }
-  async componentDidMount(){
+ 
+ async componentDidMount(){
     let items
     if(this.props.items && this.props.itemsName === 'users'){
         items = this.props.items
     }
     else{
       if(this.props.itemsName === 'users'){
-        items = (await this.strapi.getEntries('users')).filter((user)=> user.type === this.props.listType)
+        const users = await this.getItems(this.props.api_url+this.props.reqUrlPath) // get initial items  
+        const listType = this.props.listType === 'drivers'? 'driver': this.props.listType
+        items = users.filter((user)=>(user.profile_completion_percentage > 9 && user.type === listType))
       }
       else{
         items = await this.getItems(this.props.api_url+this.props.reqUrlPath) // get initial items  
       } 
     }
-    
-    if(items.length > 0){// if items are not found or zero
-      this.setState({requesting: false, items:items},()=>{
-        console.log(this.state.items)
-      })
-    }
+    this.setState({requesting: false, items:items},()=>{
+      console.log(this.state.items)
+    })
+    // if(items.length > 0){// if items are not found or zero
+    //   this.setState({requesting: false, items:items},()=>{
+    //     console.log(this.state.items)
+    //   })
+    // }
   }
   
   renderList = ()=> {

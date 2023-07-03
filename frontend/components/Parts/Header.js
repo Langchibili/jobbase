@@ -11,6 +11,31 @@ class Header extends Component {
       // Initial state goes here
     };
   }
+  
+
+  loggedInUserProfileIconSrc = ()=>{
+    let profileDetails,profile_photo
+    if(this.props.loggedInUserProfile.type === 'driver') {
+        if(this.props.loggedInUserProfile.profile_completion_percentage <= 5){
+          return '/default-profile.png' 
+        }
+        profileDetails = this.props.loggedInUserProfile.driverProfile.details
+    }
+    if(this.props.loggedInUserProfile.type === 'car-owner') {
+        if(this.props.loggedInUserProfile.profile_completion_percentage <= 5){
+          return '/default-profile.png' 
+        }
+        profileDetails = this.props.loggedInUserProfile.carOwnerProfile.details
+    }
+    if(profileDetails.profile_thumbnail_image !== null){
+        const backEndUrl = this.props.api_url.replace('/api','')
+        profile_photo = profileDetails.profile_thumbnail_image.formats? backEndUrl+profileDetails.profile_thumbnail_image.formats.thumbnail.url : '/default-profile.png'    
+    }
+    else{
+        profile_photo = '/default-profile.png' 
+    }
+    return profile_photo
+  }
 
   renderLoggedInHeaderData = ()=>{
     const loggedInUserProfile = this.props.loggedInUserProfile
@@ -19,7 +44,7 @@ class Header extends Component {
     }
     else{
        return (<><a className="nav-link" href="#" role="button" data-bs-toggle="dropdown">
-                    <img src="images/profile/17.jpg" width={20} alt />
+                    <img style={{border:'2px solid lightgrey'}} src={this.loggedInUserProfileIconSrc()} width={20} alt />
                     <div className="header-info">
                       <span className="text-black">{loggedInUserProfile.username}</span>
                       <p className="fs-12 mb-0" style={{textTransform:'capitalize'}}>{loggedInUserProfile.type}</p>

@@ -11,11 +11,11 @@ class JobApplicationForm extends Component {
 
   handleSubmit = async (event) => {
     event.preventDefault()
-    if(user.profile_completion_percentage === null || user.profile_completion_percentage === 0){
-      this.setState({submittingText:'Error!'})
+    const user = this.props.loggedInUserProfile // get the job applying user data
+    if(user.profile_completion_percentage === null || user.profile_completion_percentage <= 9){
+      this.setState({submittingText:'Error! Add Number TO Pofile'})
       return
     }
-    const user = this.props.loggedInUserProfile // get the job applying user data
     const jobId = this.props.job.data.id
     const JobApplicants = this.props.job.data.attributes.applicants.data
     JobApplicants.push(user.id)

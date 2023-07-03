@@ -6,6 +6,8 @@ import JobApplicationForm from '@/components/Forms/JobApplicationForm';
 import { api_url,getJwt } from '@/Constants';
 import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
+import JobsEditForm from '@/components/Forms/JobsEditForm';
+import JobDeleteForm from '@/components/Forms/JobDeleteForm';
  
 async function getJob(jid) {
     let job
@@ -39,10 +41,26 @@ async function getLoggedInUserData(){
       return user
 }
 
+function showForm(type,data){
+    if(type==='edit'){
+        return <JobsEditForm
+            jwt={getJwt()}
+            api_url={api_url} 
+            job={data.job} 
+            loggedInUserProfile={data.loggedInUserProfile} />
+    }
+    else if(type==='delete'){
+        return <JobDeleteForm
+            jwt={getJwt()}
+            api_url={api_url} 
+            job={data.job} 
+            loggedInUserProfile={data.loggedInUserProfile} />
+    }
+} 
 
-export default function jobs_application(props) {
+export default function jobs_manage(props) {
     const router = useRouter()
-    const { jid } = router.query
+    const { type,jid } = router.query
     const [data, setData] = React.useState({ loading: true, job: null, loggedInUserProfile: null });
     
     React.useEffect(() => {
@@ -63,15 +81,15 @@ export default function jobs_application(props) {
     }
     else{
         //const applicants = job.applicants
-        if(data.loggedInUserProfile.type !== 'driver'){
-          return (<> <HtmlHead pageTitle='Jobs | Application'/><div>Only Workers, such as Drivers Can Apply To Jobs</div> <HtmlFoot/> </>)
+        if(data.loggedInUserProfile.type === 'driver'){
+          return (<> <HtmlHead pageTitle='Jobs | Application'/><div>Only Employers, such as CarOwners Have Jobs</div> <HtmlFoot/> </>)
         }
         if(data.job === 'not-found'){
             return (<> <HtmlHead pageTitle='Jobs | Application'/><div>The Job You Are Looking For Doesn't Exist. It could be that the owner closed it or it got cancelled.</div> <HtmlFoot/> </>)
         }
-        if(data.loggedInUserProfile.driverProfile.application_points <= 0){
-            return (<> <HtmlHead pageTitle='Jobs | Application'/><div>You Have No Application Points To Apply To This or any other job, get your account verified or subscribe as a premium user to be able to apply to more jobs.</div> <HtmlFoot/> </>)
-        }
+        // if(data.loggedInUserProfile.driverProfile.application_points <= 0){
+        //     return (<> <HtmlHead pageTitle='Jobs | Application'/><div>You Have No Application Points To Apply To This or any other job, get your account verified or subscribe as a premium user to be able to apply to more jobs.</div> <HtmlFoot/> </>)
+        // }
         
         return (
          <>
@@ -83,14 +101,7 @@ export default function jobs_application(props) {
                         <div className="authincation-content">
                         <div className="row no-gutters">
                             <div className="col-xl-12" >
-                                Before You apply, make sure you have updated your profile enough to stand out from other applicants
-                                Note That When you apply to this job, your application points(APs) will reduce by one
-                                Are You Sure You Want To Apply To This Job?
-                                <JobApplicationForm 
-                                    jwt={getJwt()}
-                                    api_url={api_url} 
-                                    job={data.job} 
-                                    loggedInUserProfile={data.loggedInUserProfile} />
+                               {showForm(type,data)}
                             </div>
                         </div>
                         </div>
