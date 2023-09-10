@@ -59,7 +59,7 @@ export default class Jobs extends React.Component {
          }).then(response => response.json())
           .then(data => data)
           .catch(error => console.error(error))
-          console.log(carOwner)
+          console.log('the car owner',carOwner)
           if(carOwner.profile_update_percentage <= 5){
             carOwnerProfileNames[jobId] = {
               firstname:'Unknown',
@@ -73,7 +73,24 @@ export default class Jobs extends React.Component {
           return carOwnerProfileNames
       }
   }
-
+  componentDidMount(){
+    async function updateCarOwnerProfileNames(jobs, ctx) {
+      let carOwnerProfileNames = {};
+      for (const job of jobs) {
+        carOwnerProfileNames = await ctx.getJobCarOwnersNames(job.id, carOwnerProfileNames);
+      }
+      ctx.setState({
+        carOwnerProfileNames: carOwnerProfileNames,
+      }, () => {
+        console.log('the usernames of the carowners',ctx.state.carOwnerProfileNames);
+      });
+    }
+    
+    // Usage inside a Next.js method (e.g., a function within your component or a server-side API route)
+    // Assuming 'this.props.jobs' contains the list of jobs and 'this' refers to the current context
+    updateCarOwnerProfileNames(this.props.jobs, this);
+    
+  }
   renderJob = ()=> {
     const jobs = this.props.jobs
     if(jobs.length === 0) return <p>Jobs Will Show Soon</p>
@@ -81,8 +98,8 @@ export default class Jobs extends React.Component {
       let carOwnerFirstName
       let carOwnerLastName
       if(job.id in this.state.carOwnerProfileNames){
-           carOwnerFirstName = this.state.carOwnerProfileNames.firstname
-           carOwnerLastName = this.state.carOwnerProfileNames.lastname
+           carOwnerFirstName = this.state.carOwnerProfileNames[job.id].firstname
+           carOwnerLastName = this.state.carOwnerProfileNames[job.id].lastname
       }
       else{
         carOwnerFirstName = 'Unknown'
@@ -124,19 +141,6 @@ export default class Jobs extends React.Component {
   }
 
   render() {
-    // update car owner profile details#
-    (function (jobs,ctx) {
-      let carOwnerProfileNames = {} 
-      jobs.forEach(async (job)=>{
-        carOwnerProfileNames = await ctx.getJobCarOwnersNames(job.id,carOwnerProfileNames)
-      })
-      ctx.setState({
-         carOwnerProfileNames: carOwnerProfileNames
-      },()=>{
-         console.log(ctx.state.carOwnerProfileNames)
-      })
-    })(this.props.jobs,this)
-
     return <div>{this.renderJob()}</div>
   }
 }

@@ -46,6 +46,7 @@ class List extends Component {
       if(this.props.itemsName === 'users'){
         const users = await this.getItems(this.props.api_url+this.props.reqUrlPath) // get initial items  
         const listType = this.props.listType === 'drivers'? 'driver': this.props.listType
+        console.log('this is the list of items',items)
         items = users.filter((user)=>(user.profile_completion_percentage > 9 && user.type === listType))
       }
       else{

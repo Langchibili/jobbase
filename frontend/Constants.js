@@ -1,5 +1,5 @@
 //192.168.43.207
-const LOCAL_API_URL = 'http://34.155.167.255:1337/api' /*'http://192.168.43.207:1337/api' // localhost api */
+const LOCAL_API_URL = /*'http://34.155.167.255:1337/api'*/ 'http://192.168.43.207:1337/api' // localhost api 
 const REMOTE_API_URL = 'https://driverbabase.thenetworkzambia.com:1337/api' // remote server url
 export const api_url = LOCAL_API_URL
 // return data as props object
