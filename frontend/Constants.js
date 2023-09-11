@@ -1,16 +1,18 @@
-let api_url
+let api_uri
 const ENV = process.env.NODE_ENV
-api_url =  process.env.REMOTE_API_URL
+api_uri =  process.env.REMOTE_API_URL
 // if(ENV === 'production'){
-//    api_url =  process.env.REMOTE_API_URL
+//    api_uri =  process.env.REMOTE_API_URL
 // }
 // else{
-//    api_url = process.env.LOCAL_API_URL
+//    api_uri = process.env.LOCAL_API_URL
 // }
 // return data as props object
 // jwt stuff
+
 const fakeStr1 = 'kahs3lahebblo2uwb00an~#va5lwi_ad_fgaljdj'; // security stuff
 const fakeStr2 ='klahewi_ad_fgalloanv;;aitalkjfajhsbbluwba==hn3vajd5j=+;'
+export const api_url = api_uri
 export function getJwt(){
     let jwt = localStorage.getItem('jwt')
     if(jwt === undefined || jwt === null){
