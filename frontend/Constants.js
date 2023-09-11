@@ -1,6 +1,6 @@
-let api_uri
-const ENV = process.env.NODE_ENV
-api_uri =  process.env.REMOTE_API_URL
+// let api_uri
+// const ENV = process.env.NODE_ENV
+// api_uri =  process.env.REMOTE_API_URL
 // if(ENV === 'production'){
 //    api_uri =  process.env.REMOTE_API_URL
 // }
@@ -12,7 +12,7 @@ api_uri =  process.env.REMOTE_API_URL
 
 const fakeStr1 = 'kahs3lahebblo2uwb00an~#va5lwi_ad_fgaljdj'; // security stuff
 const fakeStr2 ='klahewi_ad_fgalloanv;;aitalkjfajhsbbluwba==hn3vajd5j=+;'
-export const api_url = api_uri
+export const api_url = 'http://localhost:1337/api' // because both frontend and backend will be on the same host, or rather server
 export function getJwt(){
     let jwt = localStorage.getItem('jwt')
     if(jwt === undefined || jwt === null){
