@@ -1,7 +1,12 @@
-//192.168.43.207
-const LOCAL_API_URL = /*'http://34.155.167.255:1337/api'*/ 'http://192.168.43.207:1337/api' // localhost api 
-const REMOTE_API_URL = 'https://driverbabase.thenetworkzambia.com:1337/api' // remote server url
-export const api_url = LOCAL_API_URL
+let api_url
+const ENV = process.env.NODE_ENV
+api_url =  process.env.REMOTE_API_URL
+// if(ENV === 'production'){
+//    api_url =  process.env.REMOTE_API_URL
+// }
+// else{
+//    api_url = process.env.LOCAL_API_URL
+// }
 // return data as props object
 // jwt stuff
 const fakeStr1 = 'kahs3lahebblo2uwb00an~#va5lwi_ad_fgaljdj'; // security stuff
