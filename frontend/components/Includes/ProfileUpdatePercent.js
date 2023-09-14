@@ -99,7 +99,7 @@ async componentDidMount(){
     this.setState({
         profile_completion_percentage:'75%',
         color: 'success',
-        message:'You have successfully updated your profile details to the highest percentage, you are now eligible to begin requesting for verification'
+        message:(<>You have successfully updated your profile details to the highest percentage, you are now eligible to begin requesting for verification. <strong>Click this message to see the steps</strong></>)
     })
     if(parseInt(user.profile_completion_percentage) ===  75) return // don't make update then
     this.updateUser(75)
@@ -205,13 +205,15 @@ async componentDidMount(){
     this.setState({
         profile_completion_percentage:'75%',
         color: 'success',
-        message:'You have successfully updated your profile details to the highest percentage, you are now eligible to begin requesting for verification'
+        message:(<>You have successfully updated your profile details to the highest percentage, you are now eligible to begin requesting for verification. <strong>Click this message to see the steps</strong></>)
     })
     if(parseInt(user.profile_completion_percentage) ===  75) return // don't make update then
     this.updateUser(75)
    }
 }
 render() {
+    if(parseInt(this.props.loggedInUserProfile.profile_completion_percentage) === 75) return (
+      <div className={"alert alert-"+this.state.color}> <Link href='/verification_steps'><p>{this.state.message}</p><p>{'Your profile is now updated: '+this.state.profile_completion_percentage}</p></Link></div>);
     return (
         <div className={"alert alert-"+this.state.color}> <Link href='/profile'><p>{this.state.message}</p> <p>{'Your profile is now updated: '+this.state.profile_completion_percentage}</p></Link></div>
     );
