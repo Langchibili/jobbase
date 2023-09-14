@@ -110,7 +110,7 @@ export default class Jobs extends React.Component {
           <>
             <ListItem alignItems="flex-start" key={job.id}>
                 <ListItemAvatar>
-                  <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt="Travis Howard" src="/job-icon.png" />
                 </ListItemAvatar>
                 <ListItemText
                   primary={carOwnerName}

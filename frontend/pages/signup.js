@@ -18,40 +18,57 @@ export default function signup(props) {
     const renderSignUpForm = ()=>{
         if(userType.typeSet){
             if(userType.type === 'car-owner'){
-                return <SignUpForm api_url={api_url} user_type='car-owner'/>
+                return (<div className="authincation h-100 m-1">
+                <div className="container h-100">
+                    <div className="row justify-content-center h-100 align-items-center">
+                    <div className="col-md-6">
+                        <div className="authincation-content">
+                        <div className="row no-gutters">
+                            <div className="col-xl-12" >
+                            <SignUpForm api_url={api_url} user_type='car-owner'/>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>)
             }
             else{
-                return <SignUpForm api_url={api_url} user_type='driver'/>
+                return (<div className="authincation h-100 m-1">
+                        <div className="container h-100">
+                            <div className="row justify-content-center h-100 align-items-center">
+                            <div className="col-md-6">
+                                <div className="authincation-content">
+                                <div className="row no-gutters">
+                                    <div className="col-xl-12" >
+                                    <SignUpForm api_url={api_url} user_type='driver'/>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>)
             }
         }
         else{
-            return (<>
-                    <p>Register As A</p>
-                    <div className="btn-group">
-                    <button type="button" className="btn btn-primary" onClick={renderDriverSignUpForm}>Driver</button>
-                    <button type="button" className="btn btn-default">  </button>
-                    <button type="button" className="btn btn-info" onClick={renderCarOwnerSignUpForm}>Car Owner</button>
-                    </div></>)
+            return (
+                    <div style={{margin:10,textAlign:'center'}}>
+                        <h3>REGISTER AS A</h3>
+                        <div className="btn-group">
+                        <button style={{borderTopRightRadius:10,borderBottomRightRadius:10}} type="button" className="btn btn-primary" onClick={renderDriverSignUpForm}>DRIVER</button>
+                        <button type="button" className="btn btn-default">  </button>
+                        <button style={{borderTopLeftRadius:10,borderBottomLeftRadius:10}} type="button" className="btn btn-info" onClick={renderCarOwnerSignUpForm}>CAR OWNER</button>
+                        </div>
+                        </div>
+                    )
         }
     }
 
     return (<>
         <HtmlHead pageTitle='Signup'/>
-        <div className="authincation h-100 m-1">
-            <div className="container h-100">
-                <div className="row justify-content-center h-100 align-items-center">
-                <div className="col-md-6">
-                    <div className="authincation-content">
-                    <div className="row no-gutters">
-                        <div className="col-xl-12" >
-                        {renderSignUpForm()}
-                        </div>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </div>
+                {renderSignUpForm()}
         <HtmlFoot/>
         </>)
 }

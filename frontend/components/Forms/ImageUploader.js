@@ -26,7 +26,7 @@ export default class ImageUploader extends React.Component{
        const uploads_url = this.props.api_url.replace('/api','')
        const image = this.props.image
 
-       if(image === null) return
+       if(image === null || image === undefined) return
        if(image.formats === null){
            this.setState({
             imageSrc: uploads_url+image.url,

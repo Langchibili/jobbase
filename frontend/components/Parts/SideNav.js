@@ -5,7 +5,6 @@ class SideNav extends Component {
   constructor(props) {
     super(props);
   }
-
  
   render() {
     return (
@@ -17,7 +16,12 @@ class SideNav extends Component {
                 <span className="nav-text">Dashboard</span>
               </a>
               <ul aria-expanded="false">
-                <li><Link onClick={this.props.handlePageChange} href="/jobs">Jobs</Link></li>
+                <li><Link onClick={this.props.handlePageChange} href="/jobs?act=show-all">Jobs</Link></li>
+                <li><Link onClick={this.props.handlePageChange} href="/jobs?act=edit">Edit Jobs</Link></li>
+                <li><Link onClick={this.props.handlePageChange} href="/jobs?act=delete">Delete Jobs</Link></li> 
+                <li><Link onClick={this.props.handlePageChange} href="/jobs?act=add">Add Job</Link></li>
+                <li><Link onClick={this.props.handlePageChange} href="/drivers">All Drivers</Link></li>
+                <li><Link onClick={this.props.handlePageChange} href="/car_owners">All CarOwners</Link></li>
                 <li><a href="index2.html">Dashboard Dark</a></li>
                 <li><a href="search-job.html">Search Job</a></li>
                 <li><a href="application.html">Application</a></li>
@@ -151,8 +155,8 @@ class SideNav extends Component {
             </li>
           </ul>
           <div className="copyright">
-            <p><strong>Jobie Dashboard</strong>  © 2022 All Rights Reserved</p>
-            <p>by DexignZone</p>
+            <p><strong>DriverBase Dashboard</strong>  © 2023 All Rights Reserved</p>
+            <p>by Gotriips</p>
           </div>
         </div>
       </div>

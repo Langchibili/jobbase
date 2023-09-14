@@ -83,7 +83,7 @@ class LoginForm extends Component {
     return (
         <div className="auth-form">
                 <div className="text-center mb-3">
-                <a href="index.html"><img src="images/logo-full.png" alt /></a>
+                <Link href="/"><img style={{width:60,height:60}} src="/DriverBaseTransparentBackground.png" alt /></Link>
                 </div>
                 <h4 className="text-center mb-4 text-white">Log Into Your Account</h4>
                 <form>

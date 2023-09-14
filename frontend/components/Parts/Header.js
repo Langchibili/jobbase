@@ -45,7 +45,7 @@ class Header extends Component {
     else{
        return (<><a className="nav-link" href="#" role="button" data-bs-toggle="dropdown">
                     <img style={{border:'2px solid lightgrey'}} src={this.loggedInUserProfileIconSrc()} width={20} alt />
-                    <div className="header-info">
+                    <div style={{ borderLeft:'none',paddingLeft:10,marginRight:20}} className="header-info">
                       <span className="text-black">{loggedInUserProfile.username}</span>
                       <p className="fs-12 mb-0" style={{textTransform:'capitalize'}}>{loggedInUserProfile.type}</p>
                     </div>

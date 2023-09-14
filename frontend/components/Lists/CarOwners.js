@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { Component } from 'react';
 
 class CarOwners extends Component {
@@ -15,19 +16,57 @@ class CarOwners extends Component {
     return date.toDateString()
   }
   
-  renderDriversList = ()=>{
+  checkEligibility = (carOwner)=>{
+    let eligibleForListing = false
+    let carOwnerProfile
+    if(this.props.listAll) { // if on list all page
+        carOwnerProfile = carOwner.attributes // the profile
+        if(carOwnerProfile.details === null || carOwnerProfile.details === undefined) { 
+          return false // you aren't eligible
+        }
+        if(carOwnerProfile.details.firstname === null || carOwnerProfile.details.lastname === null){
+          eligibleForListing = false
+        }
+        else{
+          eligibleForListing = true
+      }
+    }
+    else{ // if a shorter list
+        carOwnerProfile = carOwner.carOwnerProfile // the profile
+        if(carOwner.profile_completion_percentage < 9){
+          eligibleForListing = false
+        }
+        else{
+          eligibleForListing = true
+      }
+    }
+    return eligibleForListing
+  }
+
+
+  rendercarOwnersList = ()=>{
     const listFormat = this.props.listFormat;
     const carOwners = this.props.carOwners
+    console.log('car owners frontpage',carOwners)
     if(carOwners.length === 0) return <p>No Car Owners Registered Yet</p>
     if(listFormat === 'grid'){
         return <></>;
     }
     else{
-        let fullname, phone_number, thumbnail, profile_url
+        let userId,fullname, rating, thumbnail, profile_url,eligibleForListing,carOwnerProfile
         return carOwners.map((carOwner)=>{
-          if('carOwnerProfile' in driver){ // check if user has a profile
-            const carOwnerProfile = carOwner.carOwnerProfile
-            if('details' in carOwnerProfile){ //check if profile has got details to it
+          if(this.props.listAll) { // set userId for user profiles
+            userId = parseInt(carOwner.attributes.userid) // the userid
+            carOwnerProfile = carOwner.attributes // the profile if attributes property exists
+          }
+          else{
+            userId = carOwner.id // the userid
+            carOwnerProfile = carOwner.carOwnerProfile // the profile no attribute property
+          }
+
+          eligibleForListing = this.checkEligibility(carOwner) // check carOwner listing eligibility
+          
+           if(eligibleForListing){ //check if profile has got details to it
                fullname = carOwnerProfile.details.firstname? carOwnerProfile.details.firstname +' '+ carOwnerProfile.details.lastname || '' : ''
                if(carOwnerProfile.details.profile_thumbnail_image !== null){ // check if thumbnail exists
                    const backEndUrl = this.props.api_url.replace('/api','')
@@ -38,16 +77,14 @@ class CarOwners extends Component {
                } 
                // PROFILE URL
                profile_url = '/profile?uid='+carOwner.id+'&user_type=car-owner'
+               //RATING 
+               rating = carOwnerProfile.details.average_rating? carOwnerProfile.details.average_rating : ''
             }
-            else{
-              return
-            }
-          }
           else{
             return
           }
           return ( 
-            <div className="card-body"> 
+            <div className="card-body" key={userId}> 
             <div id="DZ_W_Todo1" className="widget-media dz-scroll ps ps--active-y">
               <ul className="timeline">
                 <li>
@@ -57,7 +94,7 @@ class CarOwners extends Component {
                     </div>
                     <div className="media-body">
                       <Link href={profile_url}><h5 className="mb-1" style={{textTransform:'capitalize'}}>{fullname}</h5></Link>
-                      <small className="d-block">{'Joined: '+this.dateCreated(driver.createdAt)}</small>
+                      <small className="d-block">{rating+' '}<span className='fa fa-star text-danger'></span></small>
                     </div>
                     <div className="d-flex">
                       <a className="contact-icon me-3" href="#"><i className="fa fa-truck" aria-hidden="true" /></a>
@@ -74,7 +111,7 @@ class CarOwners extends Component {
   }
 
   render() {
-    return this.renderDriversList()
+    return this.rendercarOwnersList()
   }
 }
 

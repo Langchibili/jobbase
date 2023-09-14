@@ -107,8 +107,10 @@
         "mini-bus",
         "canter",
         "heavy-duty",
-        "noah"
-      ]
+        "noah",
+        "other"
+      ],
+      "default": "other"
     }
   }
 }

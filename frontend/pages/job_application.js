@@ -6,7 +6,12 @@ import JobApplicationForm from '@/components/Forms/JobApplicationForm';
 import { api_url,getJwt } from '@/Constants';
 import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
- 
+import Alert from '@mui/material/Alert';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import Link from 'next/link';
+
+
+
 async function getJob(jid) {
     let job
     if(jid){ // this is mainly for purposes of applying to a job not making a job
@@ -64,13 +69,22 @@ export default function jobs_application(props) {
     else{
         //const applicants = job.applicants
         if(data.loggedInUserProfile.type !== 'driver'){
-          return (<> <HtmlHead pageTitle='Jobs | Application'/><div>Only Workers, such as Drivers Can Apply To Jobs</div> <HtmlFoot/> </>)
+          return (<> <HtmlHead pageTitle='Jobs | Application'/>
+                        <div style={{maxWidth:500,margin:'auto'}}><Alert severity="info">Only Workers, such as Drivers Can Apply To Jobs!</Alert></div> 
+                        <div style={{maxWidth:100,textAlign:'center',margin:'auto'}}><KeyboardDoubleArrowDownIcon color='primary'/></div>
+                        <div style={{margin:10,textAlign:'center'}}><Link href="/signup" className="btn btn-primary light btn-rounded me-auto">You Can SingUp For A Driver Account</Link></div>
+                        <div style={{margin:10,textAlign:'center'}}><Link href="/login" className="btn btn-primary light btn-rounded me-auto">Or Login Into an Existing Driver Account</Link></div>
+                     <HtmlFoot/> </>)
         }
         if(data.job === 'not-found'){
-            return (<> <HtmlHead pageTitle='Jobs | Application'/><div>The Job You Are Looking For Doesn't Exist. It could be that the owner closed it or it got cancelled.</div> <HtmlFoot/> </>)
+            return (<> <HtmlHead pageTitle='Jobs | Application'/>
+                         <Alert severity="warning">The Job You Are Looking For Doesn't Exist. It could be that the owner closed it or it got cancelled.</Alert> 
+                       <HtmlFoot/> </>)
         }
-        if(data.loggedInUserProfile.driverProfile.application_points <= 0){
-            return (<> <HtmlHead pageTitle='Jobs | Application'/><div>You Have No Application Points To Apply To This or any other job, get your account verified or subscribe as a premium user to be able to apply to more jobs.</div> <HtmlFoot/> </>)
+        if(data.loggedInUserProfile.driverProfile.application_points <= 0){ 
+            return (<> <HtmlHead pageTitle='Jobs | Application'/>
+                         <Alert severity="error">You Have No Application Points To Apply To This or any other job, get your account verified or subscribe as a premium user to be able to apply to more jobs.</Alert> 
+                        <HtmlFoot/> </>)
         }
         
         return (

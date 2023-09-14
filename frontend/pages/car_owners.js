@@ -21,10 +21,10 @@ export default function car_owners(props) {
                     <div className="row no-gutters">
                         <div className="col-xl-12" >
                         <ItemListAll
+                            reqUrlPath={'/car-owner-profiles?populate=details,details.profile_thumbnail_image'}
                             itemsName='users'
                             listType='car-owners'
-                            api_url={api_url}
-                        />
+                            api_url={api_url}/>
                         </div>
                     </div>
                     </div>

@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2023-09-11T19:32:46.790Z"
+    "x-generation-date": "2023-09-12T18:21:53.409Z"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -25,7 +25,7 @@
   },
   "servers": [
     {
-      "url": "https://driverbaseapi.thenetworkzambia.com/api",
+      "url": "http://localhost:1337/api",
       "description": "Development server"
     }
   ],
@@ -224,12 +224,6 @@
                                         },
                                         "lastname": {
                                           "type": "string"
-                                        },
-                                        "phone_number": {
-                                          "type": "integer"
-                                        },
-                                        "whatsapp_number": {
-                                          "type": "integer"
                                         },
                                         "profile_cover_image": {
                                           "type": "object",
@@ -533,7 +527,8 @@
                                                 "central",
                                                 "lusaka",
                                                 "luapula",
-                                                "copperbelt"
+                                                "copperbelt",
+                                                "unset"
                                               ]
                                             },
                                             "city": {
@@ -551,7 +546,8 @@
                                           "type": "string",
                                           "enum": [
                                             "male",
-                                            "female"
+                                            "female",
+                                            "unset"
                                           ]
                                         },
                                         "age": {
@@ -561,7 +557,13 @@
                                           "type": "number",
                                           "format": "float"
                                         },
-                                        "ratings": {}
+                                        "ratings": {},
+                                        "whatsapp_number": {
+                                          "type": "string"
+                                        },
+                                        "phone_number": {
+                                          "type": "string"
+                                        }
                                       }
                                     },
                                     "jobs": {
@@ -1232,12 +1234,6 @@
                                           "lastname": {
                                             "type": "string"
                                           },
-                                          "phone_number": {
-                                            "type": "integer"
-                                          },
-                                          "whatsapp_number": {
-                                            "type": "integer"
-                                          },
                                           "profile_cover_image": {
                                             "type": "object",
                                             "properties": {
@@ -1540,7 +1536,8 @@
                                                   "central",
                                                   "lusaka",
                                                   "luapula",
-                                                  "copperbelt"
+                                                  "copperbelt",
+                                                  "unset"
                                                 ]
                                               },
                                               "city": {
@@ -1558,7 +1555,8 @@
                                             "type": "string",
                                             "enum": [
                                               "male",
-                                              "female"
+                                              "female",
+                                              "unset"
                                             ]
                                           },
                                           "age": {
@@ -1568,7 +1566,13 @@
                                             "type": "number",
                                             "format": "float"
                                           },
-                                          "ratings": {}
+                                          "ratings": {},
+                                          "whatsapp_number": {
+                                            "type": "string"
+                                          },
+                                          "phone_number": {
+                                            "type": "string"
+                                          }
                                         }
                                       },
                                       "experience": {
@@ -1888,7 +1892,8 @@
                                           "mini-bus",
                                           "canter",
                                           "heavy-duty",
-                                          "noah"
+                                          "noah",
+                                          "other"
                                         ]
                                       },
                                       "createdAt": {
@@ -2078,12 +2083,6 @@
           },
           "lastname": {
             "type": "string"
-          },
-          "phone_number": {
-            "type": "integer"
-          },
-          "whatsapp_number": {
-            "type": "integer"
           },
           "profile_cover_image": {
             "type": "object",
@@ -2387,7 +2386,8 @@
                   "central",
                   "lusaka",
                   "luapula",
-                  "copperbelt"
+                  "copperbelt",
+                  "unset"
                 ]
               },
               "city": {
@@ -2405,7 +2405,8 @@
             "type": "string",
             "enum": [
               "male",
-              "female"
+              "female",
+              "unset"
             ]
           },
           "age": {
@@ -2415,7 +2416,13 @@
             "type": "number",
             "format": "float"
           },
-          "ratings": {}
+          "ratings": {},
+          "whatsapp_number": {
+            "type": "string"
+          },
+          "phone_number": {
+            "type": "string"
+          }
         }
       },
       "CategoryRequest": {
@@ -3874,12 +3881,6 @@
                                         "lastname": {
                                           "type": "string"
                                         },
-                                        "phone_number": {
-                                          "type": "integer"
-                                        },
-                                        "whatsapp_number": {
-                                          "type": "integer"
-                                        },
                                         "profile_cover_image": {
                                           "type": "object",
                                           "properties": {
@@ -4182,7 +4183,8 @@
                                                 "central",
                                                 "lusaka",
                                                 "luapula",
-                                                "copperbelt"
+                                                "copperbelt",
+                                                "unset"
                                               ]
                                             },
                                             "city": {
@@ -4200,7 +4202,8 @@
                                           "type": "string",
                                           "enum": [
                                             "male",
-                                            "female"
+                                            "female",
+                                            "unset"
                                           ]
                                         },
                                         "age": {
@@ -4210,7 +4213,13 @@
                                           "type": "number",
                                           "format": "float"
                                         },
-                                        "ratings": {}
+                                        "ratings": {},
+                                        "whatsapp_number": {
+                                          "type": "string"
+                                        },
+                                        "phone_number": {
+                                          "type": "string"
+                                        }
                                       }
                                     },
                                     "experience": {
@@ -4272,12 +4281,6 @@
                                                                   },
                                                                   "lastname": {
                                                                     "type": "string"
-                                                                  },
-                                                                  "phone_number": {
-                                                                    "type": "integer"
-                                                                  },
-                                                                  "whatsapp_number": {
-                                                                    "type": "integer"
                                                                   },
                                                                   "profile_cover_image": {
                                                                     "type": "object",
@@ -4581,7 +4584,8 @@
                                                                           "central",
                                                                           "lusaka",
                                                                           "luapula",
-                                                                          "copperbelt"
+                                                                          "copperbelt",
+                                                                          "unset"
                                                                         ]
                                                                       },
                                                                       "city": {
@@ -4599,7 +4603,8 @@
                                                                     "type": "string",
                                                                     "enum": [
                                                                       "male",
-                                                                      "female"
+                                                                      "female",
+                                                                      "unset"
                                                                     ]
                                                                   },
                                                                   "age": {
@@ -4609,7 +4614,13 @@
                                                                     "type": "number",
                                                                     "format": "float"
                                                                   },
-                                                                  "ratings": {}
+                                                                  "ratings": {},
+                                                                  "whatsapp_number": {
+                                                                    "type": "string"
+                                                                  },
+                                                                  "phone_number": {
+                                                                    "type": "string"
+                                                                  }
                                                                 }
                                                               },
                                                               "jobs": {
@@ -5048,7 +5059,8 @@
                                         "mini-bus",
                                         "canter",
                                         "heavy-duty",
-                                        "noah"
+                                        "noah",
+                                        "other"
                                       ]
                                     },
                                     "createdAt": {
@@ -5452,7 +5464,8 @@
                   "mini-bus",
                   "canter",
                   "heavy-duty",
-                  "noah"
+                  "noah",
+                  "other"
                 ]
               }
             }
@@ -6623,12 +6636,6 @@
                                         "lastname": {
                                           "type": "string"
                                         },
-                                        "phone_number": {
-                                          "type": "integer"
-                                        },
-                                        "whatsapp_number": {
-                                          "type": "integer"
-                                        },
                                         "profile_cover_image": {
                                           "type": "object",
                                           "properties": {
@@ -6931,7 +6938,8 @@
                                                 "central",
                                                 "lusaka",
                                                 "luapula",
-                                                "copperbelt"
+                                                "copperbelt",
+                                                "unset"
                                               ]
                                             },
                                             "city": {
@@ -6949,7 +6957,8 @@
                                           "type": "string",
                                           "enum": [
                                             "male",
-                                            "female"
+                                            "female",
+                                            "unset"
                                           ]
                                         },
                                         "age": {
@@ -6959,7 +6968,13 @@
                                           "type": "number",
                                           "format": "float"
                                         },
-                                        "ratings": {}
+                                        "ratings": {},
+                                        "whatsapp_number": {
+                                          "type": "string"
+                                        },
+                                        "phone_number": {
+                                          "type": "string"
+                                        }
                                       }
                                     },
                                     "jobs": {
@@ -7630,12 +7645,6 @@
                                           "lastname": {
                                             "type": "string"
                                           },
-                                          "phone_number": {
-                                            "type": "integer"
-                                          },
-                                          "whatsapp_number": {
-                                            "type": "integer"
-                                          },
                                           "profile_cover_image": {
                                             "type": "object",
                                             "properties": {
@@ -7938,7 +7947,8 @@
                                                   "central",
                                                   "lusaka",
                                                   "luapula",
-                                                  "copperbelt"
+                                                  "copperbelt",
+                                                  "unset"
                                                 ]
                                               },
                                               "city": {
@@ -7956,7 +7966,8 @@
                                             "type": "string",
                                             "enum": [
                                               "male",
-                                              "female"
+                                              "female",
+                                              "unset"
                                             ]
                                           },
                                           "age": {
@@ -7966,7 +7977,13 @@
                                             "type": "number",
                                             "format": "float"
                                           },
-                                          "ratings": {}
+                                          "ratings": {},
+                                          "whatsapp_number": {
+                                            "type": "string"
+                                          },
+                                          "phone_number": {
+                                            "type": "string"
+                                          }
                                         }
                                       },
                                       "experience": {
@@ -8286,7 +8303,8 @@
                                           "mini-bus",
                                           "canter",
                                           "heavy-duty",
-                                          "noah"
+                                          "noah",
+                                          "other"
                                         ]
                                       },
                                       "createdAt": {
@@ -8686,7 +8704,8 @@
               "mini-bus",
               "canter",
               "heavy-duty",
-              "noah"
+              "noah",
+              "other"
             ]
           },
           "createdAt": {
@@ -8896,12 +8915,6 @@
                           },
                           "lastname": {
                             "type": "string"
-                          },
-                          "phone_number": {
-                            "type": "integer"
-                          },
-                          "whatsapp_number": {
-                            "type": "integer"
                           },
                           "profile_cover_image": {
                             "type": "object",
@@ -9687,7 +9700,8 @@
                                   "central",
                                   "lusaka",
                                   "luapula",
-                                  "copperbelt"
+                                  "copperbelt",
+                                  "unset"
                                 ]
                               },
                               "city": {
@@ -9705,7 +9719,8 @@
                             "type": "string",
                             "enum": [
                               "male",
-                              "female"
+                              "female",
+                              "unset"
                             ]
                           },
                           "age": {
@@ -9715,7 +9730,13 @@
                             "type": "number",
                             "format": "float"
                           },
-                          "ratings": {}
+                          "ratings": {},
+                          "whatsapp_number": {
+                            "type": "string"
+                          },
+                          "phone_number": {
+                            "type": "string"
+                          }
                         }
                       },
                       "jobs": {
@@ -10356,12 +10377,6 @@
                                                       "lastname": {
                                                         "type": "string"
                                                       },
-                                                      "phone_number": {
-                                                        "type": "integer"
-                                                      },
-                                                      "whatsapp_number": {
-                                                        "type": "integer"
-                                                      },
                                                       "profile_cover_image": {
                                                         "type": "object",
                                                         "properties": {
@@ -10664,7 +10679,8 @@
                                                               "central",
                                                               "lusaka",
                                                               "luapula",
-                                                              "copperbelt"
+                                                              "copperbelt",
+                                                              "unset"
                                                             ]
                                                           },
                                                           "city": {
@@ -10682,7 +10698,8 @@
                                                         "type": "string",
                                                         "enum": [
                                                           "male",
-                                                          "female"
+                                                          "female",
+                                                          "unset"
                                                         ]
                                                       },
                                                       "age": {
@@ -10692,7 +10709,13 @@
                                                         "type": "number",
                                                         "format": "float"
                                                       },
-                                                      "ratings": {}
+                                                      "ratings": {},
+                                                      "whatsapp_number": {
+                                                        "type": "string"
+                                                      },
+                                                      "phone_number": {
+                                                        "type": "string"
+                                                      }
                                                     }
                                                   },
                                                   "experience": {
@@ -11012,7 +11035,8 @@
                                                       "mini-bus",
                                                       "canter",
                                                       "heavy-duty",
-                                                      "noah"
+                                                      "noah",
+                                                      "other"
                                                     ]
                                                   },
                                                   "createdAt": {
@@ -14584,12 +14608,6 @@
                                                     "lastname": {
                                                       "type": "string"
                                                     },
-                                                    "phone_number": {
-                                                      "type": "integer"
-                                                    },
-                                                    "whatsapp_number": {
-                                                      "type": "integer"
-                                                    },
                                                     "profile_cover_image": {
                                                       "type": "object",
                                                       "properties": {
@@ -14892,7 +14910,8 @@
                                                             "central",
                                                             "lusaka",
                                                             "luapula",
-                                                            "copperbelt"
+                                                            "copperbelt",
+                                                            "unset"
                                                           ]
                                                         },
                                                         "city": {
@@ -14910,7 +14929,8 @@
                                                       "type": "string",
                                                       "enum": [
                                                         "male",
-                                                        "female"
+                                                        "female",
+                                                        "unset"
                                                       ]
                                                     },
                                                     "age": {
@@ -14920,7 +14940,13 @@
                                                       "type": "number",
                                                       "format": "float"
                                                     },
-                                                    "ratings": {}
+                                                    "ratings": {},
+                                                    "whatsapp_number": {
+                                                      "type": "string"
+                                                    },
+                                                    "phone_number": {
+                                                      "type": "string"
+                                                    }
                                                   }
                                                 },
                                                 "experience": {
@@ -14982,12 +15008,6 @@
                                                                               },
                                                                               "lastname": {
                                                                                 "type": "string"
-                                                                              },
-                                                                              "phone_number": {
-                                                                                "type": "integer"
-                                                                              },
-                                                                              "whatsapp_number": {
-                                                                                "type": "integer"
                                                                               },
                                                                               "profile_cover_image": {
                                                                                 "type": "object",
@@ -15291,7 +15311,8 @@
                                                                                       "central",
                                                                                       "lusaka",
                                                                                       "luapula",
-                                                                                      "copperbelt"
+                                                                                      "copperbelt",
+                                                                                      "unset"
                                                                                     ]
                                                                                   },
                                                                                   "city": {
@@ -15309,7 +15330,8 @@
                                                                                 "type": "string",
                                                                                 "enum": [
                                                                                   "male",
-                                                                                  "female"
+                                                                                  "female",
+                                                                                  "unset"
                                                                                 ]
                                                                               },
                                                                               "age": {
@@ -15319,7 +15341,13 @@
                                                                                 "type": "number",
                                                                                 "format": "float"
                                                                               },
-                                                                              "ratings": {}
+                                                                              "ratings": {},
+                                                                              "whatsapp_number": {
+                                                                                "type": "string"
+                                                                              },
+                                                                              "phone_number": {
+                                                                                "type": "string"
+                                                                              }
                                                                             }
                                                                           },
                                                                           "jobs": {
@@ -15758,7 +15786,8 @@
                                                     "mini-bus",
                                                     "canter",
                                                     "heavy-duty",
-                                                    "noah"
+                                                    "noah",
+                                                    "other"
                                                   ]
                                                 },
                                                 "createdAt": {
@@ -17472,12 +17501,6 @@
                                                                   "lastname": {
                                                                     "type": "string"
                                                                   },
-                                                                  "phone_number": {
-                                                                    "type": "integer"
-                                                                  },
-                                                                  "whatsapp_number": {
-                                                                    "type": "integer"
-                                                                  },
                                                                   "profile_cover_image": {
                                                                     "type": "object",
                                                                     "properties": {
@@ -17780,7 +17803,8 @@
                                                                           "central",
                                                                           "lusaka",
                                                                           "luapula",
-                                                                          "copperbelt"
+                                                                          "copperbelt",
+                                                                          "unset"
                                                                         ]
                                                                       },
                                                                       "city": {
@@ -17798,7 +17822,8 @@
                                                                     "type": "string",
                                                                     "enum": [
                                                                       "male",
-                                                                      "female"
+                                                                      "female",
+                                                                      "unset"
                                                                     ]
                                                                   },
                                                                   "age": {
@@ -17808,7 +17833,13 @@
                                                                     "type": "number",
                                                                     "format": "float"
                                                                   },
-                                                                  "ratings": {}
+                                                                  "ratings": {},
+                                                                  "whatsapp_number": {
+                                                                    "type": "string"
+                                                                  },
+                                                                  "phone_number": {
+                                                                    "type": "string"
+                                                                  }
                                                                 }
                                                               },
                                                               "experience": {
@@ -17870,12 +17901,6 @@
                                                                                             },
                                                                                             "lastname": {
                                                                                               "type": "string"
-                                                                                            },
-                                                                                            "phone_number": {
-                                                                                              "type": "integer"
-                                                                                            },
-                                                                                            "whatsapp_number": {
-                                                                                              "type": "integer"
                                                                                             },
                                                                                             "profile_cover_image": {
                                                                                               "type": "object",
@@ -18179,7 +18204,8 @@
                                                                                                     "central",
                                                                                                     "lusaka",
                                                                                                     "luapula",
-                                                                                                    "copperbelt"
+                                                                                                    "copperbelt",
+                                                                                                    "unset"
                                                                                                   ]
                                                                                                 },
                                                                                                 "city": {
@@ -18197,7 +18223,8 @@
                                                                                               "type": "string",
                                                                                               "enum": [
                                                                                                 "male",
-                                                                                                "female"
+                                                                                                "female",
+                                                                                                "unset"
                                                                                               ]
                                                                                             },
                                                                                             "age": {
@@ -18207,7 +18234,13 @@
                                                                                               "type": "number",
                                                                                               "format": "float"
                                                                                             },
-                                                                                            "ratings": {}
+                                                                                            "ratings": {},
+                                                                                            "whatsapp_number": {
+                                                                                              "type": "string"
+                                                                                            },
+                                                                                            "phone_number": {
+                                                                                              "type": "string"
+                                                                                            }
                                                                                           }
                                                                                         },
                                                                                         "jobs": {
@@ -18646,7 +18679,8 @@
                                                                   "mini-bus",
                                                                   "canter",
                                                                   "heavy-duty",
-                                                                  "noah"
+                                                                  "noah",
+                                                                  "other"
                                                                 ]
                                                               },
                                                               "createdAt": {
@@ -20551,12 +20585,6 @@
                                                     "lastname": {
                                                       "type": "string"
                                                     },
-                                                    "phone_number": {
-                                                      "type": "integer"
-                                                    },
-                                                    "whatsapp_number": {
-                                                      "type": "integer"
-                                                    },
                                                     "profile_cover_image": {
                                                       "type": "object",
                                                       "properties": {
@@ -20859,7 +20887,8 @@
                                                             "central",
                                                             "lusaka",
                                                             "luapula",
-                                                            "copperbelt"
+                                                            "copperbelt",
+                                                            "unset"
                                                           ]
                                                         },
                                                         "city": {
@@ -20877,7 +20906,8 @@
                                                       "type": "string",
                                                       "enum": [
                                                         "male",
-                                                        "female"
+                                                        "female",
+                                                        "unset"
                                                       ]
                                                     },
                                                     "age": {
@@ -20887,7 +20917,13 @@
                                                       "type": "number",
                                                       "format": "float"
                                                     },
-                                                    "ratings": {}
+                                                    "ratings": {},
+                                                    "whatsapp_number": {
+                                                      "type": "string"
+                                                    },
+                                                    "phone_number": {
+                                                      "type": "string"
+                                                    }
                                                   }
                                                 },
                                                 "experience": {
@@ -20949,12 +20985,6 @@
                                                                               },
                                                                               "lastname": {
                                                                                 "type": "string"
-                                                                              },
-                                                                              "phone_number": {
-                                                                                "type": "integer"
-                                                                              },
-                                                                              "whatsapp_number": {
-                                                                                "type": "integer"
                                                                               },
                                                                               "profile_cover_image": {
                                                                                 "type": "object",
@@ -21258,7 +21288,8 @@
                                                                                       "central",
                                                                                       "lusaka",
                                                                                       "luapula",
-                                                                                      "copperbelt"
+                                                                                      "copperbelt",
+                                                                                      "unset"
                                                                                     ]
                                                                                   },
                                                                                   "city": {
@@ -21276,7 +21307,8 @@
                                                                                 "type": "string",
                                                                                 "enum": [
                                                                                   "male",
-                                                                                  "female"
+                                                                                  "female",
+                                                                                  "unset"
                                                                                 ]
                                                                               },
                                                                               "age": {
@@ -21286,7 +21318,13 @@
                                                                                 "type": "number",
                                                                                 "format": "float"
                                                                               },
-                                                                              "ratings": {}
+                                                                              "ratings": {},
+                                                                              "whatsapp_number": {
+                                                                                "type": "string"
+                                                                              },
+                                                                              "phone_number": {
+                                                                                "type": "string"
+                                                                              }
                                                                             }
                                                                           },
                                                                           "jobs": {
@@ -21725,7 +21763,8 @@
                                                     "mini-bus",
                                                     "canter",
                                                     "heavy-duty",
-                                                    "noah"
+                                                    "noah",
+                                                    "other"
                                                   ]
                                                 },
                                                 "createdAt": {

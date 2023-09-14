@@ -22,7 +22,7 @@ class HtmlHead extends Component {
               <meta name="format-detection" content="telephone=no" />
               <title>{this.props.pageTitle+' | DriverBase'}</title>
               {/* Favicon icon */}
-              <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png" />
+              <link rel="icon" type="image/png" sizes="16x16" href="/DriverBaseTransparentBackground.png" />
               {/* <link href="/template/vendor/jqvmap/css/jqvmap.min.css" rel="stylesheet" /> */}
               {/* <link rel="stylesheet" href="/template/vendor/chartist/css/chartist.min.css" /> */}
               {/* Vectormap */}

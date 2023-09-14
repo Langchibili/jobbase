@@ -1,7 +1,7 @@
 module.exports = ({ env }) => ({
   host: env('HOST', '0.0.0.0'),
   port: env.int('PORT', 1337),
-  url: 'https://driverbaseapi.thenetworkzambia.com',
+  // url: 'https://driverbaseapi.thenetworkzambia.com',
   app: {
     keys: env.array('APP_KEYS'),
   },

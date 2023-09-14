@@ -31,17 +31,78 @@ async componentDidMount(){
     return
    }
    
-   if(user.type === 'car-owner'){
+   if(user.type === 'car-owner'){ // car owner profile percent updates
       if(user.carOwnerProfile === null){
         this.setState({
-            profile_completion_percentage: '9%',
+            profile_completion_percentage: '3%',
             color:'danger', // red
             message:'This profile is too empty, please add some data, as it stands, you cannot create a job or get listed as a car owner'
+        })
+        if(parseInt(user.profile_completion_percentage) ===  3) return // don't make update then
+        this.updateUser(3)
+        return
+      }
+      const carOwnerProfile = user.carOwnerProfile // get driver's profile
+      if(carOwnerProfile.details === null){
+        this.setState({
+            profile_completion_percentage:'5%',
+            color: 'danger',
+            message:'!Please add details like first and last name, phone number, about you, etc. In order to activate your profile'
+        })
+        if(parseInt(user.profile_completion_percentage) ===  5) return // don't make update then
+        this.updateUser(5)
+        return
+      }
+      
+      const profileDetails = carOwnerProfile.details
+      if(profileDetails.firstname === null || profileDetails.lastname === null){
+        this.setState({
+            profile_completion_percentage:'9%',
+            color: 'danger',
+            message:'!Please add a firstname and lastname to be listed as a driver'
         })
         if(parseInt(user.profile_completion_percentage) ===  9) return // don't make update then
         this.updateUser(9)
         return
       }
+
+      if(profileDetails.phone_number === null){
+        this.setState({
+            profile_completion_percentage:'9%',
+            color: 'danger',
+            message:'!Please add a number to start posting jobs or get them listed'
+        })
+        if(parseInt(user.profile_completion_percentage) ===  9) return // don't make update then
+        this.updateUser(9)
+        return
+      }
+      if(profileDetails.age === null || profileDetails.gender === null){
+        this.setState({
+            profile_completion_percentage:'15%',
+            color: 'warning',
+            message:'Please add an age and a gender to stand out on profile and job listings'
+        })
+        if(parseInt(user.profile_completion_percentage) ===  15) return // don't make update then
+        this.updateUser(15)
+        return
+      }
+      if(profileDetails.profile_cover_image === null || profileDetails.profile_thumbnail_image === null || profileDetails.about === null){
+        this.setState({
+            profile_completion_percentage:'20%',
+            color: 'warning',
+            message:'Please add a profile photo, cover photo and an about you to stand out on profile and job listings'
+        })
+        if(parseInt(user.profile_completion_percentage) ===  20) return // don't make update then
+        this.updateUser(20)
+        return
+      }
+    this.setState({
+        profile_completion_percentage:'75%',
+        color: 'success',
+        message:'You have successfully updated your profile details to the highest percentage, you are now eligible to begin requesting for verification'
+    })
+    if(parseInt(user.profile_completion_percentage) ===  75) return // don't make update then
+    this.updateUser(75)
    }
    else{// a driver
       if(user.driverProfile === null){
@@ -157,5 +218,3 @@ render() {
 }
 
 }
-
-

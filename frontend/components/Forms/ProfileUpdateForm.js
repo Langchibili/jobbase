@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import ImageUploader from './ImageUploader';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import Link from 'next/link';
 
 class ProfileUpdateForm extends Component {
   constructor(props) {
@@ -12,7 +12,14 @@ class ProfileUpdateForm extends Component {
         userProfile : this.props.userProfile || null,
         profileId: null,
         refName: null,
-        townText: '--Select a province--'
+        townText: '--Select a province--',
+        errorExists: false,
+        errorMessage: '',
+        updating: false,
+        updated: false,
+        snapBackOpen: true,
+        updatingProfileThumbnail: false,
+        updatingProfileCover: false
     };
     this.createRefs()
 }
@@ -43,14 +50,13 @@ class ProfileUpdateForm extends Component {
   }
   
   componentDidUpdate(){
-    if (this.state.formUpdated === false && this.state.userProfile !== null) {
+    if (this.state.formUpdated === false && this.state.userProfile !== null) { // to avoid recycles
         // set default form values 
         let profileDetails 
       
         if(this.state.userProfile.type === 'driver') profileDetails = this.state.userProfile.driverProfile.details
         if(this.state.userProfile.type === 'car-owner') profileDetails = this.state.userProfile.carOwnerProfile.details
         
-        this.email.current.value = this.state.userProfile.email
         this.firstName.current.value = profileDetails.firstname
         this.lastName.current.value = profileDetails.lastname
         this.age.current.value = profileDetails.age
@@ -62,13 +68,26 @@ class ProfileUpdateForm extends Component {
         this.town.current.value = profileDetails.address? profileDetails.address.town : ''
         this.about.current.value = profileDetails.about
 
-        
+        // EMAIL STUFF
+        if(this.state.userProfile.email === this.state.userProfile.username+'_unset@email.com'){
+            this.email.current.value = ""
+        }
+        else{
+            this.email.current.value = this.state.userProfile.email
+        }
+
+        // DRIVER SPECIFIC STUFF
         if(this.state.userProfile.type === 'driver'){
-            this.experience.current.value = this.state.userProfile.driverProfile.experience
-            this.category.current.value = this.state.userProfile.driverProfile.driver_category
+            this.category.current.value = this.state.userProfile.driverProfile.driver_category // set the driver category
+            if(this.state.userProfile.driverProfile.experience === 0){
+                this.experience.current.value = ""
+            }
+            else{
+                this.experience.current.value = this.state.userProfile.driverProfile.experience
+            }
         } 
         
-        this.setState({// file upload stuff
+        this.setState({// file upload stuff, also for driver file details stuff
             formUpdated: true,
             townText:  profileDetails.address? profileDetails.address.town : '',
             profileId: this.state.userProfile.type === 'driver'? this.state.userProfile.driverProfile.id : this.state.userProfile.carOwnerProfile.id,
@@ -154,42 +173,73 @@ class ProfileUpdateForm extends Component {
     }
   }
   
-  async updateProfileImages(image,image_type,userProfile,updateRequest){
-        let updateObject = { id:null,data:{}}
+   updateProfileImages = async (image,image_type,userProfile,updateRequest)=>{
+        let updateObject = {data:{}}
+        const makeRequestAndFireUx = async (updateObject)=>{
+            const updatedUser = await updateRequest(updateObject)
+            if(updatedUser.ok) {
+                this.setState({ 
+                    errorExists: false,
+                    submittingText: 'updated',
+                    updating: false,
+                    updated: true,
+                    snapBackOpen: true
+                })
+            }
+            else{
+                this.setState({
+                    errorExists: true,
+                    updating: false,
+                    submittingText: 'retry',
+                    snapBackOpen: true,
+                    errorMessage: "Couldn't update profile, please retry"
+                })
+            }
+        }
         if(image_type === 'profile_cover_image'){
             if(userProfile.type === 'driver'){
                 userProfile.driverProfile.details.profile_cover_image = image
-                updateObject.id =  userProfile.driverProfile.id
+                updateObject.data.id =  userProfile.driverProfile.id // set update id
                 updateObject.data = {...userProfile.driverProfile}
             }
             if(userProfile.type === 'car-owner'){
                 userProfile.carOwnerProfile.details.profile_cover_image = image
-                updateObject.id =  userProfile.carOwnerProfile.id
+                updateObject.data.id =  userProfile.carOwnerProfile.id // set update id
                 updateObject.data = {...userProfile.carOwnerProfile}
             }
+            this.setState({
+                updatingProfileCover: true
+            },()=>{
+                makeRequestAndFireUx(updateObject) // make request and fire UXs
+            })
+            
         }
         else if(image_type === 'profile_thumbnail_image'){
             if(userProfile.type === 'driver'){
                 userProfile.driverProfile.details.profile_thumbnail_image = image
-                updateObject.id =  userProfile.driverProfile.id
+                updateObject.data.id =  userProfile.driverProfile.id // set update id
                 updateObject.data = {...userProfile.driverProfile}
             }
             if(userProfile.type === 'car-owner'){
                 userProfile.carOwnerProfile.details.profile_thumbnail_image = image
-                updateObject.id =  userProfile.carOwnerProfile.id
-                updateObject.data = {...userProfile.carOwnerProfile}
+                updateObject.data.id =  userProfile.carOwnerProfile.id // set update id
+                updateObject.data = {...userProfile.carOwnerProfile} 
             }
+            this.setState({
+                updatingProfileThumbnail: true
+            },()=>{
+                makeRequestAndFireUx(updateObject) // make request and fire UXs
+            })
         }
-        updateRequest(updateObject)
+       
   }
 
 
   handleSubmit = (e)=>{
         e.preventDefault()
         let userProfile = this.state.userProfile
-        let updateObject = {id:null,data:{}}
+        let updateObject = {data:{}}
         userProfile.email = this.email.current.value 
-        
         if(this.state.userProfile.type === 'driver'){
             userProfile.driverProfile.details.firstname = this.firstName.current.value 
             userProfile.driverProfile.details.lastname =  this.lastName.current.value
@@ -216,9 +266,8 @@ class ProfileUpdateForm extends Component {
                 userProfile.driverProfile.details.address.town = this.town.current.value 
                 userProfile.driverProfile.details.address.city = this.town.current.value 
             }
-           
+            console.log('car ownwer ilegal place',updateObject)
             // setting up updateObject
-            updateObject.id =  userProfile.driverProfile.id
             updateObject.data = {...userProfile.driverProfile}
         }
         if(this.state.userProfile.type === 'car-owner'){
@@ -245,9 +294,7 @@ class ProfileUpdateForm extends Component {
                 userProfile.carOwnerProfile.details.address.town = this.town.current.value 
                 userProfile.carOwnerProfile.details.address.city = this.town.current.value 
             }
-            
             // setting up updateObject
-             updateObject.id =  userProfile.carOwnerProfile.id
              updateObject.data = {...userProfile.carOwnerProfile}
         }
         
@@ -255,45 +302,66 @@ class ProfileUpdateForm extends Component {
             userProfile: userProfile,
             updateObject: updateObject
         },()=>{
-            console.log(this.state.userProfile)
             this.setState({
+                errorExists: false,
                 updating: true,
                 submittingText: 'updating...'
              },async ()=>{
-                const updatedUser = await this.updateRequest(updateObject)
-                if(updatedUser) this.setState({ submittingText: 'updated'})
+                const updateUserEmail = await this.updateUserEmail(userProfile.email,userProfile.id) //update email first
+                if(updateUserEmail.ok){
+                    const updatedUser = await this.updateRequest(updateObject) // then update other user profile details
+                 
+                    if(updatedUser.ok) {
+                        this.setState({ 
+                            errorExists: false,
+                            submittingText: 'updated',
+                            updating: false,
+                            updated: true,
+                            snapBackOpen: true
+                        })
+                    }
+                    else{
+                        this.setState({
+                            errorExists: true,
+                            updating: false,
+                            submittingText: 'retry',
+                            snapBackOpen: true,
+                            errorMessage: "Couldn't update profile, please retry"
+                        })
+                    }
+                }
+                else{
+                    this.setState({
+                        errorExists: true,
+                        updating: false,
+                        submittingText: 'retry',
+                        snapBackOpen: true,
+                        errorMessage: "Couldn't update profile, please retry"
+                    })
+                }
             })
         })
   }
 
+  updateUserEmail = async (email,userId)=>{
+    if(email === ""){
+        email = this.state.userProfile.username+'_unset@email.com'
+    }
+    return await fetch(this.props.api_url+"/users/"+userId, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.props.jwt}`
+        },
+        body: JSON.stringify({email:email})
+      })
+  }
 
   updateRequest = async (updateObject)=>{
-     delete updateObject.data.id
-     delete updateObject.data.updatedAt
-     delete updateObject.data.createdAt
-     delete updateObject.data.publishedAt
-     delete updateObject.data.driving_license_front
-     delete updateObject.data.drivers_license_back
-     delete updateObject.data.driving_certificate_front
-     delete updateObject.data.driving_certificate_back
-     delete updateObject.data.nrc_front
-     delete updateObject.data.nrc_back
-     delete updateObject.data.driver_category
-     delete updateObject.data.details.profile_cover_image
-     delete updateObject.data.details.profile_thumbnail_image
-    //  delete updateObject.data.details.about
-    //  delete updateObject.data.details.address
-    //  delete updateObject.data.details.age
-    delete updateObject.data.details.average_rating
-    //  delete updateObject.data.details.gender
-    //  delete updateObject.data.details.lastname
-    //  delete updateObject.data.details.firstname
-    delete updateObject.data.details.ratings
-    //  delete updateObject.data.details.verified
-     delete updateObject.data.details.phone_number
-     delete updateObject.data.details.whatsapp_number
-     console.log(updateObject)
+     updateObject = this.cleanData(updateObject)// add values to empty required data and parse ints
      const update_url = this.state.userProfile.type === 'driver'? this.props.api_url+"/driver-profiles/"+this.state.profileId : this.props.api_url+"/car-owner-profiles/"+this.state.profileId
+    
+     console.log('a cleaner update object',updateObject)
      return await fetch(update_url, {
         method: 'PUT',
         headers: {
@@ -302,11 +370,93 @@ class ProfileUpdateForm extends Component {
         },
         body: JSON.stringify(updateObject)
       })
-      .then(response => response.json())
-      .then(data => data)
-      .catch(error => console.error(error));
   }
   
+  cleanData = (updateObject)=>{
+        // driver specific property checks
+        if(updateObject.data.hasOwnProperty('experience')){ 
+            if(updateObject.data.experience === "") {
+                updateObject.data.experience = 0
+            }
+            else{
+                updateObject.data.experience = parseInt(updateObject.data.experience)
+            }
+        }
+
+        if(updateObject.data.hasOwnProperty('driver_category')){ 
+            if(updateObject.data.driver_category === "") {
+                updateObject.data.driver_category = "other"
+            }
+        }
+
+        // all other user types property checks
+        if(updateObject.data.details.hasOwnProperty('age')){
+            if(updateObject.data.details.age === ""){ // if the age is not set and equal to a string
+                updateObject.data.details.age = 0
+            }
+            else{
+                updateObject.data.details.age  = parseInt(updateObject.data.details.age)
+            }
+        }
+        if(updateObject.data.details.address.province === ""){
+           updateObject.data.details.address.province = "unset"
+        }
+        if(updateObject.data.details.gender === ""){
+           updateObject.data.details.gender = "unset"
+        }
+       
+        // delete data to avoid a 400 on bad data construction
+        delete updateObject.data.id
+        delete updateObject.data.updatedAt
+        delete updateObject.data.createdAt
+        delete updateObject.data.publishedAt
+        // delete these coz they get updated by strapi whenever a new upload it made using refId,RefName,etc
+        delete updateObject.data.driving_license_front
+        delete updateObject.data.drivers_license_back
+        delete updateObject.data.driving_certificate_front
+        delete updateObject.data.driving_certificate_back
+        delete updateObject.data.nrc_front
+        delete updateObject.data.nrc_back
+         
+        // only delete any of the follwing when not being updated, otherwise leave to update
+        if(!this.state.updatingProfileCover) delete updateObject.data.details.profile_cover_image
+        if(!this.state.updatingProfileThumbnail) delete updateObject.data.details.profile_thumbnail_image
+        
+        delete updateObject.data.details.ratings
+        delete updateObject.data.details.average_rating // coz ratings are updated elsewhere
+        return updateObject // return cleaner data ready to upstream
+  }
+
+   handleUx = ()=>{
+    const handleSnapBackClose = (event, reason) => {
+        if (reason === 'clickaway') {
+          return;
+        }
+        this.setState({
+            snapBackOpen: false
+        })
+      }
+
+    if(this.state.errorExists){
+        return (
+            <Snackbar open={this.state.snapBackOpen} autoHideDuration={3500} onClose={handleSnapBackClose} TransitionComponent='SlideTransition' anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+            <MuiAlert elevation={6}  variant="filled" onClose={handleSnapBackClose} severity="error" sx={{ width: '100%' }}>
+                {this.state.errorMessage}
+                </MuiAlert>
+            </Snackbar>
+            
+        )
+    }
+    else{
+        return (<Link href={"/profile?user_type="+this.state.userProfile.type+"&uid="+this.state.userProfile.id} >   
+                <Snackbar TransitionComponent='SlideTransition' open={this.state.snapBackOpen} autoHideDuration={4500} onClose={handleSnapBackClose} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                <MuiAlert elevation={6}  variant="filled" onClose={handleSnapBackClose} severity="success" sx={{ width: '100%' }}>
+                     profile updated, click to view changes
+                </MuiAlert>
+                </Snackbar>
+                </Link>)
+    }
+   }
 
   renderDriverForm = ()=>{
      if(this.state.userProfile.type === 'driver'){
@@ -483,7 +633,7 @@ class ProfileUpdateForm extends Component {
                             <div className="input-group-prepend">
                             <span className="input-group-number" id="basic-addon2"><i className="fab fa-whatsapp" aria-hidden="true" /></span>
                             </div>
-                            <input ref={this.whatsAppNumber}  type="tell" className="form-control" placeholder="Phone no." />
+                            <input ref={this.whatsAppNumber}  type="tel" className="form-control" placeholder="Phone no." />
                         </div>
                         </div>
                     </div>
@@ -575,6 +725,7 @@ class ProfileUpdateForm extends Component {
                         <Button disabled={this.state.updating} onClick={this.handleSubmit} variant="contained" component="label">
                               {this.state.submittingText}
                         </Button> 
+                        {this.state.errorExists || this.state.updated? this.handleUx() : '' /*this is some basic ux stuff */}
                     </div>            
                     </div>
                 </div>
@@ -614,7 +765,7 @@ class ProfileUpdateForm extends Component {
                     <div className="col-xl-12">
                         <div className="form-group">
                         <label>About You</label>
-                        <textarea ref={this.about} className="form-control" rows={6} defaultValue={"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum que laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta su\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t"} />
+                        <textarea ref={this.about} className="form-control" rows={6} />
                         </div>
                     </div>
                     </div>

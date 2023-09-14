@@ -11,6 +11,18 @@ class UserProfile extends Component {
     };
   }
 
+  imageUrlFormat = (image,formatWanted)=>{
+    if(image.hasOwnProperty('formats')){
+       if(image.formats.hasOwnProperty(formatWanted)){
+        return image.formats[formatWanted].url
+       }
+    }
+    if(!image.url){
+        return '/no-cover-photo.jpg'
+    }
+    return image.url
+  }
+
   render() {
     console.log(this.props.userProfile)
     if(this.props.userProfile === null) return <div>User Not Found</div>
@@ -48,7 +60,8 @@ class UserProfile extends Component {
     let cover_photo
     if(profileDetails.profile_cover_image !== null){
         const backEndUrl = this.props.api_url.replace('/api','')
-        cover_photo = profileDetails.profile_cover_image.formats? backEndUrl+profileDetails.profile_cover_image.formats.large.url : '/no-cover-photo.jpg'    
+        const coverPhotoUrl = this.imageUrlFormat(profileDetails.profile_cover_image,'large')
+        cover_photo = backEndUrl+coverPhotoUrl
     }
     else{
         cover_photo = '/no-cover-photo.jpg' 
@@ -65,12 +78,13 @@ class UserProfile extends Component {
     let profile_photo
     if(profileDetails.profile_thumbnail_image !== null){
         const backEndUrl = this.props.api_url.replace('/api','')
-        profile_photo = profileDetails.profile_thumbnail_image.formats? backEndUrl+profileDetails.profile_thumbnail_image.formats.thumbnail.url : '/default-profile.png'    
+        const profilePhotoUrl = this.imageUrlFormat(profileDetails.profile_thumbnail_image,'thumbnail')
+        profile_photo =  backEndUrl+profilePhotoUrl  
     }
     else{
         profile_photo = '/default-profile.png' 
     }
-
+  
     // address stuff
     let address, province, town, locationDisplay 
     if(profileDetails.address === null){
@@ -198,7 +212,7 @@ class UserProfile extends Component {
                 <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : email}</span>
                 </div>
                 </div>
-                {this.props.userProfile.type === 'car-owner'? '' : <div className="row mb-2"><div className="col-sm-3 col-5"><h5 className="f-w-500">Availability <span className="pull-end">:</span></h5></div><div className="col-sm-9 col-7"><span class='text-success'><strong>{availability_display}</strong></span></div></div>}
+                {this.props.userProfile.type === 'car-owner'? '' : <div className="row mb-2"><div className="col-sm-3 col-5"><h5 className="f-w-500">Availability <span className="pull-end">:</span></h5></div><div className="col-sm-9 col-7"><span className='text-success'><strong>{availability_display}</strong></span></div></div>}
                 <div className="row mb-2">
                 <div className="col-sm-3 col-5">
                     <h5 className="f-w-500">Age <span className="pull-end">:</span>

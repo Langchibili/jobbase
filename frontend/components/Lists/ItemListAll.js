@@ -41,8 +41,8 @@ class ItemListAll extends Component {
   
   getReqUrl = ()=>{
     if(this.props.itemsName === 'users'){
-      if(this.props.listType === 'drivers') return this.props.api_url+'/driver-profiles'
-      if(this.props.listType === 'car-owners') return this.props.api_url+'/car-owner-profiles'  
+      if(this.props.listType === 'drivers') return this.props.api_url+this.props.reqUrlPath
+      if(this.props.listType === 'car-owners') return this.props.api_url+this.props.reqUrlPath
     }
     else if(this.props.itemsName === 'jobs'){
       return this.props.api_url+'/'+this.props.itemsName
@@ -51,7 +51,7 @@ class ItemListAll extends Component {
 
   getInitialItems = async (reqUrl)=>{
     const itemsName = this.props.itemsName
-    const items = await fetch(reqUrl+'?meta=true',{
+    const items = await fetch(reqUrl,{
       headers: {
         'Content-Type': 'application/json'
       }
@@ -75,35 +75,47 @@ class ItemListAll extends Component {
 
   async componentDidMount(){
     const reqUrl = this.getReqUrl()
-    let items = await this.getInitialItems(reqUrl) // get initial items
-    if(items.data.length < 0){// if items are not found or zero
-      this.setState({contentLoaded: true})
+    let items // to be filled bellow
+    let response = await this.getInitialItems(reqUrl) // get initial items
+    if(response !== undefined){
+      if('data' in response){ // if the response has .data property
+        items = response.data
+      }
+      if(items.length < 0){// if items are not found or zero
+        this.setState({contentLoaded: true})
+      }
+      else{
+        const itemsToDisplay = this.getPageItems(items, 1, 10)// get page one elements
+        const pageCount = this.getPageCount(response.meta.pagination.total,10)
+        this.setState({// add items to state
+          items:items,
+          pageCount: pageCount,
+          itemsCount: response.meta.pagination.total,
+          currentPage: 1,
+          itemsToDisplay: itemsToDisplay
+          //pageCount: items.meta.pagination.pageCount
+        },async ()=>{
+            const InitialItemsCount = this.state.items.length
+            const itemsCount = this.state.itemsCount
+            const itemsLeft = itemsCount - InitialItemsCount
+            if(itemsLeft > 0){
+              const items = this.state.items
+              let newItems = await this.loadNextBatch(InitialItemsCount, itemsCount, reqUrl)
+              if(newItems !== undefined) {
+                  if('data' in newItems){ // if the response has .data proprty
+                    newItems = newItems.data
+                  }
+                  items.push(...newItems);
+                  this.setState({items:items,contentLoaded: true})// add rest of the items
+              } 
+            }
+            else{
+              this.setState({contentLoaded: true})
+            }
+        })
+      }
     }
-    else{
-      const itemsToDisplay = this.getPageItems(items.data, 1, 10)// get page one elements
-      const pageCount = this.getPageCount(items.meta.pagination.total,10)
-      this.setState({// add items to state
-        items:items.data,
-        pageCount: pageCount,
-        itemsCount: items.meta.pagination.total,
-        currentPage: 1,
-        itemsToDisplay: itemsToDisplay
-        //pageCount: items.meta.pagination.pageCount
-      },async ()=>{
-          const InitialItemsCount = this.state.items.length
-          const itemsCount = this.state.itemsCount
-          const itemsLeft = itemsCount - InitialItemsCount
-          if(itemsLeft > 0){
-            const items = this.state.items
-            const newItems = await this.loadNextBatch(InitialItemsCount, itemsCount, reqUrl)
-            items.push(...newItems.data);
-            this.setState({items:items,contentLoaded: true})// add rest of the items
-          }
-          else{
-            this.setState({contentLoaded: true})
-          }
-      })
-    }
+    
   }
   
 

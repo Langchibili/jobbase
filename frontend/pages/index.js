@@ -7,6 +7,15 @@ import PageLoader from '@/components/Includes/PageLoader'
 import ContentLoader from '@/components/Includes/ContentLoader'
 
 
+// const navigator = ()=>{
+//   if(stack.length === 1){
+
+//   }
+
+//   job
+//   home
+// }
+
 export default function Home() {
   const [data, setData] = React.useState({
     loading: true,
@@ -27,10 +36,11 @@ export default function Home() {
   return (
     <>
       <HtmlHead pageTitle='Homepage'/>
-      {data.loading? <><PageLoader /><ContentLoader text="DRIVERBASE"/></> : <Content 
-                                                                                     loggedInUserProfile={data.loggedInUserProfile}
-                                                                                     api_url={api_url}
-                                                                                     jwt={getJwt()}/>}
+      {data.loading? <><PageLoader /><ContentLoader text="DRIVERBASE"/></> : 
+      <Content 
+            loggedInUserProfile={data.loggedInUserProfile}
+            api_url={api_url}
+            jwt={getJwt()}/>}
       <HtmlFoot/>
     </>
   )

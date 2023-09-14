@@ -46,7 +46,6 @@ class List extends Component {
       if(this.props.itemsName === 'users'){
         const users = await this.getItems(this.props.api_url+this.props.reqUrlPath) // get initial items  
         const listType = this.props.listType === 'drivers'? 'driver': this.props.listType
-        console.log('this is the list of items',items)
         items = users.filter((user)=>(user.profile_completion_percentage > 9 && user.type === listType))
       }
       else{
@@ -66,8 +65,8 @@ class List extends Component {
   renderList = ()=> {
     const listType = this.props.listType
     if(this.props.itemsName === 'users'){
-      if(listType === 'drivers') return <Drivers drivers={this.state.items} {...this.props} />
-        if(listType === 'car-owners') return <CarOwners carOwners={this.state.items} {...this.props} />     
+        if(listType === 'drivers') return <Drivers drivers={this.state.items} {...this.props} listAll={false}/>
+        if(listType === 'car-owners') return <CarOwners carOwners={this.state.items} {...this.props} listAll={false}/>     
     }
     else if(this.props.itemsName === 'jobs'){
         if(listType === 'jobs') return <Jobs jobs={this.state.items} {...this.props} />

@@ -46,7 +46,7 @@ class SignUpForm extends Component {
     user.username = username
     user.password = password
     user.email = username+'_unset@email.com'
-    
+
     if(!this.state.errorExists){
         this.setState({
             submitting: true,
@@ -202,7 +202,7 @@ class SignUpForm extends Component {
     return (
         <div className="auth-form">
                         <div className="text-center mb-3">
-                        <a href="index.html"><img src="images/logo-full.png" alt /></a>
+                        <Link href="/"><img style={{width:60,height:60}} src="/DriverBaseTransparentBackground.png" alt /></Link>
                         </div>
                         <h4 className="text-center mb-4 text-white">Sign up your account</h4>
                         <form>
