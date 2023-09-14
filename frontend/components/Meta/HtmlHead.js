@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Head from 'next/head';
+import { Padding } from '@mui/icons-material';
 class HtmlHead extends Component {
   constructor(props) {
     super(props);
@@ -33,8 +34,6 @@ class HtmlHead extends Component {
               <link href="/template/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
               <link href="/template/css/style.css" rel="stylesheet" />
               {/* <link href="/template/vendor/jquery-smartwizard/dist/css/smart_wizard.min.css" rel="stylesheet"/> */}
-        
-              
             </Head>
     );
   }

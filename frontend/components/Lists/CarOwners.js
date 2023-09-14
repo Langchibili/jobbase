@@ -47,7 +47,6 @@ class CarOwners extends Component {
   rendercarOwnersList = ()=>{
     const listFormat = this.props.listFormat;
     const carOwners = this.props.carOwners
-    console.log('car owners frontpage',carOwners)
     if(carOwners.length === 0) return <p>No Car Owners Registered Yet</p>
     if(listFormat === 'grid'){
         return <></>;
@@ -64,8 +63,8 @@ class CarOwners extends Component {
             carOwnerProfile = carOwner.carOwnerProfile // the profile no attribute property
           }
 
-          eligibleForListing = this.checkEligibility(carOwner) // check carOwner listing eligibility
-          
+           eligibleForListing = this.checkEligibility(carOwner) // check carOwner listing eligibility
+           if(carOwnerProfile === undefined) return
            if(eligibleForListing){ //check if profile has got details to it
                fullname = carOwnerProfile.details.firstname? carOwnerProfile.details.firstname +' '+ carOwnerProfile.details.lastname || '' : ''
                if(carOwnerProfile.details.profile_thumbnail_image !== null){ // check if thumbnail exists

@@ -29405,3 +29405,6 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     [data-theme-version="dark"] .footer .copyright a {
       color: #fff; }
 
+.card-body{
+  padding: 0.7rem !important;
+}

@@ -30,7 +30,7 @@ export function getJwt(){
    
 } 
 export const driver_populate_url = 'populate=driverProfile,driverProfile.details,driverProfile.details.address,driverProfile.details.profile_cover_image,driverProfile.details.profile_thumbnail_image,driverProfile.driving_license_front,driverProfile.drivers_license_back,driverProfile.driving_certificate_front,driverProfile.driving_certificate_back,driverProfile.nrc_front,driverProfile.nrc_back'
-export const minimal_driver_populate_url = 'populate=driverProfile,driverProfile.details,driverProfile.details.driverProfile.details.profile_thumbnail_image'
+export const minimal_driver_populate_url = 'populate=driverProfile,driverProfile.details,driverProfile.details.profile_thumbnail_image'
 export const car_owner_populate_url = 'populate=carOwnerProfile,carOwnerProfile.details,carOwnerProfile.details.address,carOwnerProfile.details.profile_cover_image,carOwnerProfile.details.profile_thumbnail_image'
 export const minimal_car_owner_populate_url = '?populate=details,details.profile_thumbnail_image'
 
