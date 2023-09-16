@@ -1,3 +1,4 @@
+import { imageUrlFormat } from '@/Constants';
 import { EscalatorWarningOutlined } from '@mui/icons-material';
 import Link from 'next/link';
 import React, { Component } from 'react';
@@ -52,7 +53,7 @@ class Drivers extends Component {
         return <></>;
     }
     else{
-        let userId,fullname,phone_number,thumbnail,profile_url,rating,eligibleForListing,driverProfile
+        let userId,fullname,phone_number,thumbnail,thumbnailUrl,profile_url,rating,eligibleForListing,driverProfile
         return drivers.map((driver)=>{
             if(this.props.listAll) { // set userId for user profiles
               userId = parseInt(driver.attributes.userid) // the userid
@@ -70,11 +71,30 @@ class Drivers extends Component {
                 // THUMBNAIL
                 if(driverProfile.details.profile_thumbnail_image !== null){ // check if thumbnail exists
                     const backEndUrl = this.props.api_url.replace('/api','')
-                    thumbnail = driverProfile.details.profile_thumbnail_image.formats? backEndUrl+driverProfile.details.profile_thumbnail_image.formats.thumbnail.url : '/default-profile.png' 
+                    if(this.props.listAll) {
+                        if(driverProfile.details.profile_thumbnail_image.data === null) { 
+                          thumbnail = '/default-profile.png' 
+                        }
+                        else{
+                          thumbnailUrl = imageUrlFormat(driverProfile.details.profile_thumbnail_image.data.attributes,'thumbnail')
+                        }
+                    }
+                    else{
+                        thumbnailUrl = imageUrlFormat(driverProfile.details.profile_thumbnail_image,'thumbnail')
+                    }
+                    // adding an api url path to the image source
+                    if(driverProfile.details.profile_thumbnail_image.data === null) { 
+                       thumbnail = '/default-profile.png' 
+                    }
+                    else{
+                       thumbnail = backEndUrl+thumbnailUrl
+                    }
+                    
                 }    
                 else{
-                    thumbnail = '/default-profile.png' 
+                  thumbnail = '/default-profile.png' 
                 } 
+
                 //PHONE NUMBER
                 phone_number = driverProfile.details.phone_number? driverProfile.details.phone_number : '' 
                 //PROFILE URL

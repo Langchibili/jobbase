@@ -97,6 +97,10 @@
         "driver",
         "car-owner"
       ]
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

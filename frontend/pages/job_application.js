@@ -9,8 +9,22 @@ import ContentLoader from '@/components/Includes/ContentLoader';
 import Alert from '@mui/material/Alert';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import Link from 'next/link';
+import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 
 
+function checkIfHasAppliedBefore(job,user){
+         const jobId = job.data.id
+         const jobs = user.driverProfile.jobs
+         if(jobs === null || jobs.length === 0){
+            return true
+         }
+         const jobFound = jobs.filter((job)=>{ // check for job in users applied to jobs
+                return job.id === jobId
+         })
+         if(jobFound.length >= 1) return true
+         return false // means u have applied before
+
+}
 
 async function getJob(jid) {
     let job
@@ -70,6 +84,7 @@ export default function jobs_application(props) {
         //const applicants = job.applicants
         if(data.loggedInUserProfile.type !== 'driver'){
           return (<> <HtmlHead pageTitle='Jobs | Application'/>
+                        <UpAndBackButton/>
                         <div style={{maxWidth:500,margin:'auto'}}><Alert severity="info">Only Workers, such as Drivers Can Apply To Jobs!</Alert></div> 
                         <div style={{maxWidth:100,textAlign:'center',margin:'auto'}}><KeyboardDoubleArrowDownIcon color='primary'/></div>
                         <div style={{margin:10,textAlign:'center'}}><Link href="/signup" className="btn btn-primary light btn-rounded me-auto">You Can SingUp For A Driver Account</Link></div>
@@ -78,18 +93,22 @@ export default function jobs_application(props) {
         }
         if(data.job === 'not-found'){
             return (<> <HtmlHead pageTitle='Jobs | Application'/>
+                         <UpAndBackButton/>
                          <Alert severity="warning">The Job You Are Looking For Doesn't Exist. It could be that the owner closed it or it got cancelled.</Alert> 
                        <HtmlFoot/> </>)
         }
-        if(data.loggedInUserProfile.driverProfile.application_points <= 0){ 
+        if(checkIfHasAppliedBefore(data.job, data.loggedInUserProfile)) return <>You have already applied to this Job</>
+        if(data.loggedInUserProfile.driverProfile.application_points < 2){ 
             return (<> <HtmlHead pageTitle='Jobs | Application'/>
+                         <UpAndBackButton/> 
                          <Alert severity="error">You Have No Application Points To Apply To This or any other job, get your account verified or subscribe as a premium user to be able to apply to more jobs.</Alert> 
                         <HtmlFoot/> </>)
         }
         
         return (
-         <>
+         <> 
             <HtmlHead pageTitle='Jobs | Application'/>
+            <UpAndBackButton/>
             <div className="authincation h-100">
                 <div className="container h-100">
                     <div className="row justify-content-center h-100 align-items-center">
@@ -98,7 +117,7 @@ export default function jobs_application(props) {
                         <div className="row no-gutters">
                             <div className="col-xl-12" >
                                 Before You apply, make sure you have updated your profile enough to stand out from other applicants
-                                Note That When you apply to this job, your application points(APs) will reduce by one
+                                Note That When you apply to this job, your Job application points(JAPs) will reduce by one
                                 Are You Sure You Want To Apply To This Job?
                                 <JobApplicationForm 
                                     jwt={getJwt()}

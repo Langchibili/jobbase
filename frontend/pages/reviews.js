@@ -7,6 +7,7 @@ import { api_url,getJwt } from '@/Constants';
 import { useRouter } from 'next/router';
 import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
+import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 
 
 async function getUserProfile(uid,user_type) {
@@ -58,8 +59,9 @@ export default function reviews(props) {
           fetchData();
       }
     }, [act,uid,user_type]);
+    console.log(data.loggedInUserProfile)
     if (data.loggedInUserProfile === 'logged-out') window.location = '/login' // you should re-log in
-
+    
     if (data.loading || data.loggedInUserProfile === null || data.userProfile == null) {
         return (<> <PageLoader/><HtmlHead pageTitle='Reviews'/><ContentLoader text='loading...'/> <HtmlFoot/> </>)
     }
@@ -72,11 +74,10 @@ export default function reviews(props) {
     return (
     <>
         <HtmlHead pageTitle='Reviews'/>
-        <div className="authincation h-100">
+        <UpAndBackButton/>
             <div className="container h-100">
                 <div className="row justify-content-center h-100 align-items-center">
                 <div className="col-md-6">
-                    <div className="authincation-content">
                     <div className="row no-gutters">
                         <div className="col-xl-12" >
                             {props.act === 'show'? <UserReview {...props} jwt={getJwt()} loggedInUserProfile={data.loggedInUserProfile} /> : <ReviewsForm 
@@ -86,11 +87,9 @@ export default function reviews(props) {
                                                                                                                                                          userProfile={data.userProfile}/>}
                         </div>
                     </div>
-                    </div>
                 </div>
                 </div>
             </div>
-        </div>
         <HtmlFoot/>
         </>   
     )

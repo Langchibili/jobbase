@@ -6,6 +6,7 @@ import { api_url,getJwt } from '@/Constants';
 import { useRouter } from 'next/router';
 import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
+import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 
 
 export default function car_owners(props) {
@@ -13,6 +14,7 @@ export default function car_owners(props) {
     return (
         <>
         <HtmlHead pageTitle='CarOwners'/>
+        <UpAndBackButton/>
         <div className="authincation h-100">
             <div className="container h-100">
                 <div className="row justify-content-center h-100 align-items-center">

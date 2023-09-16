@@ -62,7 +62,7 @@ class List extends Component {
       } 
     }
     this.setState({requesting: false, items:items},()=>{
-      console.log(this.state.items)
+      //  console.log(this.state.items)
     })
     // if(items.length > 0){// if items are not found or zero
     //   this.setState({requesting: false, items:items},()=>{

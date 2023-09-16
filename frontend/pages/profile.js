@@ -7,6 +7,7 @@ import ProfileUpdateForm from  '@/components/Forms/ProfileUpdateForm'
 import UserProfile from '@/components/Includes/UserProfile';
 import ContentLoader from '@/components/Includes/ContentLoader';
 import PageLoader from '@/components/Includes/PageLoader';
+import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 
 async function getUserProfile(uid,user_type) {
     let url,userProfile
@@ -85,14 +86,14 @@ async function fetchData(url){
      
     if(uid && user_type && data.userProfile !== null && data.userProfile !== 'not-found'){
       if(user_type !== data.userProfile.type){
-        return ( <> <HtmlHead pageTitle="Profile" /> <div>User Not Found </div><HtmlFoot /> </> );
+        return ( <> <HtmlHead pageTitle="Profile" /><UpAndBackButton/> <div>User Not Found </div><HtmlFoot /> </> );
       }
-      return (<><UserProfile userProfile={data.userProfile} loggedInUserProfile={data.loggedInUserProfile} api_url={api_url} jwt={getJwt()} /></>);
+      return (<><UpAndBackButton/><UserProfile userProfile={data.userProfile} loggedInUserProfile={data.loggedInUserProfile} api_url={api_url} jwt={getJwt()} /></>);
     }
     else {
       if (data.loggedInUserProfile !== null && data.userProfile === null && !uid && !user_type) {
         if (data.loggedInUserProfile === 'logged-out') window.location = '/login' // you should re-log in
-        return (<><HtmlHead pageTitle="Profile" /><ProfileUpdateForm userProfile={data.loggedInUserProfile} jwt={getJwt()} api_url={api_url}/><HtmlFoot /></>);
+        return (<><HtmlHead pageTitle="Profile" /><UpAndBackButton/><ProfileUpdateForm userProfile={data.loggedInUserProfile} jwt={getJwt()} api_url={api_url}/><HtmlFoot /></>);
       } 
     }
   }

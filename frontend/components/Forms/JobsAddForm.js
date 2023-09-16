@@ -24,10 +24,12 @@ class JobsAddForm extends Component {
 
    // add a new job to the user(car-owner) jobs array
  updateUserWIthNewJob = async (user,newJob)=>{
+     console.log(user)
      const jobs = user.carOwnerProfile.jobs // grab job ids
      const carOwnerProfileId = user.carOwnerProfile.id // get car owner id
+     const jobCreationPoints = user.carOwnerProfile.job_creation_points - 5
      jobs.push(newJob.data.id) // push new job id into car owner object
-     const carOwnerProfileJobsUpdate = {id : carOwnerProfileId, data:{jobs:  jobs}}
+     const carOwnerProfileJobsUpdate = {id : carOwnerProfileId, data:{jobs:  jobs,job_creation_points:jobCreationPoints}}
      return await fetch(this.props.api_url+'/car-owner-profiles/'+carOwnerProfileId, {
             method: 'PUT',
             headers: {

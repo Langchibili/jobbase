@@ -8,6 +8,7 @@ import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
 import JobsEditForm from '@/components/Forms/JobsEditForm';
 import JobDeleteForm from '@/components/Forms/JobDeleteForm';
+import UpAndBackButton from '@/components/Includes/UpAndBackButton';
  
 async function getJob(jid) {
     let job
@@ -94,6 +95,7 @@ export default function jobs_manage(props) {
         return (
          <>
             <HtmlHead pageTitle='Jobs | Application'/>
+            <UpAndBackButton/>
             <div className="authincation h-100">
                 <div className="container h-100">
                     <div className="row justify-content-center h-100 align-items-center">

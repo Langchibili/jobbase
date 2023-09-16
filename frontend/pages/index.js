@@ -5,6 +5,7 @@ import React from 'react';
 import { api_url,getLoggedInUserData,getJwt } from '@/Constants';
 import PageLoader from '@/components/Includes/PageLoader'
 import ContentLoader from '@/components/Includes/ContentLoader'
+import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 
 
 // const navigator = ()=>{
@@ -35,6 +36,7 @@ export default function Home() {
 
   return (
     <>
+     <UpAndBackButton/>
       <HtmlHead pageTitle='Homepage'/>
       {data.loading? <><PageLoader /><ContentLoader text="DRIVERBASE"/></> : 
       <Content 

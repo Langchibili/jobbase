@@ -8,81 +8,14 @@ class HtmlFoot extends Component {
     };
   }
   componentDidMount() {
-    // function checkDirection() {
-    //   var htmlClassName = document.getElementsByTagName('html')[0].getAttribute('class');
-    //   if(htmlClassName === 'rtl') {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }
-    /*
-    function carouselReview() {
-       //testimonial one function by = owl.carousel.js 
-      jQuery('.testimonial-one').owlCarousel({
-        loop:true,
-        autoplay:true,
-        margin:15,
-        nav:false,
-        dots: false,
-        left:true,
-        rtl: checkDirection(),
-        navText: ['', ''],
-        responsive:{
-          0:{
-            items:1
-          },
-          800:{
-            items:2
-          }, 
-          991:{
-            items:2
-          },      
-      
-          1200:{
-            items:2
-          },
-          1600:{
-            items:2
-          }
-        }
-      })    
-      jQuery('.testimonial-two').owlCarousel({
-        loop:true,
-        autoplay:true,
-        margin:15,
-        nav:false,
-        dots: true,
-        left:true,
-        rtl: checkDirection(),
-        navText: ['', ''],
-        responsive:{
-          0:{
-            items:1
-          },
-          600:{
-            items:2
-          },  
-          991:{
-            items:3
-          },      
-      
-          1200:{
-            items:3
-          },
-          1600:{
-            items:4
-          }
-        }
-      })          
+    // remove the template's floating buttons
+    if(window.screen.availWidth >= 1025){
+      if(document.getElementsByClassName('DZ-bt-support-now DZ-theme-btn')[0] === undefined) return
+      document.getElementsByClassName('DZ-bt-support-now DZ-theme-btn')[0].style.display = 'none'
+      document.getElementsByClassName('DZ-bt-buy-now DZ-theme-btn')[0].style.display = 'none'  
     }
-    
-    jQuery(window).on('load', function() {
-      setTimeout(function() {
-        carouselReview();
-      }, 1000); 
-    });*/
-  } 
+  }
+   
   
   render() {
     return (
@@ -100,7 +33,7 @@ class HtmlFoot extends Component {
         {/* <script src="/template/js/demo.js"></script> */}
         {/* <script src="/template/js/styleSwitcher.js"></script> */}
         {/* <script src="/template/vendor/jquery-smartwizard/dist/js/jquery.smartWizard.js"></script> */}
-        <script id="DZScript" src="/dzassets.s3.amazonaws.com/w3-global8bb6.js?btn_dir=right"></script>
+        {/* <script id="DZScript" src="/dzassets.s3.amazonaws.com/w3-global8bb6.js?btn_dir=right"></script> */}
       </React.Fragment>
     );
   }

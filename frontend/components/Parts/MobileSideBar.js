@@ -10,8 +10,10 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import Link from 'next/link';
+import { ArrowCircleRight, ArrowForwardOutlined } from '@mui/icons-material';
 
-export default function MobileSideBAr() {
+export default function MobileSideBAr(props) {
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -31,6 +33,13 @@ export default function MobileSideBAr() {
     setState({ ...state, [anchor]: open });
   };
 
+//   <Link onClick={this.props.handlePageChange} href="/jobs?act=show-all">Jobs</Link></li>
+//                 <li><Link onClick={this.props.handlePageChange} href="/jobs?act=edit">Edit Jobs</Link></li>
+//                 <li><Link onClick={this.props.handlePageChange} href="/jobs?act=delete">Delete Jobs</Link></li> 
+//                 <li><Link onClick={this.props.handlePageChange} href="/jobs?act=add">Add Job</Link></li>
+//                 <li><Link onClick={this.props.handlePageChange} href="/drivers">All Drivers</Link></li>
+//                 <li><Link onClick={this.props.handlePageChange} href="/car_owners">All CarOwners</Link></li>
+
   const list = (anchor) => (
     <Box
       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
@@ -39,14 +48,16 @@ export default function MobileSideBAr() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        {[['Jobs','/jobs?act=show-all'], ['Inbox','/jobs?act=show-all'], ['Inbox','/jobs?act=show-all'], ['Inbox','/jobs?act=show-all']].map((text, index) => (
+          <ListItem sx={{marginLeft:2}} key={text} disablePadding>
+            <Link onClick={props.handlePageChange} href={text[1]}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <ArrowCircleRight />
               </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
+              </Link>
+              <Link onClick={props.handlePageChange} href={text[1]}>
+              <ListItemText primary={text[0]} />
+            </Link>
           </ListItem>
         ))}
       </List>

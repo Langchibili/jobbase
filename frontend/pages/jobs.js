@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
 import JobView from '@/components/Includes/JobView';
+import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 
 
 async function fetchData(url){
@@ -35,7 +36,11 @@ async function getLoggedInUserData(){
 
 function renderJobView(act,data,jid){
   if(act === 'show'){
-    return <JobView jid={jid} api_url={api_url} jwt={getJwt()} loggedInUserProfile={data.loggedInUserProfile} />
+    return <JobView 
+              jid={jid} 
+              api_url={api_url} 
+              jwt={getJwt()} 
+              loggedInUserProfile={data.loggedInUserProfile} />
   }
   else if(act === 'show-all'){
     return <ItemListAll
@@ -47,30 +52,36 @@ function renderJobView(act,data,jid){
         api_url={api_url}
          />
   }
-  else if(act === 'edit'){
-    return <ItemListAll
+  else if(act === 'edit' || act === 'delete'){
+    if(data.loggedInUserProfile === undefined) return <div>Nothing to show here</div>
+    if('carOwnerProfile' in data.loggedInUserProfile){
+        return <ItemListAll
         loggedInUserProfile={data.loggedInUserProfile}
         itemsName='jobs'
         listType='jobs'
         listTitle='Jobs Available'
-        act='edit'
+        act={act}
         api_url={api_url}
-         />
-  }
-  else if(act === 'delete'){
-    return <ItemListAll
-        loggedInUserProfile={data.loggedInUserProfile}
-        itemsName='jobs'
-        listType='jobs'
-        listTitle='Jobs Available'
-        act='delete'
-        api_url={api_url}
-         />
+        reqUrlPath={'/car-owner-profiles/'+data.loggedInUserProfile.carOwnerProfile.id+'?populate=jobs'}
+        />
+      }
+      else{
+          return <>Your Profile Isn't updated enough</>
+      }
   }
   else if(act === 'add'){
-    return <JobsAddForm loggedInUserProfile={data.loggedInUserProfile} api_url={api_url} jwt={getJwt()}/>
-  }
-
+    if(data.loggedInUserProfile === undefined) return <div>Nothing to show here</div>
+    if('carOwnerProfile' in data.loggedInUserProfile){
+        const jobCreationPoints = data.loggedInUserProfile.carOwnerProfile.job_creation_points 
+        if(jobCreationPoints < 5){
+          let tip = ''
+          if(data.loggedInUserProfile.profile_completion_percentage < 75) tip = ', Or try Updating your profile with more details to Earn free points'
+          if(data.loggedInUserProfile.profile_completion_percentage === 75) tip = ', Or try verifying your account to Earn 20 free points!'
+          return <>You have insuficient job creation points to post a job. Please buy more{tip}</>
+        }
+        return <JobsAddForm loggedInUserProfile={data.loggedInUserProfile} api_url={api_url} jwt={getJwt()}/>
+    }
+   }
 }
 
 export default function jobs(props) {
@@ -80,14 +91,14 @@ export default function jobs(props) {
     
     // set loggedin user data state
       React.useEffect(() => {
-        if(act === 'add'){ 
+        if(act === 'add' || act === 'edit' || act === 'delete'){ 
           async function fetchData() {
             const loggedInUserProfile = await getLoggedInUserData() 
             setData({ loading: false, loggedInUserProfile: loggedInUserProfile });
           }
           fetchData();
         } 
-        else if(act === 'show' || act === 'edit' || act === 'delete' || act === 'show-all'){
+        else if(act === 'show' || act === 'show-all'){
           setData({ loading: false});
         }
       }, [act]);
@@ -101,26 +112,23 @@ export default function jobs(props) {
     
     else{
         if(act === 'add' && data.loggedInUserProfile.type !== 'car-owner'){
-          return (<> <HtmlHead pageTitle='Jobs'/><div>Only Employers, such as Car Owners Can Create Jobs</div> <HtmlFoot/> </>)
+          return (<> <HtmlHead pageTitle='Jobs'/><UpAndBackButton/><div>Only Employers, such as Car Owners Can Create Jobs</div> <HtmlFoot/> </>)
         }
         return (
          <>
             <HtmlHead pageTitle='Jobs'/>
-            <div className="authincation h-100">
+            <UpAndBackButton/>
                 <div className="container h-100">
                     <div className="row justify-content-center h-100 align-items-center">
                     <div className="col-md-6">
-                        <div className="authincation-content">
                         <div className="row no-gutters">
                             <div className="col-xl-12" >
                                 {renderJobView(act,data,jid)}
                             </div>
                         </div>
-                        </div>
                     </div>
                     </div>
                 </div>
-            </div>
             <HtmlFoot/>
             </>   
         )

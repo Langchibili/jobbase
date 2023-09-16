@@ -19,7 +19,7 @@ class JobApplicationForm extends Component {
     const jobId = this.props.job.data.id
     const JobApplicants = this.props.job.data.attributes.applicants.data
     JobApplicants.push(user.id)
-    const jobApplicationObject = {id: jobId, data:{applicants:JobApplicants}}
+    const jobApplicationObject = {data:{applicants:JobApplicants}}
     
     // firstly add a job to the jobs backend
     try {
@@ -38,11 +38,11 @@ class JobApplicationForm extends Component {
 
 
       if (updatedJob) {
-        const applicationPoints = user.driverProfile.application_points - 1 // reduce application points by one, coz you have applied to a job
+        const applicationPoints = user.driverProfile.application_points - 2 // reduce application points by one, coz you have applied to a job
         const jobs = user.driverProfile.jobs // grab job ids
         const driverProfileId = user.driverProfile.id // get car owner id
         jobs.push(jobId) // push new job id into car owner object
-        const driverProfileJobsUpdate = {id : driverProfileId, data:{jobs:  jobs},application_points:applicationPoints}
+        const driverProfileJobsUpdate = {data:{jobs:  jobs,application_points:applicationPoints}}
         const response = await fetch(this.props.api_url+'/driver-profiles/'+driverProfileId, {
             method: 'PUT',
             headers: {

@@ -23,6 +23,7 @@ class ItemListAll extends Component {
   }
 
   getPageItems(items, currentPage, itemsPerPage) {
+    console.log('user jobs',items)
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, items.length);
     return items.slice(startIndex, endIndex);
@@ -45,6 +46,7 @@ class ItemListAll extends Component {
       if(this.props.listType === 'car-owners') return this.props.api_url+this.props.reqUrlPath
     }
     else if(this.props.itemsName === 'jobs'){
+      if(this.props.act === 'edit' || this.props.act === 'delete') return this.props.api_url+this.props.reqUrlPath
       return this.props.api_url+'/'+this.props.itemsName
      }
   }
@@ -75,22 +77,37 @@ class ItemListAll extends Component {
 
   async componentDidMount(){
     const reqUrl = this.getReqUrl()
-    let items // to be filled bellow
+    let items,pageCount,itemsToDisplay,itemsTotal // to be filled bellow
+
     let response = await this.getInitialItems(reqUrl) // get initial items
     if(response !== undefined){
       if('data' in response){ // if the response has .data property
         items = response.data
       }
+      /* If it's a car ownwer managing posts */
+      if(this.props.listType === 'jobs' && (this.props.act === 'edit' || this.props.act === 'delete')){ // if a user is editing or deleting their posts
+          items = items.attributes.jobs.data 
+      }
       if(items.length < 0){// if items are not found or zero
         this.setState({contentLoaded: true})
       }
-      else{
-        const itemsToDisplay = this.getPageItems(items, 1, 10)// get page one elements
-        const pageCount = this.getPageCount(response.meta.pagination.total,10)
+      else{ 
+        /* If it's a car ownwer managing posts */
+        if(this.props.listType === 'jobs' && (this.props.act === 'edit' || this.props.act === 'delete')){ // if a user is editing or deleting their posts
+            itemsTotal = items.length
+            itemsToDisplay = this.getPageItems(items, 1, 30)// get page one elements  
+            pageCount = this.getPageCount(itemsTotal,30) // get page count if it's to list a user's jobs
+        }
+        else{
+            itemsTotal = response.meta.pagination.total
+            itemsToDisplay = this.getPageItems(items, 1, 10)// get page one elements  
+            pageCount = this.getPageCount(itemsTotal,10) // get page count if it's to list all 
+        }
+        
         this.setState({// add items to state
           items:items,
           pageCount: pageCount,
-          itemsCount: response.meta.pagination.total,
+          itemsCount: itemsTotal,
           currentPage: 1,
           itemsToDisplay: itemsToDisplay
           //pageCount: items.meta.pagination.pageCount

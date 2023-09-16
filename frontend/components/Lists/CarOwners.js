@@ -1,3 +1,4 @@
+import { imageUrlFormat } from '@/Constants';
 import Link from 'next/link';
 import React, { Component } from 'react';
 
@@ -52,7 +53,7 @@ class CarOwners extends Component {
         return <></>;
     }
     else{
-        let userId,fullname, rating, thumbnail, profile_url,eligibleForListing,carOwnerProfile
+        let userId,fullname, rating, thumbnail, thumbnailUrl, profile_url,eligibleForListing,carOwnerProfile
         return carOwners.map((carOwner)=>{
           if(this.props.listAll) { // set userId for user profiles
             userId = parseInt(carOwner.attributes.userid) // the userid
@@ -67,13 +68,32 @@ class CarOwners extends Component {
            if(carOwnerProfile === undefined) return
            if(eligibleForListing){ //check if profile has got details to it
                fullname = carOwnerProfile.details.firstname? carOwnerProfile.details.firstname +' '+ carOwnerProfile.details.lastname || '' : ''
+               // thumbnail stuff
                if(carOwnerProfile.details.profile_thumbnail_image !== null){ // check if thumbnail exists
-                   const backEndUrl = this.props.api_url.replace('/api','')
-                   thumbnail = carOwnerProfile.details.profile_thumbnail_image.formats? backEndUrl+carOwnerProfile.details.profile_thumbnail_image.formats.thumbnail.url : '/default-profile.png' 
-               }    
-               else{
-                  thumbnail = '/default-profile.png' 
-               } 
+                const backEndUrl = this.props.api_url.replace('/api','')
+                if(this.props.listAll) {
+                    if(carOwnerProfile.details.profile_thumbnail_image.data === null) { 
+                      thumbnail = '/default-profile.png' 
+                    }
+                    else{
+                      thumbnailUrl = imageUrlFormat(carOwnerProfile.details.profile_thumbnail_image.data.attributes,'thumbnail')
+                    }
+                }
+                else{
+                    thumbnailUrl = imageUrlFormat(carOwnerProfile.details.profile_thumbnail_image,'thumbnail')
+                }
+                // adding an api url path to the image source
+                if(carOwnerProfile.details.profile_thumbnail_image.data === null) { 
+                   thumbnail = '/default-profile.png' 
+                }
+                else{
+                   thumbnail = backEndUrl+thumbnailUrl
+                }
+                
+            }    
+            else{
+              thumbnail = '/default-profile.png' 
+            } 
                // PROFILE URL
                profile_url = '/profile?uid='+carOwner.id+'&user_type=car-owner'
                //RATING 

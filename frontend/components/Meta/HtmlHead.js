@@ -34,6 +34,9 @@ class HtmlHead extends Component {
               <link href="/template/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet" />
               <link href="/template/css/style.css" rel="stylesheet" />
               {/* <link href="/template/vendor/jquery-smartwizard/dist/css/smart_wizard.min.css" rel="stylesheet"/> */}
+              {/* <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+              <meta http-equiv="Pragma" content="no-cache" />
+              <meta http-equiv="Expires" content="0" /> */}
             </Head>
     );
   }

@@ -1,16 +1,70 @@
 import Link from 'next/link';
 import React from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 export default class ProfileUpdatePercent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
         profile_completion_percentage: 0,
-        color:'danger'
+        color:'danger',
+        snapBackOpen: true,
+        showPointsMessage: false,
+        pointsAllocationMessage: ''
     };
 }
 
 updateUser = async (profile_completion_percentage)=>{
+   if(profile_completion_percentage > 9){ // award user points for updating profile
+    let pointsAllocationMessage = '' 
+    const user = this.props.loggedInUserProfile // get loggedInUser
+
+    if(user.type === 'driver'){
+      let applicationPoints = user.driverProfile.application_points + 2
+      pointsAllocationMessage = 'Congratulations! You have been awarded 2 Job Application Points For Updating Your Profile.'
+      
+      if(profile_completion_percentage >= 30){
+        applicationPoints += 2 // add another point to the APs if driver updates 30% plus
+        pointsAllocationMessage = 'Congratulations! You have been awarded 4 Job Application Points For Updating Your Profile.'
+      }
+
+      const driverApplicationPointsUpdate = {data:{application_points:applicationPoints}}
+      await fetch(this.props.api_url+'/driver-profiles/'+user.driverProfile.id, {
+        method: 'PUT',
+        headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.props.jwt}`
+        },
+        body: JSON.stringify(driverApplicationPointsUpdate), 
+    })
+    }
+    else{
+        let jobCreationPoints = user.carOwnerProfile.job_creation_points + 5
+        pointsAllocationMessage = 'Congratulations! You have been awarded 5 Job Creation Points For Updating Your Profile.'
+        
+        if(profile_completion_percentage >= 30){
+          jobCreationPoints += 5 // add another point to the APs if driver updates 30% plus
+          pointsAllocationMessage = 'Congratulations! You have been awarded 10 Job Creation Points For Updating Your Profile.'
+        }
+
+        const carOwnerApplicationPointsUpdate = {data:{job_creation_points:jobCreationPoints}}
+        await fetch(this.props.api_url+'/car-owner-profiles/'+user.carOwnerProfile.id, {
+          method: 'PUT',
+          headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.props.jwt}`
+          },
+          body: JSON.stringify(carOwnerApplicationPointsUpdate), 
+      })
+    }
+    
+    this.setState({
+      showPointsMessage: true,
+      pointsAllocationMessage: pointsAllocationMessage
+    })
+   }
+   // update the profile percentage
    const userId = this.props.loggedInUserProfile.id
    const updateObject = {id:userId,profile_completion_percentage:profile_completion_percentage}
    return await fetch(this.props.api_url+'/users/'+userId, {
@@ -78,22 +132,22 @@ async componentDidMount(){
       }
       if(profileDetails.age === null || profileDetails.gender === null){
         this.setState({
-            profile_completion_percentage:'15%',
+            profile_completion_percentage:'30%',
             color: 'warning',
             message:'Please add an age and a gender to stand out on profile and job listings'
         })
-        if(parseInt(user.profile_completion_percentage) ===  15) return // don't make update then
-        this.updateUser(15)
+        if(parseInt(user.profile_completion_percentage) ===  30) return // don't make update then
+        this.updateUser(30)
         return
       }
       if(profileDetails.profile_cover_image === null || profileDetails.profile_thumbnail_image === null || profileDetails.about === null){
         this.setState({
-            profile_completion_percentage:'20%',
+            profile_completion_percentage:'50%',
             color: 'warning',
             message:'Please add a profile photo, cover photo and an about you to stand out on profile and job listings'
         })
-        if(parseInt(user.profile_completion_percentage) ===  20) return // don't make update then
-        this.updateUser(20)
+        if(parseInt(user.profile_completion_percentage) ===  50) return // don't make update then
+        this.updateUser(50)
         return
       }
     this.setState({
@@ -211,11 +265,30 @@ async componentDidMount(){
     this.updateUser(75)
    }
 }
+
+showPointsAllocationMessage = ()=>{
+  const handleSnapBackClose = (event, reason) => { // close alert
+    if(reason === 'clickaway') return
+    this.setState({
+        snapBackOpen: false
+    })
+  }
+  // show user that they have been awarded the points through an alert
+  return (<Snackbar open={this.state.snapBackOpen} autoHideDuration={5000} onClose={handleSnapBackClose} TransitionComponent='SlideTransition' anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+  <MuiAlert elevation={6}  variant="filled" onClose={handleSnapBackClose} severity="success" sx={{ width: '100%' }}>
+      {this.state.pointsAllocationMessage}
+      </MuiAlert>
+  </Snackbar>)
+}
+
 render() {
     if(parseInt(this.props.loggedInUserProfile.profile_completion_percentage) === 75) return (
       <div className={"alert alert-"+this.state.color}> <Link href='/verification_steps'><p>{this.state.message}</p><p>{'Your profile is now updated: '+this.state.profile_completion_percentage}</p></Link></div>);
     return (
-        <div className={"alert alert-"+this.state.color}> <Link href='/profile'><p>{this.state.message}</p> <p>{'Your profile is now updated: '+this.state.profile_completion_percentage}</p></Link></div>
+        <div>
+            {this.state.showPointsMessage? this.showPointsAllocationMessage(): ''}
+            <div className={"alert alert-"+this.state.color}> <Link href='/profile'><p>{this.state.message}</p> <p>{'Your profile is now updated: '+this.state.profile_completion_percentage}</p></Link></div>
+        </div>
     );
 }
 

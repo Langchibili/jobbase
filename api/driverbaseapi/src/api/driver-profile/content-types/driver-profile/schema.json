@@ -111,6 +111,10 @@
         "other"
       ],
       "default": "other"
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

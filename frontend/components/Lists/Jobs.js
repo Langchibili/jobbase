@@ -52,14 +52,15 @@ export default class Jobs extends React.Component {
          return carOwnerProfileNames
       }
       else{
-        const carOwner = await fetch(this.props.api_url+'/users/'+carOwnerProfile.data.attributes.car_owner_profile.data.attributes.userid+'?populate=carOwnerProfile,carOwnerProfile.details',{
+          if(carOwnerProfile.data.attributes.car_owner_profile.data === null) return carOwnerProfileNames
+          const carOwner = await fetch(this.props.api_url+'/users/'+carOwnerProfile.data.attributes.car_owner_profile.data.attributes.userid+'?populate=carOwnerProfile,carOwnerProfile.details',{
           headers: {
             'Content-Type': 'application/json'
           }
          }).then(response => response.json())
           .then(data => data)
           .catch(error => console.error(error))
-          console.log('the car owner',carOwner)
+        //  console.log('the car owner',carOwner)
           if(carOwner.profile_update_percentage <= 5){
             carOwnerProfileNames[jobId] = {
               firstname:'Unknown',
@@ -82,7 +83,7 @@ export default class Jobs extends React.Component {
       ctx.setState({
         carOwnerProfileNames: carOwnerProfileNames,
       }, () => {
-        console.log('the usernames of the carowners',ctx.state.carOwnerProfileNames);
+       // console.log('the usernames of the carowners',ctx.state.carOwnerProfileNames);
       });
     }
     
@@ -107,10 +108,12 @@ export default class Jobs extends React.Component {
       }
       const carOwnerName = carOwnerFirstName + ' ' +carOwnerLastName
       return (
-          <>
-            <ListItem alignItems="flex-start" key={job.id}>
+          <div key={job.id} >
+            <ListItem alignItems="flex-start" >
                 <ListItemAvatar>
-                  <Avatar alt="Travis Howard" src="/job-icon.png" />
+                <Link href={'/jobs?act=show&jid='+job.id} onClick={this.props.handlePageChange}>
+                  <Avatar alt="Job" src="/job-icon.png" />
+                  </Link>
                 </ListItemAvatar>
                 <ListItemText
                   primary={carOwnerName}
@@ -135,7 +138,7 @@ export default class Jobs extends React.Component {
               {this.showLink(job)}
               </ListItem>
               <Divider variant="inset" component="li" />
-        </>
+        </div>
         )
     })
   }

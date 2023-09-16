@@ -24,6 +24,14 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::job.job"
+    },
+    "job_creation_points": {
+      "type": "integer",
+      "default": 10
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

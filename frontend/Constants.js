@@ -12,9 +12,10 @@
 
 const fakeStr1 = 'kahs3lahebblo2uwb00an~#va5lwi_ad_fgaljdj'; // security stuff
 const fakeStr2 ='klahewi_ad_fgalloanv;;aitalkjfajhsbbluwba==hn3vajd5j=+;'
-//export const api_url = 'https://driverbaseapi.thenetworkzambia.com/api' // / because a locahost fails to load due to cors or ssl issues
-export const api_url = 'http://localhost:1337/api'
+export const api_url = 'https://driverbaseapi.thenetworkzambia.com/api' // / because a locahost fails to load due to cors or ssl issues
+//export const api_url = 'http://localhost:1337/api'
 export function getJwt(){
+    userHasConnection() // check the internet connection
     let jwt = localStorage.getItem('jwt')
     if(jwt === undefined || jwt === null){
         localStorage.setItem('jwt','o')
@@ -29,10 +30,24 @@ export function getJwt(){
     }
    
 } 
+
 export const driver_populate_url = 'populate=driverProfile,driverProfile.details,driverProfile.details.address,driverProfile.details.profile_cover_image,driverProfile.details.profile_thumbnail_image,driverProfile.driving_license_front,driverProfile.drivers_license_back,driverProfile.driving_certificate_front,driverProfile.driving_certificate_back,driverProfile.nrc_front,driverProfile.nrc_back'
 export const minimal_driver_populate_url = 'populate=driverProfile,driverProfile.details,driverProfile.details.profile_thumbnail_image'
 export const car_owner_populate_url = 'populate=carOwnerProfile,carOwnerProfile.details,carOwnerProfile.details.address,carOwnerProfile.details.profile_cover_image,carOwnerProfile.details.profile_thumbnail_image'
 export const minimal_car_owner_populate_url = '?populate=details,details.profile_thumbnail_image'
+
+async function userHasConnection(){
+  const checkConnection = await fetch(api_url+'/featured-users',{
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  if(!checkConnection.ok){
+     alert('You seem to have an internet connection problem, this app requires an internet connection. So this screen shall continue reloading until an active connection is set.')
+     window.location = ''
+    return
+  }
+}
 
 export async function getLoggedInUserData(){
     if(getJwt() === null) return 'logged-out' // you are looged out
@@ -45,7 +60,7 @@ export async function getLoggedInUserData(){
     }).then(response => response.json())
       .then(data => data)
       .catch(error => console.error(error))
-
+    if(user === undefined) return 'logged-out' // means couldn't connect well, so leave u logged out
     if('error' in user) return 'logged-out' //it means you are looged out
       //.catch(error => return 'logged-out')
      // get user first to check type, coz we don't know whether user is a driver or car owner
@@ -62,3 +77,14 @@ export async function getLoggedInUserData(){
       .catch(error => console.error(error))
   }
   
+  export const imageUrlFormat = (image,formatWanted)=>{
+    if(image.hasOwnProperty('formats')){
+       if(image.formats.hasOwnProperty(formatWanted)){
+        return image.formats[formatWanted].url
+       }
+    }
+    if(!image.url){
+        return '/no-cover-photo.jpg'
+    }
+    return image.url
+  }

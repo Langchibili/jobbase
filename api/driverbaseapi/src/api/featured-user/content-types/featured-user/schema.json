@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "featured_users",
+  "info": {
+    "singularName": "featured-user",
+    "pluralName": "featured-users",
+    "displayName": "FeaturedUser"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

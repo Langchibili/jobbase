@@ -6,12 +6,14 @@ import { api_url,minimal_driver_populate_url,getJwt } from '@/Constants';
 import { useRouter } from 'next/router';
 import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
+import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 
 
 export default function drivers(props) {
     
     return (
         <>
+        <UpAndBackButton/>
         <HtmlHead pageTitle='Drivers'/>
         <div className="authincation h-100">
             <div className="container h-100">

@@ -10,6 +10,7 @@ class ReviewsForm extends Component {
       error: null,
       submitting: false,
       submittingText: 'Post',
+      alreadyReviewed: false,
       userProfile: this.props.userProfile
     };
   }
@@ -27,6 +28,17 @@ class ReviewsForm extends Component {
     const sum = ratingsArray.reduce((total, num) => total + num, 0);
     const average = sum / ratingsArray.length;
     return parseFloat(average.toFixed(1)); 
+  }
+  checkIfHasBeenReviewedBefore = (user_reviews)=>{
+    const loggedInUserProfile = this.props.loggedInUserProfile
+    if(user_reviews === null || user_reviews.length === 0){
+      return true
+    }
+    const reviewFound = user_reviews.filter((review)=>{ // check for job in users applied to jobs
+            return parseInt(review.userid) === loggedInUserProfile.id
+    })
+    if(reviewFound.length >= 1) return true
+    return false // means u have reviewd user before
   }
 
    // add a new review to the user reviews array
@@ -60,7 +72,7 @@ class ReviewsForm extends Component {
     event.preventDefault();
     const { reviewBody, rating } = this.state;
     const  userid  = this.props.loggedInUserProfile.id;
-
+    
     if (!reviewBody) {
       this.setState({ error: "Write something about the user, Eg, 'Good employee'" });
       return;
@@ -88,38 +100,50 @@ class ReviewsForm extends Component {
     user[profileDetailsPropName].details.average_rating = this.avgRating(ratingsArray)
   
     // update state, coz it's what we shall use to send to backend
-    this.setState({ userProfile: user })
-
-    // firstly add a review to the reviews backend
-    try {
-        this.setState({submitting:true,submittingText:'Posting...'})// to disable button from re-requesting
-        const newReview = await fetch(this.props.api_url+'/user-reviews', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.props.jwt}`
-        },
-        body: JSON.stringify(reviewObject)
-      })
-      .then(response => response.json())
-      .then(data => data)
-      .catch(error => console.error(error));
-
-
-      if (newReview) {
-        const response = await this.updateUserWIthNewReview(newReview,user[profileDetailsPropName]) // update user object
-        if(response.ok) console.log('Review submitted successfully!');
-        this.setState({submittingText:'Done'})// to disable button from re-requesting
-      } else {
-        console.error('Failed to submit review:');
-      }
-    } catch (error) {
-      console.error('Error submitting review:', error);
-    }
+    this.setState({ userProfile: user },()=>{
+        this.setState({
+          alreadyReviewed: this.checkIfHasBeenReviewedBefore(this.state.userProfile.user_reviews)
+        },async ()=>{ 
+          if(this.state.alreadyReviewed){ // then u cannot re-review this user
+            return
+          }
+          else{
+             // firstly add a review to the reviews backend then later to user's reviews
+                try {  
+                  this.setState({submitting:true,submittingText:'Posting...'})// to disable button from re-requesting
+                  const newReview = await fetch(this.props.api_url+'/user-reviews', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${this.props.jwt}`
+                  },
+                  body: JSON.stringify(reviewObject)
+                })
+                .then(response => response.json())
+                .then(data => data)
+                .catch(error => console.error(error));
+          
+          
+                if (newReview) {
+                  const response = await this.updateUserWIthNewReview(newReview,user[profileDetailsPropName]) // update user object
+                  if(response.ok) console.log('Review submitted successfully!');
+                  this.setState({submittingText:'Done'})// to disable button from re-requesting
+                } else {
+                  console.error('Failed to submit review:');
+                }
+              } catch (error) {
+                console.error('Error submitting review:', error);
+              }
+          }
+        })
+    })
+    
+    
   };
 
   render() {
     const { error } = this.state;
+    if(this.state.alreadyReviewed) return <>You have already reviewed this {this.state.userProfile.type} you cannot review them twice.</>
     return (
       <div>
         <RatingForm getRating={this.getRating} />

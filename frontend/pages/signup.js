@@ -3,6 +3,7 @@ import HtmlHead from '@/components/Meta/HtmlHead'
 import HtmlFoot from '@/components/Meta/HtmlFoot'
 import SignUpForm from  '@/components/Forms/SignUpForm'
 import { api_url } from '@/Constants';
+import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 
 export default function signup(props) {
     const [userType, setType] = React.useState({typeSet: false, type: 'driver'});
@@ -68,6 +69,7 @@ export default function signup(props) {
 
     return (<>
         <HtmlHead pageTitle='Signup'/>
+        <UpAndBackButton/>
                 {renderSignUpForm()}
         <HtmlFoot/>
         </>)
