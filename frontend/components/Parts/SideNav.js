@@ -5,7 +5,27 @@ class SideNav extends Component {
   constructor(props) {
     super(props);
   }
+
+  renderDashBoard = ()=>{
+    if(this.props.loggedInUserProfile === 'logged-out') {
+      return <Link onClick={this.props.handlePageChange} href="/login"><span className="nav-text">Dashboard</span></Link>
+    }
+    return <span className="nav-text">Dashboard</span>
+  }
  
+  renderLoggedInLinks  = ()=>{
+          if(this.props.loggedInUserProfile === 'logged-out') return <></>
+          if(this.props.loggedInUserProfile.type === 'driver'){
+             return <></>
+          }
+          return (
+            <><li><Link onClick={this.props.handlePageChange} href="/jobs?act=add">Create Job</Link></li>
+            <li><Link onClick={this.props.handlePageChange} href="/jobs?act=edit">Edit Jobs</Link></li>
+            <li><Link onClick={this.props.handlePageChange} href="/jobs?act=delete">Delete Jobs</Link></li> 
+          </>
+          )
+  }
+
   render() {
     return (
         <div className="deznav">
@@ -13,24 +33,17 @@ class SideNav extends Component {
           <ul className="metismenu" id="menu">
             <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                 <i className="flaticon-381-networking" />
-                <span className="nav-text">Dashboard</span>
+                {this.renderDashBoard()}
               </a>
               <ul aria-expanded="false">
                 <li><Link onClick={this.props.handlePageChange} href="/jobs?act=show-all">Jobs</Link></li>
-                <li><Link onClick={this.props.handlePageChange} href="/jobs?act=edit">Edit Jobs</Link></li>
-                <li><Link onClick={this.props.handlePageChange} href="/jobs?act=delete">Delete Jobs</Link></li> 
-                <li><Link onClick={this.props.handlePageChange} href="/jobs?act=add">Add Job</Link></li>
                 <li><Link onClick={this.props.handlePageChange} href="/drivers">All Drivers</Link></li>
                 <li><Link onClick={this.props.handlePageChange} href="/car_owners">All CarOwners</Link></li>
-                <li><a href="index2.html">Dashboard Dark</a></li>
-                <li><a href="search-job.html">Search Job</a></li>
-                <li><a href="application.html">Application</a></li>
-                <li><a href="profile.html">Profile</a></li>
-                <li><a href="companies.html">Companies</a></li>
-                <li><a href="statistics.html">Statistics</a></li>
+               {this.renderLoggedInLinks()} 
+                <li><Link onClick={this.props.handlePageChange} href="/about">About Us</Link></li>
               </ul>
             </li>
-            <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
+            {/* <li className="has-menu"><a className="has-arrow ai-icon" href="#" aria-expanded="false">
                 <i className="flaticon-381-television" />
                 <span className="nav-text">Apps</span>
               </a>
@@ -152,10 +165,10 @@ class SideNav extends Component {
                 </li>
                 <li><a href="page-lock-screen.html">Lock Screen</a></li>
               </ul>
-            </li>
+            </li> */}
           </ul>
           <div className="copyright">
-            <p><strong>DriverBase Dashboard</strong>  © 2023 All Rights Reserved</p>
+            <p><strong>DriverBase</strong>  © 2023~ All Rights Reserved</p>
             <p>by Gotriips</p>
           </div>
         </div>

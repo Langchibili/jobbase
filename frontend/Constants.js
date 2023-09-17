@@ -6,7 +6,7 @@
 // }
 // else{
 //    api_uri = process.env.LOCAL_API_URL
-// }
+// }\
 // return data as props object
 // jwt stuff
 
@@ -84,7 +84,10 @@ export async function getLoggedInUserData(){
        }
     }
     if(!image.url){
-        return '/no-cover-photo.jpg'
+        if(formatWanted === 'cover'){
+          return '/no-cover-photo.jpg'
+        }
+        return '/default-profile.png' 
     }
     return image.url
   }

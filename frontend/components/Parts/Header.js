@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Search } from '@material-ui/icons';
 import Link from 'next/link';
 import { Fab, Paper } from '@mui/material';
+import { LoginRounded, PersonAdd } from '@mui/icons-material';
+import { imageUrlFormat } from '@/Constants';
 //import { SearchOutlined } from '@mui/icons-material';
 
 class Header extends Component {
@@ -39,7 +41,7 @@ class Header extends Component {
     }
     if(profileDetails.profile_thumbnail_image !== null){
         const backEndUrl = this.props.api_url.replace('/api','')
-        profile_photo = profileDetails.profile_thumbnail_image.formats? backEndUrl+profileDetails.profile_thumbnail_image.formats.thumbnail.url : '/default-profile.png'    
+        profile_photo =  backEndUrl+imageUrlFormat(profileDetails.profile_thumbnail_image,'thumbnail')   
     }
     else{
         profile_photo = '/default-profile.png' 
@@ -50,11 +52,13 @@ class Header extends Component {
   renderLoggedInHeaderData = ()=>{
     const loggedInUserProfile = this.props.loggedInUserProfile
     if(loggedInUserProfile === 'logged-out'){
-       return <><Link href="/signup" className="btn btn-primary light btn-rounded me-auto">SingUp</Link><Link href="/login" className="btn btn-primary light btn-rounded me-auto">Login</Link></>
+       return (
+       <><Fab variant="extended"  sx={{marginRight: '10px !important', borderRadius: '10px !important'}}><Link  href="/signup"><PersonAdd sx={{ mr: 1,color:"#ff6746" }}/><span style={{color:"#ff6746"}}>SingUp</span></Link></Fab>
+       <Fab variant="extended" sx={{marginRight: '10px !important', borderRadius: '10px !important'}}><Link href="/login">  <LoginRounded sx={{ mr: 1, color:"#ff6746"}} /><span style={{color:"#ff6746"}}>Login</span></Link></Fab></>)
     }
     else{
        return (<><a className="nav-link" href="#" role="button" data-bs-toggle="dropdown">
-                     <Fab size="small"  aria-label="add"><img style={{border:'2px solid lightgrey'}} src={this.loggedInUserProfileIconSrc()} width={20} alt /></Fab>
+                     <Fab size="small"  aria-label="add" sx={{marginRight:1}}><img style={{border:'2px solid lightgrey'}} src={this.loggedInUserProfileIconSrc()} width={20} alt /></Fab>
                     <div style={{ borderLeft:'none',paddingLeft:10,marginRight:20}} className="header-info">
                     <span className="text-black">{loggedInUserProfile.username}</span>
                      <p className="fs-12 mb-0" style={{textTransform:'capitalize'}}>{loggedInUserProfile.type}</p>
@@ -98,7 +102,7 @@ class Header extends Component {
                
                 <li className="nav-item dropdown notification_dropdown">
                 <Fab size="small"  aria-label="add">
-                    <Search color="primary"/>
+                    <Search color='secondary'/>
                 </Fab>
                 </li>
                 <li className="nav-item dropdown header-profile">

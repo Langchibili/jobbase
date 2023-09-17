@@ -41,7 +41,7 @@ class Content extends Component {
     {/***********************************
       Nav header start
   ************************************/}
-   <LogoArea handlePageChange={this.handlePageChange}/>
+   <LogoArea loggedInUserProfile={this.props.loggedInUserProfile} handlePageChange={this.handlePageChange}/>
     {/***********************************
       Nav header end
   ************************************/}
@@ -63,7 +63,7 @@ class Content extends Component {
     {/***********************************
       Sidebar start
   ************************************/}
-    <SideNav handlePageChange={this.handlePageChange}/>
+    <SideNav loggedInUserProfile={this.props.loggedInUserProfile} handlePageChange={this.handlePageChange}/>
     {/***********************************
       Sidebar end
   ************************************/}

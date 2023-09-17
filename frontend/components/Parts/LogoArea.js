@@ -2,6 +2,7 @@ import Link from 'next/link';
 import React, { Component } from 'react';
 import MobileSideBAr from './MobileSideBar';
 
+
 class LogoArea extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +18,7 @@ class LogoArea extends Component {
         </div>)
     }
     else{
-      return <MobileSideBAr handlePageChange={this.props.handlePageChange}/>
+      return <MobileSideBAr loggedInUserProfile={this.props.loggedInUserProfile} handlePageChange={this.props.handlePageChange}/>
     }
   }
 
