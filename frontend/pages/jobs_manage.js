@@ -9,7 +9,8 @@ import ContentLoader from '@/components/Includes/ContentLoader';
 import JobsEditForm from '@/components/Forms/JobsEditForm';
 import JobDeleteForm from '@/components/Forms/JobDeleteForm';
 import UpAndBackButton from '@/components/Includes/UpAndBackButton';
- 
+import Alert from '@mui/material/Alert'; 
+
 async function getJob(jid) {
     let job
     if(jid){ // this is mainly for purposes of applying to a job not making a job
@@ -83,10 +84,10 @@ export default function jobs_manage(props) {
     else{
         //const applicants = job.applicants
         if(data.loggedInUserProfile.type === 'driver'){
-          return (<> <HtmlHead pageTitle='Jobs | Application'/><div>Only Employers, such as CarOwners Have Jobs</div> <HtmlFoot/> </>)
+          return (<> <HtmlHead pageTitle='Jobs | Application'/><UpAndBackButton/><Alert severity="error">Only Employers, such as CarOwners Have Jobs</Alert> <HtmlFoot/> </>)
         }
         if(data.job === 'not-found'){
-            return (<> <HtmlHead pageTitle='Jobs | Application'/><div>The Job You Are Looking For Doesn't Exist. It could be that the owner closed it or it got cancelled.</div> <HtmlFoot/> </>)
+            return (<> <HtmlHead pageTitle='Jobs | Application'/><UpAndBackButton/><Alert severity="error">The Job You Are Looking For Doesn't Exist. It could be that the owner closed it or it got cancelled.</Alert> <HtmlFoot/> </>)
         }
         // if(data.loggedInUserProfile.driverProfile.application_points <= 0){
         //     return (<> <HtmlHead pageTitle='Jobs | Application'/><div>You Have No Application Points To Apply To This or any other job, get your account verified or subscribe as a premium user to be able to apply to more jobs.</div> <HtmlFoot/> </>)
@@ -96,7 +97,6 @@ export default function jobs_manage(props) {
          <>
             <HtmlHead pageTitle='Jobs | Application'/>
             <UpAndBackButton/>
-            <div className="authincation h-100">
                 <div className="container h-100">
                     <div className="row justify-content-center h-100 align-items-center">
                     <div className="col-md-6">
@@ -110,7 +110,6 @@ export default function jobs_manage(props) {
                     </div>
                     </div>
                 </div>
-            </div>
             <HtmlFoot/>
             </>   
         )

@@ -22,9 +22,24 @@ class UserProfile extends Component {
     }
     return image.url
   }
+  showDriverNumber = (mobileNumber)=>{
+    if(this.props.loggedInUserProfile === "logged-out") return 'Only Visible To Car Owners'
+    if(this.props.loggedInUserProfile.type === "driver"){
+        return 'Only Visible To Car Owners'
+    }
+     return mobileNumber
+  }
+
+  showEmail = (email)=>{
+    if(this.props.loggedInUserProfile === "logged-out") return 'Only Visible To Car Owners'
+    if(this.props.loggedInUserProfile.type === "driver" && this.props.userProfile.type === "driver"){
+        return 'Only Visible To Car Owners'
+    }
+    return email
+   }
 
   render() {
-    console.log(this.props.userProfile)
+    console.log('here',this.props.userProfile)
     if(this.props.userProfile === null) return <div>User Not Found</div>
     if(this.props.userProfile.profile_completion_percentage <= 5) return <div>User Still Making Their Profile</div>
     let profileDetails
@@ -123,7 +138,7 @@ class UserProfile extends Component {
                     <p>{this.props.userProfile.type}</p>
                     </div>
                     <div className="profile-number px-2 pt-2">
-                    <h4 className="text-muted mb-0">{this.props.userProfile.type === 'car-owner'? 'hidden' : mobileNumber}</h4>
+                    <h4 className="text-muted mb-0">{this.props.userProfile.type === 'car-owner'? 'hidden' : this.showDriverNumber(mobileNumber)}</h4>
                     <p>Contact</p>
                     </div>
                     <div className="dropdown ms-auto">
@@ -209,7 +224,7 @@ class UserProfile extends Component {
                     <h5 className="f-w-500">Email <span className="pull-end">:</span>
                     </h5>
                 </div>
-                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : email}</span>
+                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.showEmail(email)}</span>
                 </div>
                 </div>
                 {this.props.userProfile.type === 'car-owner'? '' : <div className="row mb-2"><div className="col-sm-3 col-5"><h5 className="f-w-500">Availability <span className="pull-end">:</span></h5></div><div className="col-sm-9 col-7"><span className='text-success'><strong>{availability_display}</strong></span></div></div>}

@@ -116,8 +116,8 @@ class CarOwners extends Component {
                       <small className="d-block">{rating+' '}<span className='fa fa-star text-danger'></span></small>
                     </div>
                     <div className="d-flex">
-                      <a className="contact-icon me-3" href="#"><i className="fa fa-truck" aria-hidden="true" /></a>
-                      <a className="contact-icon" href="#"><i className="fa fa-phone" /></a>
+                      <a className="contact-icon me-3" href="#"><i className="fa fa-car" aria-hidden="true" /></a>
+                      <Link href={profile_url} className="contact-icon" ><i className="fa fa-info text-info" /></Link>
                     </div>
                   </div>
                 </li>

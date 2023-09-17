@@ -12,8 +12,8 @@
 
 const fakeStr1 = 'kahs3lahebblo2uwb00an~#va5lwi_ad_fgaljdj'; // security stuff
 const fakeStr2 ='klahewi_ad_fgalloanv;;aitalkjfajhsbbluwba==hn3vajd5j=+;'
-export const api_url = 'https://driverbaseapi.thenetworkzambia.com/api' // / because a locahost fails to load due to cors or ssl issues
-//export const api_url = 'http://localhost:1337/api'
+//export const api_url = 'https://driverbaseapi.thenetworkzambia.com/api' // / because a locahost fails to load due to cors or ssl issues
+export const api_url = 'http://localhost:1337/api'
 export function getJwt(){
     userHasConnection() // check the internet connection
     let jwt = localStorage.getItem('jwt')

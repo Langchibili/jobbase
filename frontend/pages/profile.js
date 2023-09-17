@@ -8,6 +8,7 @@ import UserProfile from '@/components/Includes/UserProfile';
 import ContentLoader from '@/components/Includes/ContentLoader';
 import PageLoader from '@/components/Includes/PageLoader';
 import UpAndBackButton from '@/components/Includes/UpAndBackButton';
+import { Alert } from '@mui/material';
 
 async function getUserProfile(uid,user_type) {
     let url,userProfile
@@ -86,7 +87,7 @@ async function fetchData(url){
      
     if(uid && user_type && data.userProfile !== null && data.userProfile !== 'not-found'){
       if(user_type !== data.userProfile.type){
-        return ( <> <HtmlHead pageTitle="Profile" /><UpAndBackButton/> <div>User Not Found </div><HtmlFoot /> </> );
+        return ( <> <HtmlHead pageTitle="Profile" /><UpAndBackButton/> <Alert severity="error">User Not Found </Alert><HtmlFoot /> </> );
       }
       return (<><UpAndBackButton/><UserProfile userProfile={data.userProfile} loggedInUserProfile={data.loggedInUserProfile} api_url={api_url} jwt={getJwt()} /></>);
     }

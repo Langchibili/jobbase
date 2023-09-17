@@ -23,7 +23,6 @@ function checkIfHasAppliedBefore(job,user){
          })
          if(jobFound.length >= 1) return true
          return false // means u have applied before
-
 }
 
 async function getJob(jid) {
@@ -97,7 +96,7 @@ export default function jobs_application(props) {
                          <Alert severity="warning">The Job You Are Looking For Doesn't Exist. It could be that the owner closed it or it got cancelled.</Alert> 
                        <HtmlFoot/> </>)
         }
-        if(checkIfHasAppliedBefore(data.job, data.loggedInUserProfile)) return <>You have already applied to this Job</>
+        if(checkIfHasAppliedBefore(data.job, data.loggedInUserProfile)) return <Alert severity="error"><UpAndBackButton />You have already applied to this Job</Alert>
         if(data.loggedInUserProfile.driverProfile.application_points < 2){ 
             return (<> <HtmlHead pageTitle='Jobs | Application'/>
                          <UpAndBackButton/> 
@@ -109,28 +108,28 @@ export default function jobs_application(props) {
          <> 
             <HtmlHead pageTitle='Jobs | Application'/>
             <UpAndBackButton/>
-            <div className="authincation h-100">
                 <div className="container h-100">
                     <div className="row justify-content-center h-100 align-items-center">
                     <div className="col-md-6">
-                        <div className="authincation-content">
                         <div className="row no-gutters">
                             <div className="col-xl-12" >
-                                Before You apply, make sure you have updated your profile enough to stand out from other applicants
-                                Note That When you apply to this job, your Job application points(JAPs) will reduce by one
-                                Are You Sure You Want To Apply To This Job?
-                                <JobApplicationForm 
-                                    jwt={getJwt()}
-                                    api_url={api_url} 
-                                    job={data.job} 
-                                    loggedInUserProfile={data.loggedInUserProfile} />
+                               <Alert severity="info">
+                                Before You apply, make sure you have updated your profile enough to stand out from other applicants.
+                                And note that when you apply to this job, your Job Application Points(JAPs) will reduce by one
+                                </Alert>
+
+                               <div style={{marginTop:5, textAlign: 'center'}}><Alert severity="error">Are You Sure You Want To Apply To This Job?</Alert>
+                                    <JobApplicationForm 
+                                        jwt={getJwt()}
+                                        api_url={api_url} 
+                                        job={data.job} 
+                                        loggedInUserProfile={data.loggedInUserProfile} />
+                                </div>
                             </div>
                         </div>
                         </div>
                     </div>
-                    </div>
                 </div>
-            </div>
             <HtmlFoot/>
             </>   
         )

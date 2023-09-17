@@ -1,13 +1,21 @@
+import React, { Component } from 'react';
 import { imageUrlFormat } from '@/Constants';
 import { EscalatorWarningOutlined } from '@mui/icons-material';
 import Link from 'next/link';
-import React, { Component } from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
-class Drivers extends Component {
+export default class Drivers extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // Initial state goes here
+       openPhoneNumberDialog: false
     };
   }
 
@@ -43,6 +51,28 @@ class Drivers extends Component {
       }
     }
     return eligibleForListing
+  }
+  
+  handleDialogOpen = (e)=>{
+    e.preventDefault()
+    this.setState({
+        openPhoneNumberDialog: true
+    })
+  }
+  handleDialogClose = ()=>{
+    this.setState({
+    openPhoneNumberDialog: false
+    })
+  }
+
+  renderDriverNumber = (phone_number,handleDialogOpen)=>{
+    if(this.props.loggedInUserProfile.type === "driver" || this.props.loggedInUserProfile === "logged-out"){
+      return <a className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
+    }
+    if(this.props.loggedInUserProfile.profile_completion_percentage < 9){
+      return <a className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
+    }
+    return <a className="contact-icon" href={"tel://"+phone_number}><i className="fa fa-phone" /></a>
   }
 
   renderDriversList = ()=>{
@@ -108,6 +138,7 @@ class Drivers extends Component {
           
             return ( 
               <div className="card-body" key={userId}> 
+                <PhoneNumberDialog openPhoneNumberDialog={this.state.openPhoneNumberDialog} handleDialogClose={this.handleDialogClose}/>
                 <div id="DZ_W_Todo1" className="widget-media dz-scroll ps ps--active-y">
                   <ul className="timeline">
                     <li>
@@ -121,7 +152,7 @@ class Drivers extends Component {
                         </div>
                         <div className="d-flex">
                           <a className="contact-icon me-3" href="#"><i className="fa fa-truck" aria-hidden="true" /></a>
-                          <a className="contact-icon" href={"tel://"+phone_number}><i className="fa fa-phone" /></a>
+                          {this.renderDriverNumber(phone_number,this.handleDialogOpen)}
                         </div>
                       </div>
                     </li>
@@ -138,5 +169,38 @@ class Drivers extends Component {
   }
 }
 
-export default Drivers;
 
+
+ function PhoneNumberDialog(props) {
+  return (
+    <div>
+      <Dialog
+        fullScreen={false}
+        open={props.openPhoneNumberDialog}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"!Sorry. Only Car Owners Can View Drivers' Contact Details"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Phone numbers for drivers are only accessible to registered car owners, 
+            in order to view this driver's phone number, 
+            create an account as a car owner or log into an already existing car owner account
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={props.handleDialogClose}>
+            Close
+          </Button>
+          <Link className='btn btn-sm btn-primary' href="/signup" autoFocus>
+            SignUp
+          </Link>
+          <Link className='btn btn-sm btn-primary' href="/login" autoFocus>
+            Login
+          </Link>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}

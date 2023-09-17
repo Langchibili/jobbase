@@ -9,7 +9,7 @@ import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
 import JobView from '@/components/Includes/JobView';
 import UpAndBackButton from '@/components/Includes/UpAndBackButton';
-
+import Alert from '@mui/material/Alert'; 
 
 async function fetchData(url){
     return fetch(url,{
@@ -53,7 +53,7 @@ function renderJobView(act,data,jid){
          />
   }
   else if(act === 'edit' || act === 'delete'){
-    if(data.loggedInUserProfile === undefined) return <div>Nothing to show here</div>
+    if(data.loggedInUserProfile === undefined) return <Alert severity="info">Nothing to show here</Alert>
     if('carOwnerProfile' in data.loggedInUserProfile){
         return <ItemListAll
         loggedInUserProfile={data.loggedInUserProfile}
@@ -66,18 +66,18 @@ function renderJobView(act,data,jid){
         />
       }
       else{
-          return <>Your Profile Isn't updated enough</>
+          return <Alert severity="error">Your Profile Isn't updated enough</Alert>
       }
   }
   else if(act === 'add'){
-    if(data.loggedInUserProfile === undefined) return <div>Nothing to show here</div>
+    if(data.loggedInUserProfile === undefined) return <Alert severity="info"> Nothing to show here</Alert>
     if('carOwnerProfile' in data.loggedInUserProfile){
         const jobCreationPoints = data.loggedInUserProfile.carOwnerProfile.job_creation_points 
         if(jobCreationPoints < 5){
           let tip = ''
           if(data.loggedInUserProfile.profile_completion_percentage < 75) tip = ', Or try Updating your profile with more details to Earn free points'
           if(data.loggedInUserProfile.profile_completion_percentage === 75) tip = ', Or try verifying your account to Earn 20 free points!'
-          return <>You have insuficient job creation points to post a job. Please buy more{tip}</>
+          return <Alert severity="error">You have insuficient job creation points to post a job. Please buy more{tip}</Alert>
         }
         return <JobsAddForm loggedInUserProfile={data.loggedInUserProfile} api_url={api_url} jwt={getJwt()}/>
     }
@@ -112,7 +112,7 @@ export default function jobs(props) {
     
     else{
         if(act === 'add' && data.loggedInUserProfile.type !== 'car-owner'){
-          return (<> <HtmlHead pageTitle='Jobs'/><UpAndBackButton/><div>Only Employers, such as Car Owners Can Create Jobs</div> <HtmlFoot/> </>)
+          return (<> <HtmlHead pageTitle='Jobs'/><UpAndBackButton/><Alert severity="info">Only Employers, such as Car Owners Can Create Jobs</Alert> <HtmlFoot/> </>)
         }
         return (
          <>

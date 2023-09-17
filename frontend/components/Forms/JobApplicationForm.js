@@ -65,9 +65,9 @@ class JobApplicationForm extends Component {
   render() {
     const { error } = this.state;
     return (
-      <div>
+      <div style={{marginTop:5}}>
         <div className="post-input">
-          <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn btn-primary">{this.state.submittingText}</button>
+          <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn btn-success">{this.state.submittingText}</button>
         </div>
       </div>
     );

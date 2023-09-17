@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
 import UpAndBackButton from '@/components/Includes/UpAndBackButton';
-
+import Alert from '@mui/material/Alert'; 
 
 async function getUserProfile(uid,user_type) {
   let url,userProfile
@@ -66,10 +66,10 @@ export default function reviews(props) {
         return (<> <PageLoader/><HtmlHead pageTitle='Reviews'/><ContentLoader text='loading...'/> <HtmlFoot/> </>)
     }
     if(data.userProfile === 'not-found' || user_type !== data.userProfile.type){// the check is valid here because userProfile loads from server not on frontend
-      return (<> <HtmlHead pageTitle='Reviews'/><div>User Not Found</div> <HtmlFoot/> </>)
+      return (<> <HtmlHead pageTitle='Reviews'/><UpAndBackButton/><Alert severity="info">User Not Found</Alert> <HtmlFoot/> </>)
     }
     if(data.loggedInUserProfile.id === data.userProfile.id){
-      return (<> <HtmlHead pageTitle='Reviews'/><div>You cannot rate yourself...</div> <HtmlFoot/> </>)
+      return (<> <HtmlHead pageTitle='Reviews'/><UpAndBackButton/><Alert severity="error">You cannot rate yourself...</Alert> <HtmlFoot/> </>)
     }
     return (
     <>
