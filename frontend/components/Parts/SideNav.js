@@ -8,7 +8,7 @@ class SideNav extends Component {
 
   renderDashBoard = ()=>{
     if(this.props.loggedInUserProfile === 'logged-out') {
-      return <Link onClick={this.props.handlePageChange} href="/login"><span className="nav-text">Dashboard</span></Link>
+      return <span className="nav-text">Dashboard</span> // supposed to be link
     }
     return <span className="nav-text">Dashboard</span>
   }

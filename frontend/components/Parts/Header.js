@@ -102,7 +102,7 @@ class Header extends Component {
                
                 <li className="nav-item dropdown notification_dropdown">
                 <Fab size="small"  aria-label="add">
-                    <Search color='secondary'/>
+                <Link href='/search' onClick={this.props.handlePageChange}><Search color='secondary'/></Link>  
                 </Fab>
                 </li>
                 <li className="nav-item dropdown header-profile">

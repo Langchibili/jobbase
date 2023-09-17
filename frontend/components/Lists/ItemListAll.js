@@ -167,7 +167,7 @@ class ItemListAll extends Component {
   
   render() {
     if(this.state.contentLoaded && this.state.items.length < 0) return <div><p>No {this.props.itemsName} available at the moment</p></div>
-    return <div style={{minHeight: '600px'}}> {this.state.contentLoaded? this.renderList() : <ContentLoader text={'Loading '+this.props.itemsName+ '...'}/>} <PaginationLinks style={{marginTop:20,zIndex:1000}} handlePageChange={this.handlePageChange} itemsCount={this.state.pageCount} itemsName={this.props.itemsName} page={this.state.page}/></div>
+    return <> <div style={{minHeight: '600px'}}> {this.state.contentLoaded? this.renderList() : <ContentLoader text={'Loading '+this.props.itemsName+ '...'}/>} <div style={{minHeight:'50px'}}></div> <PaginationLinks handlePageChange={this.handlePageChange} itemsCount={this.state.pageCount} itemsName={this.props.itemsName} page={this.state.page}/></div></>
   }
 }
 

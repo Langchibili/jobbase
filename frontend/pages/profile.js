@@ -8,7 +8,7 @@ import UserProfile from '@/components/Includes/UserProfile';
 import ContentLoader from '@/components/Includes/ContentLoader';
 import PageLoader from '@/components/Includes/PageLoader';
 import UpAndBackButton from '@/components/Includes/UpAndBackButton';
-import { Alert } from '@mui/material';
+import Alert from '@mui/material/Alert'; 
 
 async function getUserProfile(uid,user_type) {
     let url,userProfile
@@ -94,7 +94,7 @@ async function fetchData(url){
     else {
       if (data.loggedInUserProfile !== null && data.userProfile === null && !uid && !user_type) {
         if (data.loggedInUserProfile === 'logged-out') window.location = '/login' // you should re-log in
-        return (<><HtmlHead pageTitle="Profile" /><UpAndBackButton/><ProfileUpdateForm userProfile={data.loggedInUserProfile} jwt={getJwt()} api_url={api_url}/><HtmlFoot /></>);
+        return (<><HtmlHead pageTitle="Profile" /><UpAndBackButton/><div style={{minHeight:'10px'}}></div><ProfileUpdateForm userProfile={data.loggedInUserProfile} jwt={getJwt()} api_url={api_url}/><HtmlFoot /></>);
       } 
     }
   }

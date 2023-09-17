@@ -11,7 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Link from 'next/link';
-import { AddBox, ArrowCircleRight, ArrowForwardOutlined, CarRental, Delete, DirectionsCar, Edit, Mode, Work } from '@mui/icons-material';
+import { AddBox, ArrowCircleRight, ArrowForwardOutlined, CarRental, Delete, DirectionsCar, Edit, Info, Mode, Work } from '@mui/icons-material';
 import { Menu } from '@material-ui/icons';
 import { Fab } from '@mui/material';
 import { useRouter } from 'next/router'
@@ -40,6 +40,7 @@ export default function MobileSideBAr(props) {
         if(linkName === 'Jobs') return <Work/>
         if(linkName === 'Drivers') return <DirectionsCar/>
         if(linkName === 'Car Owners') return <CarRental/>
+        if(linkName === 'About') return <Info/>
         if(linkName === 'Create Job') return <AddBox/>
         if(linkName === 'Edit Jobs') return <Edit/>
         if(linkName === 'Delete Jobs') return <Delete/>
@@ -73,7 +74,7 @@ export default function MobileSideBAr(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {[['Jobs','/jobs?act=show-all'], ['Drivers','/drivers'], ['Car Owners','/car-owners']].map((text, index) => (
+        {[['Jobs','/jobs?act=show-all'], ['Drivers','/drivers'], ['Car Owners','/car_owners'], ['About','/about']].map((text, index) => (
           <ListItem key={text[0]} disablePadding onClick={(e)=>{router.push(text[1]); props.handlePageChange(e)}}>
             <ListItemButton>
               <ListItemIcon>

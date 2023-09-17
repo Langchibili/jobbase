@@ -23,7 +23,7 @@ export default function signup(props) {
                 <div className="container h-100">
                     <div className="row justify-content-center h-100 align-items-center">
                     <div className="col-md-6">
-                        <div className="authincation-content">
+                        <div className="authincation-content" style={{backgroundColor: 'blueviolet'}}>
                         <div className="row no-gutters">
                             <div className="col-xl-12" >
                             <SignUpForm api_url={api_url} user_type='car-owner'/>
@@ -40,7 +40,7 @@ export default function signup(props) {
                         <div className="container h-100">
                             <div className="row justify-content-center h-100 align-items-center">
                             <div className="col-md-6">
-                                <div className="authincation-content">
+                                <div className="authincation-content" style={{backgroundColor: 'aquamarine'}}>
                                 <div className="row no-gutters">
                                     <div className="col-xl-12" >
                                     <SignUpForm api_url={api_url} user_type='driver'/>

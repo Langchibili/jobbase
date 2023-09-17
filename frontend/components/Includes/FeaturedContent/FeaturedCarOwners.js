@@ -23,12 +23,12 @@ export default class FeaturedCarOwners extends React.Component {
         return(
             <div className="col-xl-12">
             <div className="d-sm-flex align-items-center mb-3 mt-sm-0 mt-2">
-              <h4 className="text-black fs-20 me-auto">Featured Companies</h4>
-              <a href="companies.html" className="btn btn-primary light btn-rounded">View More
+              <h4 className="text-black fs-20 me-auto">Featured Car Owners</h4>
+              <Link href="/featured_users" className="btn btn-primary light btn-rounded">View More
                 <svg className="ms-3" width={24} height={14} viewBox="0 0 24 14" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M23.5607 5.93941L18.2461 0.62482C17.9532 0.331898 17.5693 0.185461 17.1854 0.185461C16.8015 0.185461 16.4176 0.331898 16.1247 0.62482C15.539 1.21062 15.539 2.16035 16.1247 2.74615L18.8787 5.50005L1.5 5.50005C0.671578 5.50005 0 6.17163 0 7.00005C0 7.82848 0.671578 8.50005 1.5 8.50005L18.8787 8.50005L16.1247 11.254C15.539 11.8398 15.539 12.7895 16.1247 13.3753C16.7106 13.9611 17.6602 13.9611 18.2461 13.3753L23.5607 8.06069C24.1464 7.47495 24.1464 6.52516 23.5607 5.93941Z" fill="#40189D" />
                 </svg>
-              </a>
+              </Link>
             </div>
             <div className="testimonial-two owl-carousel">
               <div className="items">
@@ -42,7 +42,7 @@ export default class FeaturedCarOwners extends React.Component {
                         <path d="M20.6215 59.0077C15.5312 53.9174 12.6715 47.0135 12.6715 39.8148C12.6715 32.6161 15.5312 25.7122 20.6215 20.6219C25.7118 15.5316 32.6157 12.6719 39.8144 12.6719C47.0131 12.6719 53.917 15.5316 59.0073 20.6219L49.4108 30.2183C46.8657 27.6732 43.4138 26.2434 39.8144 26.2434C36.215 26.2434 32.7631 27.6732 30.2179 30.2183C27.6728 32.7635 26.243 36.2154 26.243 39.8148C26.243 43.4141 27.6728 46.8661 30.2179 49.4112L20.6215 59.0077Z" fill="white" />
                       </svg>
                       <div className="media-body">
-                        <h6 className="fs-16 text-black font-w600">Herman-Carter</h6>
+                        <h6 className="fs-16 text-black font-w600">Gotriips</h6>
                         <span className="text-primary font-w500">21 Vacancy</span>
                       </div>
                     </div>
@@ -78,7 +78,7 @@ export default class FeaturedCarOwners extends React.Component {
                         <path d="M20.6215 59.0077C15.5312 53.9174 12.6715 47.0135 12.6715 39.8148C12.6715 32.6161 15.5312 25.7122 20.6215 20.6219C25.7118 15.5316 32.6157 12.6719 39.8144 12.6719C47.0131 12.6719 53.917 15.5316 59.0073 20.6219L49.4108 30.2183C46.8657 27.6732 43.4138 26.2434 39.8144 26.2434C36.215 26.2434 32.7631 27.6732 30.2179 30.2183C27.6728 32.7635 26.243 36.2154 26.243 39.8148C26.243 43.4141 27.6728 46.8661 30.2179 49.4112L20.6215 59.0077Z" fill="white" />
                       </svg>
                       <div className="media-body">
-                        <h6 className="fs-16 text-black font-w600">Williamson Inc</h6>
+                        <h6 className="fs-16 text-black font-w600">Some Company</h6>
                         <span className="text-primary font-w500">21 Vacancy</span>
                       </div>
                     </div>

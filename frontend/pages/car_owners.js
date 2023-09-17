@@ -15,11 +15,9 @@ export default function car_owners(props) {
         <>
         <HtmlHead pageTitle='CarOwners'/>
         <UpAndBackButton/>
-        <div className="authincation h-100">
             <div className="container h-100">
                 <div className="row justify-content-center h-100 align-items-center">
                 <div className="col-md-6">
-                    <div className="authincation-content">
                     <div className="row no-gutters">
                         <div className="col-xl-12" >
                         <ItemListAll
@@ -29,11 +27,9 @@ export default function car_owners(props) {
                             api_url={api_url}/>
                         </div>
                     </div>
-                    </div>
                 </div>
                 </div>
             </div>
-        </div>
         <HtmlFoot/>
         </>   
     )

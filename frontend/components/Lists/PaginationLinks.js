@@ -8,7 +8,7 @@ function Content(props) {
   const query = new URLSearchParams(location.search);
   const page = parseInt(query.get('page') || '1', 10);
   return (
-    <div style={{ position: 'fixed', bottom: 0, width: '100%',marginTop:'40px' }}>
+    <div style={{ position: 'fixed', bottom: 0, width: '100%',marginBottom:'10px' }}>
       <div style={{ position: 'fixed', bottom: 0, width: '100%' }}>
         <Pagination
           page={page}
