@@ -2,13 +2,19 @@ import React, { Component } from 'react';
 import HtmlHead from '../Meta/HtmlHead';
 import HtmlFoot from '../Meta/HtmlFoot';
 import Link from 'next/link';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
-class UserProfile extends Component {
+export default class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // Initial state goes here
-    };
+        openPhoneNumberDialog: false
+     };
   }
 
   imageUrlFormat = (image,formatWanted)=>{
@@ -30,6 +36,38 @@ class UserProfile extends Component {
      return mobileNumber
   }
 
+  renderDriverNumber = (phone_number,handleDialogOpen)=>{
+    if(this.props.loggedInUserProfile.type === "driver" || this.props.loggedInUserProfile === "logged-out"){
+      return <a className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
+    }
+    if(this.props.loggedInUserProfile.profile_completion_percentage < 9){
+      return <a className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
+    }
+    return <a className="contact-icon" href={"tel://"+phone_number}><i className="fa fa-phone" /></a>
+  }
+  renderUserEmail = (email,handleDialogOpen)=>{
+    if(this.props.loggedInUserProfile.type === "driver" || this.props.loggedInUserProfile === "logged-out"){
+        return <a className="contact-icon" style={{marginLeft:2}} href="#" onClick={handleDialogOpen}><i className="fa la-envelope" /></a>
+      }
+      if(this.props.loggedInUserProfile.profile_completion_percentage < 9){
+        return <a className="contact-icon"  style={{marginLeft:2}} href="#" onClick={handleDialogOpen}><i className="fa la-envelope" /></a>
+      }
+      return email === 'unset'? '':<Link className="contact-icon" style={{marginLeft:2}} href={"mailto:"+email}><i className="las la-envelope" /></Link>
+  }
+
+ 
+  handleDialogOpen = (e)=>{
+    e.preventDefault()
+    this.setState({
+        openPhoneNumberDialog: true
+    })
+  }
+  handleDialogClose = ()=>{
+    this.setState({
+    openPhoneNumberDialog: false
+    })
+  }
+ 
   showEmail = (email)=>{
     if(this.props.loggedInUserProfile === "logged-out") return 'Only Visible To Car Owners'
     if(this.props.loggedInUserProfile.type === "driver" && this.props.userProfile.type === "driver"){
@@ -122,6 +160,7 @@ class UserProfile extends Component {
 
     return (<> 
          <HtmlHead pageTitle={firstname}/>
+         <PhoneNumberDialog openPhoneNumberDialog={this.state.openPhoneNumberDialog} handleDialogClose={this.handleDialogClose}/>
         <div className="row">
         <div className="col-lg-12">
             <div className="profile card card-body px-3 pt-3 pb-0">
@@ -142,7 +181,7 @@ class UserProfile extends Component {
                     <p>Contact</p>
                     </div>
                     <div className="dropdown ms-auto">
-                    <a href="#" className="btn btn-primary light sharp" data-bs-toggle="dropdown" aria-expanded="true"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" strokeWidth={1} fill="none" fillRule="evenodd"><rect x={0} y={0} width={24} height={24} /><circle fill="#000000" cx={5} cy={12} r={2} /><circle fill="#000000" cx={12} cy={12} r={2} /><circle fill="#000000" cx={19} cy={12} r={2} /></g></svg></a>
+                    {/* <a href="#" className="btn btn-primary light sharp" data-bs-toggle="dropdown" aria-expanded="true"><svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="18px" height="18px" viewBox="0 0 24 24" version="1.1"><g stroke="none" strokeWidth={1} fill="none" fillRule="evenodd"><rect x={0} y={0} width={24} height={24} /><circle fill="#000000" cx={5} cy={12} r={2} /><circle fill="#000000" cx={12} cy={12} r={2} /><circle fill="#000000" cx={19} cy={12} r={2} /></g></svg></a> */}
                       {/* <ul className="dropdown-menu dropdown-menu-end">
                         <li className="dropdown-item"><i className="fa fa-user-circle text-primary me-2" /> View profile</li>
                         <li className="dropdown-item"><i className="fa fa-users text-primary me-2" /> Add to btn-close friends</li>
@@ -162,8 +201,9 @@ class UserProfile extends Component {
             <div className="card-body border-bottom text-center col-xl-12 col-md-6">
                 <div className="d-flex">
                 <Link href={this.props.loggedInUserProfile === 'logged-out' || this.props.loggedInUserProfile === null? '/login' :'/reviews?act=add&user_type='+this.props.userProfile.type+'&uid='+this.props.userProfile.id} type="button" className="btn btn-warning me-4">Add Review<span className="btn-icon-end"><i className="fa fa-star" /></span></Link>
-                {this.props.userProfile.type === 'driver'? <Link className="contact-icon me-2" href={"tel://"+phone_number}><i className="fa fa-phone" aria-hidden="true" /></Link>: ''}
-                {email === 'unset'?'':<Link className="contact-icon" href={"mailto:"+email}><i className="las la-envelope" /></Link>}									
+                {/* {this.props.userProfile.type === 'driver'? <Link className="contact-icon me-2" href={"tel://"+phone_number}><i className="fa fa-phone" aria-hidden="true" /></Link>: ''} */}
+                {this.renderDriverNumber(phone_number,this.handleDialogOpen)}
+                {this.renderUserEmail(email,this.handleDialogOpen)}									
                 </div>
                 <div className="row mt-5">
                 <div className="d-flex flex-wrap col-xl-12">
@@ -276,4 +316,36 @@ class UserProfile extends Component {
 }
 }
 
-export default UserProfile;
+function PhoneNumberDialog(props) {
+    return (
+      <div>
+        <Dialog
+          fullScreen={false}
+          open={props.openPhoneNumberDialog}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle id="responsive-dialog-title">
+            {"!Sorry. Only Car Owners Can View Drivers' Contact Details"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Contact Details Like Phone numbers ad Emails for drivers are only accessible to registered car owners, 
+              in order to view this driver's phone number, 
+              create an account as a car owner or log into an already existing car owner account
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={props.handleDialogClose}>
+              Close
+            </Button>
+            <Link className='btn btn-sm btn-primary' href="/signup" autoFocus>
+              SignUp
+            </Link>
+            <Link className='btn btn-sm btn-primary' href="/login" autoFocus>
+              Login
+            </Link>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
