@@ -15,8 +15,8 @@ import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 function checkIfHasAppliedBefore(job,user){
          const jobId = job.data.id
          const jobs = user.driverProfile.jobs
-         if(jobs === null || jobs.length === 0){
-            return true
+         if(jobs.length === 0 || jobs === null){
+            return false // this means u haven't applied for anything
          }
          const jobFound = jobs.filter((job)=>{ // check for job in users applied to jobs
                 return job.id === jobId
@@ -118,7 +118,7 @@ export default function jobs_application(props) {
                                 And note that when you apply to this job, your Job Application Points(JAPs) will reduce by one
                                 </Alert>
 
-                               <div style={{marginTop:5, textAlign: 'center'}}><Alert severity="error">Are You Sure You Want To Apply To This Job?</Alert>
+                               <div style={{marginTop:5, textAlign: 'center'}}><Alert severity="warning">Are You Sure You Want To Apply To This Job?</Alert>
                                     <JobApplicationForm 
                                         jwt={getJwt()}
                                         api_url={api_url} 

@@ -1,3 +1,5 @@
+import Alert from '@mui/material/Alert';
+import Link from 'next/link';
 import React, { Component, useReducer } from 'react';
 
 class JobApplicationForm extends Component {
@@ -5,7 +7,9 @@ class JobApplicationForm extends Component {
     super(props);
     this.state = {
         submitting: false,
-        submittingText: 'Submit Application'
+        submittingText: 'Submit Application',
+        errorExists: false,
+        errorMessage: ''
     };
   }
 
@@ -13,7 +17,10 @@ class JobApplicationForm extends Component {
     event.preventDefault()
     const user = this.props.loggedInUserProfile // get the job applying user data
     if(user.profile_completion_percentage === null || user.profile_completion_percentage <= 9){
-      this.setState({submittingText:'Error! Add Number TO Pofile'})
+      this.setState({
+        errorExists: true,
+        errorMessage:'Ooops! Sorry, you cannot apply to a job without a phone number added to your profile. Update your profile with at least your first and last name, age, gender and phone number in order to apply to this or any other job.'
+      })
       return
     }
     const jobId = this.props.job.data.id
@@ -67,7 +74,10 @@ class JobApplicationForm extends Component {
     return (
       <div style={{marginTop:5}}>
         <div className="post-input">
+        {this.state.errorExists? <Alert severity="error">{this.state.errorMessage}</Alert>: ''}
+          {this.state.errorExists? <Link href="/profile" className='btn btn-primary' style={{marginTop:10,marginBottom:10}}>Click Here To Update Profile</Link>: ''}
           <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn btn-success">{this.state.submittingText}</button>
+          
         </div>
       </div>
     );

@@ -32,7 +32,7 @@ class ReviewsForm extends Component {
   checkIfHasBeenReviewedBefore = (user_reviews)=>{
     const loggedInUserProfile = this.props.loggedInUserProfile
     if(user_reviews === null || user_reviews.length === 0){
-      return true
+      return false // this means u have no reviews whatsoever
     }
     const reviewFound = user_reviews.filter((review)=>{ // check for job in users applied to jobs
             return parseInt(review.userid) === loggedInUserProfile.id

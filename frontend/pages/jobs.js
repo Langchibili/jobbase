@@ -3,7 +3,7 @@ import HtmlHead from '@/components/Meta/HtmlHead'
 import HtmlFoot from '@/components/Meta/HtmlFoot'
 import JobsAddForm from '@/components/Forms/JobsAddForm';
 import ItemListAll from '@/components/Lists/ItemListAll';
-import { api_url,getJwt } from '@/Constants';
+import { api_url,getJwt, getLoggedInUserData } from '@/Constants';
 import { useRouter } from 'next/router';
 import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
@@ -11,31 +11,9 @@ import JobView from '@/components/Includes/JobView';
 import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 import Alert from '@mui/material/Alert'; 
 
-async function fetchData(url){
-    return fetch(url,{
-      headers: {
-        'Content-Type': 'application/json'
-      }
-     }).then(response => response.json())
-      .then(data => data)
-      .catch(error => console.error(error));
-  }
-
-async function getLoggedInUserData(){ 
-    if(getJwt() === null) return 'logged-out' // you are looged out
-    const user = await fetch(api_url+'/users/me?populate=carOwnerProfile,carOwnerProfile.details,carOwnerProfile.jobs',{
-    headers: {
-    'Authorization': `Bearer ${getJwt()}`,
-    'Content-Type': 'application/json'
-    }
-    }).then(response => response.json())
-      .then(data => data)
-      .catch(error => console.error(error))
-      return user
-}
-
 function renderJobView(act,data,jid){
   if(act === 'show'){
+    console.log('logged in user from jobview>',data.loggedInUserProfile)
     return <JobView 
               jid={jid} 
               api_url={api_url} 
@@ -91,16 +69,14 @@ export default function jobs(props) {
     
     // set loggedin user data state
       React.useEffect(() => {
-        if(act === 'add' || act === 'edit' || act === 'delete'){ 
+        if(act === 'add' || act === 'edit' || act === 'delete' || act === 'show' || act === 'show-all'){ 
           async function fetchData() {
-            const loggedInUserProfile = await getLoggedInUserData() 
+            const loggedInUserProfile = await getLoggedInUserData({carOwnerProfile: ',carOwnerProfile.jobs', driverProfile: ',driverProfile.jobs'}) 
+            console.log('logged in user from source>',data.loggedInUserProfile)
             setData({ loading: false, loggedInUserProfile: loggedInUserProfile });
           }
           fetchData();
         } 
-        else if(act === 'show' || act === 'show-all'){
-          setData({ loading: false});
-        }
       }, [act]);
     
     
@@ -122,7 +98,7 @@ export default function jobs(props) {
                     <div className="row justify-content-center h-100 align-items-center">
                     <div className="col-md-6">
                         <div className="row no-gutters">
-                            <div className="col-xl-12" >
+                            <div className="col-xl-12" style={{marginTop:10}}>
                                 {renderJobView(act,data,jid)}
                             </div>
                         </div>

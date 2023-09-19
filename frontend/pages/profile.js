@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import HtmlHead from '@/components/Meta/HtmlHead'
 import HtmlFoot from '@/components/Meta/HtmlFoot'
-import { api_url,driver_populate_url,getJwt } from '@/Constants';
+import { api_url,driver_populate_url,getJwt, getLoggedInUserData } from '@/Constants';
 import ProfileUpdateForm from  '@/components/Forms/ProfileUpdateForm'
 import UserProfile from '@/components/Includes/UserProfile';
 import ContentLoader from '@/components/Includes/ContentLoader';
@@ -32,31 +32,6 @@ async function fetchData(url){
       .catch(error => console.error(error));
   }
 
-  async function getLoggedInUserData(uid,user_type){
-        if(getJwt() === null && !uid && !user_type) return null 
-        if(getJwt() === null) return 'logged-out' // you are looged out
-        let url
-        const user = await fetch(api_url+'/users/me',{
-          headers: {
-            'Authorization': `Bearer ${getJwt()}`,
-            'Content-Type': 'application/json'
-          }
-        }).then(response => response.json())
-          .then(data => data)
-          .catch(error => console.error(error))
-         // get user first to check type, coz we don't know whether user is a driver or car owner
-        if(user.type === 'driver') url = api_url+'/users/me/?'+driver_populate_url
-        if(user.type === 'car-owner') url = api_url+'/users/me/?populate=carOwnerProfile,carOwnerProfile.details,carOwnerProfile.details.address,carOwnerProfile.details.profile_cover_image,carOwnerProfile.details.profile_thumbnail_image'
-        
-        return await fetch(url,{
-          headers: {
-            'Authorization': `Bearer ${getJwt()}`,
-            'Content-Type': 'application/json'
-          }
-         }).then(response => response.json())
-          .then(data => data)
-          .catch(error => console.error(error))
-  }
 
   export default function Profile(props) {
     const router = useRouter();
@@ -71,7 +46,7 @@ async function fetchData(url){
       if(uid || user_type || uid === undefined || user_type === undefined){
        async function fetchData() {
           let userProfile
-          const loggedInUserProfile = await getLoggedInUserData(uid,user_type);
+          const loggedInUserProfile = await getLoggedInUserData();
           if(uid && user_type) userProfile = await getUserProfile(uid,user_type);
           setData({
             loading: false,

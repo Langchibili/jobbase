@@ -8,26 +8,26 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import UpAndBackButton from './UpAndBackButton';
+import Alert from '@mui/material/Alert'; 
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+import { IconButton } from '@mui/material';
+import { Cancel } from '@mui/icons-material';
+import { imageUrlFormat } from '@/Constants';
+
 
 export default class UserProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        openPhoneNumberDialog: false
+        openPhoneNumberDialog: false,
+        openImageModal: false,
+        showCover: false
      };
   }
 
-  imageUrlFormat = (image,formatWanted)=>{
-    if(image.hasOwnProperty('formats')){
-       if(image.formats.hasOwnProperty(formatWanted)){
-        return image.formats[formatWanted].url
-       }
-    }
-    if(!image.url){
-        return '/no-cover-photo.jpg'
-    }
-    return image.url
-  }
   showDriverNumber = (mobileNumber)=>{
     if(this.props.loggedInUserProfile === "logged-out") return 'Only Visible To Car Owners'
     if(this.props.loggedInUserProfile.type === "driver"){
@@ -64,12 +64,32 @@ export default class UserProfile extends Component {
   }
   handleDialogClose = ()=>{
     this.setState({
-    openPhoneNumberDialog: false
+        openPhoneNumberDialog: false
     })
   }
  
+  handleImageModalOpen = ()=>{
+    this.setState({
+        openImageModal: true
+    })
+  }
+
+  handleImageModalClose = ()=>{
+    this.setState({
+        openImageModal: false,
+        showCover: false
+    })
+  }
+  handleCoverPhotoModalOpen = ()=>{
+    return // will only remove return statement when releasing the cover photo full view update
+    this.setState({
+        openImageModal: true,
+        showCover: true
+    })
+  }
+
   showEmail = (email)=>{
-    if(this.props.loggedInUserProfile === "logged-out") return 'Only Visible To Car Owners'
+    if(this.props.loggedInUserProfile === 'logged-out') return 'Only Visible To Car Owners'
     if(this.props.loggedInUserProfile.type === "driver" && this.props.userProfile.type === "driver"){
         return 'Only Visible To Car Owners'
     }
@@ -77,9 +97,24 @@ export default class UserProfile extends Component {
    }
 
   render() {
-    console.log('here',this.props.userProfile)
-    if(this.props.userProfile === null) return <div>User Not Found</div>
-    if(this.props.userProfile.profile_completion_percentage <= 5) return <div>User Still Making Their Profile</div>
+    /* HANFLING CASES WHERE USER PROFILE IS NOT YET SET */
+    if(this.props.userProfile === null) return <div><UpAndBackButton /><Alert severity="warning">User Not Found</Alert></div>
+    if(!(this.props.loggedInUserProfile === null || this.props.loggedInUserProfile === undefined)){
+        if(this.props.userProfile.profile_completion_percentage <= 5){ // not updated enough
+            if(this.props.loggedInUserProfile === 'logged-out'){
+                return <div><UpAndBackButton /><Alert severity="info">User Still Making Their Profile</Alert></div>
+            }
+            else{
+                if(this.props.userProfile.id === this.props.loggedInUserProfile.id){ // if it's logged in user account
+                    window.location = '/'
+                    return
+                }
+                return <div><UpAndBackButton /><Alert severity="info">User Still Making Their Profile</Alert></div>
+            }
+        } 
+        
+    }
+    
     let profileDetails
     if(this.props.userProfile.type === 'driver') {
         profileDetails = this.props.userProfile.driverProfile.details
@@ -110,14 +145,15 @@ export default class UserProfile extends Component {
          phone_number = this.props.userProfile.driverProfile.details.phone_number? this.props.userProfile.driverProfile.details.phone_number : '' 
     }
     // profile images stuff
-    let cover_photo
+    let cover_photo,profileCoverSrc 
     if(profileDetails.profile_cover_image !== null){
         const backEndUrl = this.props.api_url.replace('/api','')
-        const coverPhotoUrl = this.imageUrlFormat(profileDetails.profile_cover_image,'large')
+        const coverPhotoUrl = imageUrlFormat(profileDetails.profile_cover_image,'large')
         cover_photo = backEndUrl+coverPhotoUrl
+        profileCoverSrc = this.props.api_url.replace('/api','') + profileDetails.profile_cover_image.url
     }
     else{
-        cover_photo = '/no-cover-photo.jpg' 
+        cover_photo = profileCoverSrc = '/no-cover-photo.jpg' 
     }
     const coverPhotoStyles = {
         backgroundImage: 'url("'+cover_photo+'")',
@@ -128,14 +164,16 @@ export default class UserProfile extends Component {
     };
 
     //profile thumbnail stuff
-    let profile_photo
+    let profile_photo,profilePhotoSrc 
+
     if(profileDetails.profile_thumbnail_image !== null){
         const backEndUrl = this.props.api_url.replace('/api','')
-        const profilePhotoUrl = this.imageUrlFormat(profileDetails.profile_thumbnail_image,'thumbnail')
+        const profilePhotoUrl = imageUrlFormat(profileDetails.profile_thumbnail_image,'thumbnail')
         profile_photo =  backEndUrl+profilePhotoUrl  
+        profilePhotoSrc = this.props.api_url.replace('/api','') + profileDetails.profile_thumbnail_image.url
     }
     else{
-        profile_photo = '/default-profile.png' 
+        profile_photo = profilePhotoSrc = '/default-profile.png' 
     }
   
     // address stuff
@@ -157,19 +195,20 @@ export default class UserProfile extends Component {
     if(email.split('_unset').length > 1){// it mean the email address is not set
       email = 'unset'
     }
-
+   
     return (<> 
          <HtmlHead pageTitle={firstname}/>
          <PhoneNumberDialog openPhoneNumberDialog={this.state.openPhoneNumberDialog} handleDialogClose={this.handleDialogClose}/>
+         <ImageViewModal showCover={this.state.showCover} profilePhotoSrc={profilePhotoSrc} profileCoverSrc={profileCoverSrc} handleImageModalClose={this.handleImageModalClose} openImageModal={this.state.openImageModal}/>
         <div className="row">
         <div className="col-lg-12">
             <div className="profile card card-body px-3 pt-3 pb-0">
             <div className="profile-head">
                 <div className="photo-content">
-                <div className="cover-photo rounded" style={coverPhotoStyles} /></div>
+                <div onClick={this.handleCoverPhotoModalOpen} className="cover-photo rounded" style={coverPhotoStyles} /></div>
                 <div className="profile-info">
                 <div className="profile-photo">
-                    <img src={profile_photo} className="img-fluid rounded-circle" alt />
+                    <img onClick={this.handleImageModalOpen} src={profile_photo} className="img-fluid rounded-circle" alt='dp' style={{width:100,height:90}}/>
                 </div>
                 <div className="profile-details">
                     <div className="profile-name px-3 pt-2">
@@ -349,3 +388,36 @@ function PhoneNumberDialog(props) {
       </div>
     );
   }
+
+
+function ImageViewModal(props) {
+    const ModalStyle = {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        maxWidth: '90%',
+        bgcolor: 'background.paper',
+        border: '2px solid #000',
+        boxShadow: 24,
+        p: 4,
+      };
+console.log(props.profilePhotoUri)
+  return (
+    <div onClick={props.handleImageModalClose}>
+      <Modal
+        open={props.openImageModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={ModalStyle}>
+          {/* {props.showCover? <img src={props.profileCoverSrc}/>: <img src={props.profilePhotoSrc}/>} */}{/* This code allows full view of cover photos, to be released later as an update */} 
+          <img src={props.profilePhotoSrc}/>
+          <IconButton onClick={props.handleImageModalClose} aria-label="cancel">
+            <Cancel />
+        </IconButton>
+        </Box>
+      </Modal>
+    </div>
+  );
+}

@@ -49,7 +49,7 @@ async function userHasConnection(){
   }
 }
 
-export async function getLoggedInUserData(){
+export async function getLoggedInUserData(populateExtension={carOwnerProfile: '', driverProfile: ''}){
     if(getJwt() === null) return 'logged-out' // you are looged out
     let url
     const user = await fetch(api_url+'/users/me',{
@@ -64,8 +64,8 @@ export async function getLoggedInUserData(){
     if('error' in user) return 'logged-out' //it means you are looged out
       //.catch(error => return 'logged-out')
      // get user first to check type, coz we don't know whether user is a driver or car owner
-    if(user.type === 'driver') url = api_url+'/users/me/?'+driver_populate_url
-    if(user.type === 'car-owner') url = api_url+'/users/me/?populate=carOwnerProfile,carOwnerProfile.details,carOwnerProfile.details.address,carOwnerProfile.details.profile_cover_image,carOwnerProfile.details.profile_thumbnail_image'
+    if(user.type === 'driver') url = api_url+'/users/me/?'+driver_populate_url+populateExtension.driverProfile
+    if(user.type === 'car-owner') url = api_url+'/users/me/?populate=carOwnerProfile,carOwnerProfile.details,carOwnerProfile.details.address,carOwnerProfile.details.profile_cover_image,carOwnerProfile.details.profile_thumbnail_image'+populateExtension.carOwnerProfile
     
     return await fetch(url,{
       headers: {
@@ -78,6 +78,11 @@ export async function getLoggedInUserData(){
   }
   
   export const imageUrlFormat = (image,formatWanted)=>{
+    if(image === undefined || image === null) return '/default-profile.png' 
+    
+    if(formatWanted === 'original'){
+      return image.url
+    }
     if(image.hasOwnProperty('formats')){
        if(image.formats.hasOwnProperty(formatWanted)){
         return image.formats[formatWanted].url
