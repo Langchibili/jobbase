@@ -169,7 +169,7 @@ class SideNav extends Component {
           </ul>
           <div className="copyright">
             <p><strong>DriverBase</strong>  © 2023~ All Rights Reserved</p>
-            <p>by Gotriips</p>
+            <p>by <a href='https://langtechdev.com' target='_blank'>LangTechDev</a></p>
           </div>
         </div>
       </div>
