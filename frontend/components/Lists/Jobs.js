@@ -6,12 +6,15 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default class Jobs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-       carOwnerProfileNames:{}
+       carOwnerProfileNames:{},
+       gotToCarOwnerProfile: false,
+       carOwnerProfileUri: ''
     }
   }
   jobBody = (body)=>{
@@ -75,7 +78,7 @@ export default class Jobs extends React.Component {
       }
   }
   componentDidMount(){
-    async function updateCarOwnerProfileNames(jobs, ctx) {
+    async function updateCarOwnerProfileNames(jobs, ctx) { // show car owner names
       let carOwnerProfileNames = {};
       for (const job of jobs) {
         carOwnerProfileNames = await ctx.getJobCarOwnersNames(job.id, carOwnerProfileNames);
@@ -83,8 +86,18 @@ export default class Jobs extends React.Component {
       ctx.setState({
         carOwnerProfileNames: carOwnerProfileNames,
       }, () => {
-       // console.log('the usernames of the carowners',ctx.state.carOwnerProfileNames);
-      });
+        for (const job of jobs) { // add click events to car owner names
+          const carOwnerProfileName = document.getElementById('job-id-'+job.id)
+          carOwnerProfileName.style.textTransform = "capitalize"
+          carOwnerProfileName.addEventListener('click',()=>{
+            console.log(job)
+              ctx.setState({
+                gotToCarOwnerProfile: true, 
+                carOwnerProfileUri: '/profile?uid='+parseInt(job.attributes.userid)+'&user_type=car-owner'
+              })
+          })
+        }
+      })
     }
     
     // Usage inside a Next.js method (e.g., a function within your component or a server-side API route)
@@ -108,7 +121,8 @@ export default class Jobs extends React.Component {
       }
       const carOwnerName = carOwnerFirstName + ' ' +carOwnerLastName
       return (
-          <div key={job.id} >
+          <div key={job.id}>
+            {this.state.gotToCarOwnerProfile? <RedirectUser carOwnerProfileUri={this.state.carOwnerProfileUri}/> : '' /* send a user to a car owner's profile */}
             <ListItem alignItems="flex-start" >
                 <ListItemAvatar>
                 <Link href={'/jobs?act=show&jid='+job.id} onClick={this.props.handlePageChange}>
@@ -116,9 +130,13 @@ export default class Jobs extends React.Component {
                   </Link>
                 </ListItemAvatar>
                 <ListItemText
+                  id={'job-id-'+job.id}
                   primary={carOwnerName}
                   secondary={
                     <React.Fragment>
+                      <Link href={'/jobs?act=show&jid='+job.id} onClick={this.props.handlePageChange}>
+                       {this.jobBody(job.attributes.body)+" — "}
+                      </Link>
                       <Link href={'/jobs?act=show&jid='+job.id} onClick={this.props.handlePageChange}>
                         <Typography
                           sx={{ display: 'inline' }}
@@ -129,9 +147,7 @@ export default class Jobs extends React.Component {
                           {this.dateCreated(job.attributes.createdAt)}
                         </Typography>
                       </Link>
-                      <Link href={'/jobs?act=show&jid='+job.id} onClick={this.props.handlePageChange}>
-                       {" — "+this.jobBody(job.attributes.body)}
-                      </Link>
+                      
                     </React.Fragment>
                   }
                 />
@@ -146,4 +162,11 @@ export default class Jobs extends React.Component {
   render() {
     return <div>{this.renderJob()}</div>
   }
+}
+
+
+const RedirectUser = (props)=>{
+  const router = useRouter();
+  router.push(props.carOwnerProfileUri)
+  return <></>
 }

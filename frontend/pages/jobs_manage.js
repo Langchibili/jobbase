@@ -100,12 +100,10 @@ export default function jobs_manage(props) {
                 <div className="container h-100">
                     <div className="row justify-content-center h-100 align-items-center">
                     <div className="col-md-6">
-                        <div className="authincation-content">
                         <div className="row no-gutters">
                             <div className="col-xl-12" >
                                {showForm(type,data)}
                             </div>
-                        </div>
                         </div>
                     </div>
                     </div>

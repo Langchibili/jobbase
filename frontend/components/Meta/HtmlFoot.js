@@ -3,16 +3,14 @@ import React, { Component } from 'react';
 class HtmlFoot extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // Initial state goes here
-    };
   }
   componentDidMount() {
     // remove the template's floating buttons
-    if(window.screen.availWidth >= 1025){
+    if(window.innerWidth > 1040){
       if(document.getElementsByClassName('DZ-bt-support-now DZ-theme-btn')[0] === undefined) return
       document.getElementsByClassName('DZ-bt-support-now DZ-theme-btn')[0].style.display = 'none'
       document.getElementsByClassName('DZ-bt-buy-now DZ-theme-btn')[0].style.display = 'none'  
+      
     }
   }
    
@@ -20,6 +18,7 @@ class HtmlFoot extends Component {
   render() {
     return (
       <React.Fragment>
+               
         <script src="/template/vendor/global/global.min.js"></script>
         <script src="/template/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
         {/* <script src="/template/vendor/chart.js/Chart.bundle.min.js"></script> */}

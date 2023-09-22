@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Search } from '@material-ui/icons';
 import Link from 'next/link';
-import { Fab, Paper } from '@mui/material';
+import { Fab } from '@mui/material';
 import { LoginRounded, PersonAdd } from '@mui/icons-material';
 import { imageUrlFormat } from '@/Constants';
 //import { SearchOutlined } from '@mui/icons-material';
@@ -94,9 +94,9 @@ class Header extends Component {
           <nav className="navbar navbar-expand">
             <div className="collapse navbar-collapse justify-content-between">
               <div className="header-left">
-                <div className="dashboard_bar">
+                {/* <div className="dashboard_bar">
                   Dashboard
-                </div>
+                </div> */}
               </div>
               <ul className="navbar-nav header-right">
                

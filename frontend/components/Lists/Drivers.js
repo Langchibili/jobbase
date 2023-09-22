@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { imageUrlFormat } from '@/Constants';
-import { EscalatorWarningOutlined } from '@mui/icons-material';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -8,8 +7,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
+import RatingDisplay from '../Includes/RatingDisplay';
 
 export default class Drivers extends Component {
   constructor(props) {
@@ -67,12 +65,29 @@ export default class Drivers extends Component {
 
   renderDriverNumber = (phone_number,handleDialogOpen)=>{
     if(this.props.loggedInUserProfile.type === "driver" || this.props.loggedInUserProfile === "logged-out"){
-      return <a className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
+      return <a style={{color:"green"}} className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
     }
     if(this.props.loggedInUserProfile.profile_completion_percentage < 9){
-      return <a className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
+      return <a style={{color:"green"}} className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
     }
-    return <a className="contact-icon" href={"tel://"+phone_number}><i className="fa fa-phone" /></a>
+    return <a style={{color:"green"}} className="contact-icon" href={"tel://"+phone_number}><i className="fa fa-phone" /></a>
+  }
+
+  renderDriverCategory = (driverCategory)=>{
+    if(driverCategory === null) driverCategory = "other"
+    if(driverCategory === "truck" || driverCategory === "canter" || driverCategory === "heavy-duty"){
+      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory}><i className="fa fa-truck" aria-hidden="true" /></Link>
+    }
+    if(driverCategory === "taxi"){
+      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory}><i className="fa fa-car" aria-hidden="true" /></Link>
+    }
+    if(driverCategory === "tractor"){
+      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory}><i className="fa fa-truck" aria-hidden="true" /></Link>
+    }
+    if(driverCategory === "mini-bus" || driverCategory === "big-bus" || driverCategory === "noah" ){
+      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory}><i className="fa fa-bus" aria-hidden="true" /></Link>
+    }
+    return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory}><i className="fa fa-truck" aria-hidden="true" /></Link>
   }
 
   renderDriversList = ()=>{
@@ -83,7 +98,7 @@ export default class Drivers extends Component {
         return <></>;
     }
     else{
-        let userId,fullname,phone_number,thumbnail,thumbnailUrl,profile_url,rating,eligibleForListing,driverProfile
+        let userId,fullname,phone_number,thumbnail,thumbnailUrl,profile_url,rating,ratingsCount,eligibleForListing,driverProfile
         return drivers.map((driver)=>{
             if(this.props.listAll) { // set userId for user profiles
               userId = parseInt(driver.attributes.userid) // the userid
@@ -131,11 +146,12 @@ export default class Drivers extends Component {
                 profile_url = '/profile?uid='+userId+'&user_type=driver'
                 //RATING 
                 rating = driverProfile.details.average_rating? driverProfile.details.average_rating : ''
+                //RATINGs COUNT
+                ratingsCount = driverProfile.details.ratings? driverProfile.details.ratings.length : ''
              }
              else{
                 return
              }
-          
             return ( 
               <div className="card-body" key={userId}> 
                 <PhoneNumberDialog openPhoneNumberDialog={this.state.openPhoneNumberDialog} handleDialogClose={this.handleDialogClose}/>
@@ -148,10 +164,12 @@ export default class Drivers extends Component {
                         </div>
                         <div className="media-body">
                           <Link href={profile_url}><h5 className="mb-1" style={{textTransform:'capitalize'}}>{fullname}</h5></Link>
-                          <small className="d-block">{rating+' '}<span className='fa fa-star text-danger'></span></small>
+                          <small className="d-block">{rating+' '}<span className='fa fa-star text-danger'></span><small>
+                          &nbsp;&nbsp;{ratingsCount+' '}<span class="fa fa-comment-alt text-success"></span></small></small>
+                        {/* <RatingDisplay rating={rating}/> */}
                         </div>
                         <div className="d-flex">
-                          <a className="contact-icon me-3" href="#"><i className="fa fa-truck" aria-hidden="true" /></a>
+                          {this.renderDriverCategory(driverProfile.driver_category)}
                           {this.renderDriverNumber(phone_number,this.handleDialogOpen)}
                         </div>
                       </div>

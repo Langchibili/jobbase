@@ -17,7 +17,7 @@ async function getUserProfile(uid,user_type) {
         if(user_type === 'car-owner') url = api_url+'/users/'+uid+'/?populate=carOwnerProfile,carOwnerProfile.details,carOwnerProfile.details.address,carOwnerProfile.details.profile_cover_image,carOwnerProfile.details.profile_thumbnail_image'
         userProfile = await fetchData(url);
     }
-    
+     
     if('error' in userProfile) return 'not-found' 
     return userProfile
 }

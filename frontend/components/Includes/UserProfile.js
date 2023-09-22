@@ -11,7 +11,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import UpAndBackButton from './UpAndBackButton';
 import Alert from '@mui/material/Alert'; 
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { IconButton } from '@mui/material';
 import { Cancel } from '@mui/icons-material';
@@ -208,7 +207,7 @@ export default class UserProfile extends Component {
                 <div onClick={this.handleCoverPhotoModalOpen} className="cover-photo rounded" style={coverPhotoStyles} /></div>
                 <div className="profile-info">
                 <div className="profile-photo">
-                    <img onClick={this.handleImageModalOpen} src={profile_photo} className="img-fluid rounded-circle" alt='dp' style={{width:100,height:90}}/>
+                    <img onClick={this.handleImageModalOpen} src={profile_photo} className="img-fluid rounded-circle" alt='dp' style={{width:100,height:85}}/>
                 </div>
                 <div className="profile-details">
                     <div className="profile-name px-3 pt-2">
@@ -412,7 +411,7 @@ console.log(props.profilePhotoUri)
       >
         <Box sx={ModalStyle}>
           {/* {props.showCover? <img src={props.profileCoverSrc}/>: <img src={props.profilePhotoSrc}/>} */}{/* This code allows full view of cover photos, to be released later as an update */} 
-          <img src={props.profilePhotoSrc}/>
+          <img src={props.profilePhotoSrc} width='100%'/>
           <IconButton onClick={props.handleImageModalClose} aria-label="cancel">
             <Cancel />
         </IconButton>

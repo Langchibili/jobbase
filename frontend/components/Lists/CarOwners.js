@@ -53,7 +53,7 @@ class CarOwners extends Component {
         return <></>;
     }
     else{
-        let userId,fullname, rating, thumbnail, thumbnailUrl, profile_url,eligibleForListing,carOwnerProfile
+        let userId, fullname, rating, ratingsCount, thumbnail, thumbnailUrl, profile_url,eligibleForListing,carOwnerProfile
         return carOwners.map((carOwner)=>{
           if(this.props.listAll) { // set userId for user profiles
             userId = parseInt(carOwner.attributes.userid) // the userid
@@ -95,9 +95,11 @@ class CarOwners extends Component {
               thumbnail = '/default-profile.png' 
             } 
                // PROFILE URL
-               profile_url = '/profile?uid='+carOwner.id+'&user_type=car-owner'
+               profile_url = '/profile?uid='+userId+'&user_type=car-owner'
                //RATING 
                rating = carOwnerProfile.details.average_rating? carOwnerProfile.details.average_rating : ''
+               //RATINGs COUNT
+               ratingsCount = carOwnerProfile.details.ratings? carOwnerProfile.details.ratings.length : ''
             }
           else{
             return
@@ -113,7 +115,8 @@ class CarOwners extends Component {
                     </div>
                     <div className="media-body">
                       <Link href={profile_url}><h5 className="mb-1" style={{textTransform:'capitalize'}}>{fullname}</h5></Link>
-                      <small className="d-block">{rating+' '}<span className='fa fa-star text-danger'></span></small>
+                      <small className="d-block">{rating+' '}<span className='fa fa-star text-danger'></span><small>
+                      &nbsp;&nbsp;{ratingsCount+' '}<span class="fa fa-comment-alt text-success"></span></small></small>
                     </div>
                     <div className="d-flex">
                       <a className="contact-icon me-3" href="#"><i className="fa fa-car" aria-hidden="true" /></a>

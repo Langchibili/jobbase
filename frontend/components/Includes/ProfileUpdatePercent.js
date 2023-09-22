@@ -111,16 +111,16 @@ async componentDidMount(){
       const profileDetails = carOwnerProfile.details
       if(profileDetails.firstname === null || profileDetails.lastname === null){
         this.setState({
-            profile_completion_percentage:'9%',
+            profile_completion_percentage:'7%',
             color: 'danger',
             message:'!Please add a firstname and lastname to be listed as a driver'
         })
-        if(parseInt(user.profile_completion_percentage) ===  9) return // don't make update then
-        this.updateUser(9)
+        if(parseInt(user.profile_completion_percentage) ===  7) return // don't make update then
+        this.updateUser(7)
         return
       }
 
-      if(profileDetails.phone_number === null){
+      if(profileDetails.phone_number === null || profileDetails.phone_number === ""){
         this.setState({
             profile_completion_percentage:'9%',
             color: 'danger',
@@ -130,7 +130,7 @@ async componentDidMount(){
         this.updateUser(9)
         return
       }
-      if(profileDetails.age === null || profileDetails.gender === null){
+      if(profileDetails.age === null || profileDetails.gender === null || profileDetails.age === 0 || profileDetails.gender === "unset"){
         this.setState({
             profile_completion_percentage:'30%',
             color: 'warning',
@@ -185,16 +185,16 @@ async componentDidMount(){
       const profileDetails = driverProfile.details
       if(profileDetails.firstname === null || profileDetails.lastname === null){
         this.setState({
-            profile_completion_percentage:'9%',
+            profile_completion_percentage:'7%',
             color: 'danger',
             message:'!Please add a firstname and lastname to be listed as a driver'
         })
-        if(parseInt(user.profile_completion_percentage) ===  9) return // don't make update then
-        this.updateUser(9)
+        if(parseInt(user.profile_completion_percentage) ===  7) return // don't make update then
+        this.updateUser(7)
         return
       }
 
-      if(profileDetails.phone_number === null){
+      if(profileDetails.phone_number === null || profileDetails.phone_number === ""){
         this.setState({
             profile_completion_percentage:'9%',
             color: 'danger',
@@ -204,7 +204,7 @@ async componentDidMount(){
         this.updateUser(9)
         return
       }
-      if(profileDetails.age === null || profileDetails.gender === null){
+      if(profileDetails.age === null || profileDetails.gender === null || profileDetails.age === 0 || profileDetails.gender === "unset"){
         this.setState({
             profile_completion_percentage:'15%',
             color: 'warning',

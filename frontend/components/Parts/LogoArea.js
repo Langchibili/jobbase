@@ -11,15 +11,20 @@ class LogoArea extends Component {
     };
   }
   renderLogoSide = ()=>{
-    if(window.screen.availWidth >= 1025){
-      return (
-        <div className="nav-header">
-           <Link href="/"><img style={{marginLeft:60,width:140,height:140}} src="/DriverBaseTransparentBackground.png" alt /></Link> 
-        </div>)
-    }
-    else{
-      return <MobileSideBAr loggedInUserProfile={this.props.loggedInUserProfile} handlePageChange={this.props.handlePageChange}/>
-    }
+      if(window.innerWidth > 1040){
+        if(window.location.pathname === '/'){
+          return (
+            <div className="nav-header">
+               <Link href="/"><img style={{marginLeft:60,width:140,height:140}} src="/DriverBaseTransparentBackground.png" alt /></Link> 
+            </div>)
+        }
+        else{
+          return <MobileSideBAr loggedInUserProfile={this.props.loggedInUserProfile} handlePageChange={this.props.handlePageChange}/>
+        }
+      }
+      else{
+        return <MobileSideBAr loggedInUserProfile={this.props.loggedInUserProfile} handlePageChange={this.props.handlePageChange}/>
+      }
   }
 
   render() { return this.renderLogoSide()}

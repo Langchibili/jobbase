@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import ContentLoader from './ContentLoader';
 import List from '../Lists/List';
+import Alert from '@mui/material/Alert'; 
 import { getJwt, imageUrlFormat, minimal_car_owner_populate_url, minimal_driver_populate_url } from '@/Constants';
 
 export default class JobView extends React.Component {
@@ -103,7 +104,7 @@ export default class JobView extends React.Component {
 
   render() {
     if(this.state.requesting) return <ContentLoader text='loading job...'/>
-    if(this.state.noCarOwner) return <>The Job You Are Looking For Either Doesn't Exist Or The Owner Has Drafted It.</>
+    if(this.state.noCarOwner) return <Alert severity="warning">The Job You Are Looking For Either Doesn't Exist Or The Owner Has Drafted It.</Alert>
     const job = this.state.job
     const carOwnerProfile = this.state.carOwnerProfile
     const rating = carOwnerProfile.average_rating? carOwnerProfile.average_rating : ''
@@ -146,7 +147,7 @@ export default class JobView extends React.Component {
               items={this.state.applicants}
               api_url={this.props.api_url}
               listType='drivers' 
-              listTitle='Applicants' /> : 'No applicants to this job yet'}
+              listTitle='Applicants' /> : <Alert severity="info" sx={{marginBottom:2}}>No applicants to this job yet</Alert>}
     </div>)
   }
 }

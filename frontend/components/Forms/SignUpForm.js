@@ -162,7 +162,7 @@ class SignUpForm extends Component {
             localStorage.removeItem('jwt')
             localStorage.setItem("jwt", fakeStr1+response.jwt+fakeStr2)
         }
-            window.location = '/profile'
+            window.location = '/welcome'
         }
     }
  }

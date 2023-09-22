@@ -1,16 +1,50 @@
 import React, { Component } from 'react';
 import Head from 'next/head';
-import { Padding } from '@mui/icons-material';
+import LogoArea from '../Parts/LogoArea';
+import { api_url, getLoggedInUserData } from '@/Constants';
+import Header from '../Parts/Header';
+import PageLoader from '../Includes/PageLoader';
 class HtmlHead extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // Initial state goes here
+      windowLoaded: false,
+      linkClicked: false,
+      loggedInUserProfile: 'logged-out'
     };
+  }
+  async componentDidMount(){
+    const loggedInUserProfile =  await getLoggedInUserData()
+    this.setState({
+      windowLoaded: true,
+      loggedInUserProfile: loggedInUserProfile
+    })
+  }
+  handlePageChange = (e)=>{
+    window.location = '#'
+    this.setState({
+      linkClicked: true
+    })
+  }
+  renderHeader = ()=>{
+    const pathname = window.location.pathname
+    if(pathname === "/" || pathname === "/login" || pathname === "/signup" || pathname === "/profile") return '' // cannot add header to these pages
+    return ( <Header 
+      handlePageChange={this.handlePageChange}
+      linkClicked={this.state.linkClicked} 
+      api_url={api_url} 
+      loggedInUserProfile={this.state.loggedInUserProfile}/>)
+  }
+
+  renderLogoArea = ()=>{
+    const pathname = window.location.pathname
+    if(pathname === "/" || pathname === "/login" || pathname === "/signup" || pathname === "/profile") return '' // cannot add header to these pages
+    return <LogoArea loggedInUserProfile={this.state.loggedInUserProfile} handlePageChange={this.handlePageChange}/> 
   }
 
   render() {
     return (
+      <>
             <Head>
               <meta charSet="utf-8" />
               <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -38,6 +72,13 @@ class HtmlHead extends Component {
               <meta http-equiv="Pragma" content="no-cache" />
               <meta http-equiv="Expires" content="0" /> */}
             </Head>
+            {this.state.windowLoaded? 
+            <>
+             {this.state.linkClicked? <PageLoader/> : ''}
+             {this.renderLogoArea()}
+             {this.renderHeader()}</>
+             : ''}
+            </>
     );
   }
 }

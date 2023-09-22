@@ -80,7 +80,7 @@ export default function jobs(props) {
       }, [act]);
     
     
-    if (data.loggedInUserProfile === 'logged-out') window.location = '/login' // you should re-log in
+   // if (data.loggedInUserProfile === 'logged-out') window.location = '/login' // you should re-log in
     
     if (data.loading || data.loggedInUserProfile === null) {
         return (<> <PageLoader /><HtmlHead pageTitle='Jobs'/><ContentLoader text='loading...'/> <HtmlFoot/> </>)
