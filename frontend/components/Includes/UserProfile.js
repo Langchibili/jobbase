@@ -19,6 +19,7 @@ import { imageUrlFormat } from '@/Constants';
 
 export default class UserProfile extends Component {
   constructor(props) {
+    
     super(props);
     this.state = {
         openPhoneNumberDialog: false,
@@ -94,6 +95,11 @@ export default class UserProfile extends Component {
     }
     return email
    }
+
+   hidValue = (value)=>{
+      return 'hidden'; // will add more context to this as the update rolls out
+   }
+
 
   render() {
     /* HANFLING CASES WHERE USER PROFILE IS NOT YET SET */
@@ -215,7 +221,7 @@ export default class UserProfile extends Component {
                     <p>{this.props.userProfile.type}</p>
                     </div>
                     <div className="profile-number px-2 pt-2">
-                    <h4 className="text-muted mb-0">{this.props.userProfile.type === 'car-owner'? 'hidden' : this.showDriverNumber(mobileNumber)}</h4>
+                    <h4 className="text-muted mb-0">{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(this.showDriverNumber(mobileNumber))}</h4>
                     <p>Contact</p>
                     </div>
                     <div className="dropdown ms-auto">
@@ -279,7 +285,7 @@ export default class UserProfile extends Component {
                         <path d="M23 15C19.6227 15 16.875 17.7477 16.875 21.125C16.875 22.2061 17.1606 23.2689 17.701 24.1986C17.8269 24.4153 17.9677 24.6266 18.1196 24.8264L22.7339 31H23.2661L27.8804 24.8264C28.0322 24.6266 28.173 24.4154 28.299 24.1986C28.8394 23.2689 29.125 22.2061 29.125 21.125C29.125 17.7477 26.3773 15 23 15ZM23 23.1562C21.88 23.1562 20.9688 22.245 20.9688 21.125C20.9688 20.005 21.88 19.0938 23 19.0938C24.12 19.0938 25.0312 20.005 25.0312 21.125C25.0312 22.245 24.12 23.1562 23 23.1562Z" fill="#808080" />
                     </svg>
                     <div className="media-body text-left">
-                        <h4 className="fs-18 text-black font-w600 mb-0">{locationDisplay}</h4>
+                        <h4 className="fs-18 text-black font-w600 mb-0">{this.hidValue(locationDisplay)}</h4>
                         <span className="fs-14">Location</span>
                     </div>
                     </div>
@@ -302,7 +308,7 @@ export default class UserProfile extends Component {
                     <h5 className="f-w-500">Email <span className="pull-end">:</span>
                     </h5>
                 </div>
-                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.showEmail(email)}</span>
+                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(this.showEmail(email))}</span>
                 </div>
                 </div>
                 {this.props.userProfile.type === 'car-owner'? '' : <div className="row mb-2"><div className="col-sm-3 col-5"><h5 className="f-w-500">Availability <span className="pull-end">:</span></h5></div><div className="col-sm-9 col-7"><span className='text-success'><strong>{availability_display}</strong></span></div></div>}
@@ -340,7 +346,7 @@ export default class UserProfile extends Component {
                 <div className="col-sm-3 col-5">
                     <h5 className="f-w-500">Address <span className="pull-end">:</span></h5>
                 </div>
-                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : address}</span>
+                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(address)}</span>
                 </div>
                 </div>
                 {this.props.userProfile.type === 'car-owner'? '' :<div className="row mb-2"><div className="col-sm-3 col-5"> <h5 className="f-w-500">Year Experience <span className="pull-end">:</span></h5></div><div className="col-sm-9 col-7"><span>{experience_display}</span></div></div>}
