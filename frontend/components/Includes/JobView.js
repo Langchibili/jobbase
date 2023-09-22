@@ -110,7 +110,7 @@ export default class JobView extends React.Component {
     const rating = carOwnerProfile.average_rating? carOwnerProfile.average_rating : ''
     let thumbnail,thumbnailUrl // to be filled later
     // the thumbnail stuff
-     const backEndUrl = this.props.api_url.replace('/api','')
+     const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
     if(carOwnerProfile.profile_thumbnail_image.data === null) { 
       thumbnail = '/default-profile.png' 
     }

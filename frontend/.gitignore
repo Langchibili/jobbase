@@ -13,6 +13,7 @@
 /out/
 changes-to-be-made.txt
 features-list.txt
+alpha-release-build.txt
 # production
 /build
 

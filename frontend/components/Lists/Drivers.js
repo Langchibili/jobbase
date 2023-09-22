@@ -115,7 +115,7 @@ export default class Drivers extends Component {
                 fullname = driverProfile.details.firstname? driverProfile.details.firstname +' '+ driverProfile.details.lastname || '' : ''
                 // THUMBNAIL
                 if(driverProfile.details.profile_thumbnail_image !== null){ // check if thumbnail exists
-                    const backEndUrl = this.props.api_url.replace('/api','')
+                    const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
                     if(this.props.listAll) {
                         if(driverProfile.details.profile_thumbnail_image.data === null) { 
                           thumbnail = '/default-profile.png' 

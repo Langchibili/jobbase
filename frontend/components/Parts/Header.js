@@ -40,7 +40,7 @@ class Header extends Component {
         profileDetails = this.props.loggedInUserProfile.carOwnerProfile.details
     }
     if(profileDetails.profile_thumbnail_image !== null){
-        const backEndUrl = this.props.api_url.replace('/api','')
+        const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
         profile_photo =  backEndUrl+imageUrlFormat(profileDetails.profile_thumbnail_image,'thumbnail')   
     }
     else{

@@ -152,10 +152,10 @@ export default class UserProfile extends Component {
     // profile images stuff
     let cover_photo,profileCoverSrc 
     if(profileDetails.profile_cover_image !== null){
-        const backEndUrl = this.props.api_url.replace('/api','')
+        const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
         const coverPhotoUrl = imageUrlFormat(profileDetails.profile_cover_image,'large')
         cover_photo = backEndUrl+coverPhotoUrl
-        profileCoverSrc = this.props.api_url.replace('/api','') + profileDetails.profile_cover_image.url
+        profileCoverSrc = this.props.api_url.replace('driverbase.app/api','driverbase.app') + profileDetails.profile_cover_image.url
     }
     else{
         cover_photo = profileCoverSrc = '/no-cover-photo.jpg' 
@@ -172,10 +172,10 @@ export default class UserProfile extends Component {
     let profile_photo,profilePhotoSrc 
 
     if(profileDetails.profile_thumbnail_image !== null){
-        const backEndUrl = this.props.api_url.replace('/api','')
+        const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
         const profilePhotoUrl = imageUrlFormat(profileDetails.profile_thumbnail_image,'thumbnail')
         profile_photo =  backEndUrl+profilePhotoUrl  
-        profilePhotoSrc = this.props.api_url.replace('/api','') + profileDetails.profile_thumbnail_image.url
+        profilePhotoSrc = this.props.api_url.replace('driverbase.app/api','driverbase.app') + profileDetails.profile_thumbnail_image.url
     }
     else{
         profile_photo = profilePhotoSrc = '/default-profile.png' 

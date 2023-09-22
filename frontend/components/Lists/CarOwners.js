@@ -70,7 +70,7 @@ class CarOwners extends Component {
                fullname = carOwnerProfile.details.firstname? carOwnerProfile.details.firstname +' '+ carOwnerProfile.details.lastname || '' : ''
                // thumbnail stuff
                if(carOwnerProfile.details.profile_thumbnail_image !== null){ // check if thumbnail exists
-                const backEndUrl = this.props.api_url.replace('/api','')
+                const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
                 if(this.props.listAll) {
                     if(carOwnerProfile.details.profile_thumbnail_image.data === null) { 
                       thumbnail = '/default-profile.png' 
