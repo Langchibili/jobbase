@@ -12,11 +12,12 @@
 
 const fakeStr1 = 'kahs3lahebblo2uwb00an~#va5lwi_ad_fgaljdj'; // security stuff
 const fakeStr2 ='klahewi_ad_fgalloanv;;aitalkjfajhsbbluwba==hn3vajd5j=+;'
-  /*localhost: */ export const api_url = 'http://localhost:1337/api'
+ // /*localhost: */ export const api_url = 'http://localhost:1337/api'
+  /*localhost: */ export const api_url = 'http://168.43.207:1337/api'
 
  // /*liveserver: */ export const api_url = 'https://api.driverbase.app/api' // for production's sake
 
- // /*testserver: */ export const api_url = 'https://testapi.driverbase.app/api' // the api to be used when deployed to the test site
+ // /*testserver: */ export const api_url = 'https://testapi.driverbase.app' // the api to be used when deployed to the test site
 
 export function getJwt(){
     userHasConnection() // check the internet connection
