@@ -10,6 +10,7 @@ import ContentLoader from '@/components/Includes/ContentLoader';
 import JobView from '@/components/Includes/JobView';
 import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 import Alert from '@mui/material/Alert'; 
+import Link from 'next/link';
 
 function renderJobView(act,data,jid){
   if(act === 'show'){
@@ -55,7 +56,7 @@ function renderJobView(act,data,jid){
           let tip = ''
           if(data.loggedInUserProfile.profile_completion_percentage < 75) tip = ', Or try Updating your profile with more details to Earn free points'
           if(data.loggedInUserProfile.profile_completion_percentage === 75) tip = ', Or try verifying your account to Earn 20 free points!'
-          return <Alert severity="error">You have insuficient job creation points to post a job. Please buy more{tip}</Alert>
+          return (<div><Alert severity="error">You have insuficient job creation points to post a job. Please buy more{tip}</Alert> <Link className="mt-2 btn btn-success" href="/points">Buy Points</Link></div>)
         }
         return <JobsAddForm loggedInUserProfile={data.loggedInUserProfile} api_url={api_url} jwt={getJwt()}/>
     }

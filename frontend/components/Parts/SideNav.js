@@ -16,12 +16,13 @@ class SideNav extends Component {
   renderLoggedInLinks  = ()=>{
           if(this.props.loggedInUserProfile === 'logged-out') return <></>
           if(this.props.loggedInUserProfile.type === 'driver'){
-             return <></>
+             return <li><Link onClick={this.props.handlePageChange} href="/points">Buy Points(JAPs)</Link></li> 
           }
           return (
             <><li><Link onClick={this.props.handlePageChange} href="/jobs?act=add">Create Job</Link></li>
             <li><Link onClick={this.props.handlePageChange} href="/jobs?act=edit">Edit Jobs</Link></li>
             <li><Link onClick={this.props.handlePageChange} href="/jobs?act=delete">Delete Jobs</Link></li> 
+            <li><Link onClick={this.props.handlePageChange} href="/points">Buy Points(JCPs)</Link></li> 
           </>
           )
   }

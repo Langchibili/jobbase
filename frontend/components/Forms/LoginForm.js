@@ -53,7 +53,8 @@ class LoginForm extends Component {
                     window.location = '/profile'
                 }
                 else{
-                    window.location = '/profile?user_type='+user.type+'&uid='+user.id
+                   //  window.location = '/profile?user_type='+user.type+'&uid='+user.id
+                   window.location = '/'
                 }
             }
             else{

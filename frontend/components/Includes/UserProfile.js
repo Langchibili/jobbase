@@ -15,6 +15,7 @@ import Modal from '@mui/material/Modal';
 import { IconButton } from '@mui/material';
 import { Cancel } from '@mui/icons-material';
 import { imageUrlFormat } from '@/Constants';
+import { useRouter } from 'next/router';
 
 
 export default class UserProfile extends Component {
@@ -24,7 +25,16 @@ export default class UserProfile extends Component {
     this.state = {
         openPhoneNumberDialog: false,
         openImageModal: false,
-        showCover: false
+        showHiddenItem: false,
+        openHiddenDialog: false,
+        detailName: '',
+        hiddenDetailsDialogMessage: '',
+        hiddenDetailsDialogTitle: '',
+        showCover: false,
+        hideLocation: true,
+        hideEmail: true,
+        hideAddress: true,
+        hideDriverNumber: true
      };
   }
 
@@ -36,25 +46,74 @@ export default class UserProfile extends Component {
      return mobileNumber
   }
 
+
+  // renderDriverNumber = (phone_number,handleDialogOpen)=>{
+  //   if(this.props.loggedInUserProfile.type === "driver" || this.props.loggedInUserProfile === "logged-out"){
+  //     return <a className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
+  //   }
+  //   if(this.props.loggedInUserProfile.profile_completion_percentage < 9){
+  //     return <a className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
+  //   }
+  //   return <a className="contact-icon" href={"tel://"+phone_number}><i className="fa fa-phone" /></a>
+  // }
+  // renderUserEmail = (email,handleDialogOpen)=>{
+  //   if(this.props.loggedInUserProfile.type === "driver" || this.props.loggedInUserProfile === "logged-out"){
+  //       return <a className="contact-icon" style={{marginLeft:2}} href="#" onClick={handleDialogOpen}><i className="fa la-envelope" /></a>
+  //     }
+  //     if(this.props.loggedInUserProfile.profile_completion_percentage < 9){
+  //       return <a className="contact-icon"  style={{marginLeft:2}} href="#" onClick={handleDialogOpen}><i className="fa la-envelope" /></a>
+  //     }
+  //     return email === 'unset'? '':<Link className="contact-icon" style={{marginLeft:2}} href={"mailto:"+email}><i className="las la-envelope" /></Link>
+  // }
+
+  // /{"tel://"+phone_number}
+  
   renderDriverNumber = (phone_number,handleDialogOpen)=>{
-    if(this.props.loggedInUserProfile.type === "driver" || this.props.loggedInUserProfile === "logged-out"){
+    if(this.props.loggedInUserProfile === "logged-out" || this.props.loggedInUserProfile.type === "driver"){
       return <a className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
     }
     if(this.props.loggedInUserProfile.profile_completion_percentage < 9){
       return <a className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
     }
-    return <a className="contact-icon" href={"tel://"+phone_number}><i className="fa fa-phone" /></a>
+    return <a className="contact-icon" id="phone_number"  onClick={this.handleHiddenDetailsDialogOpen} href="#"><i onClick={this.handleHiddenDetailsDialogOpen} id="icon-phone_number" className="fa fa-phone" /></a>
   }
   renderUserEmail = (email,handleDialogOpen)=>{
-    if(this.props.loggedInUserProfile.type === "driver" || this.props.loggedInUserProfile === "logged-out"){
+    if(this.props.loggedInUserProfile === "logged-out"){
         return <a className="contact-icon" style={{marginLeft:2}} href="#" onClick={handleDialogOpen}><i className="fa la-envelope" /></a>
       }
+
       if(this.props.loggedInUserProfile.profile_completion_percentage < 9){
         return <a className="contact-icon"  style={{marginLeft:2}} href="#" onClick={handleDialogOpen}><i className="fa la-envelope" /></a>
       }
       return email === 'unset'? '':<Link className="contact-icon" style={{marginLeft:2}} href={"mailto:"+email}><i className="las la-envelope" /></Link>
   }
 
+  setShowNumberState = (show)=>{
+    if(show){
+      const userPoints = this.props.loggedInUserProfile.type === "driver"? this.props.loggedInUserProfile.driverProfile.application_points : this.props.loggedInUserProfile.carOwnerProfile.job_creation_points
+      const detailName = "Phone Number"
+      if(this.props.loggedInUserProfile.type === "driver"){
+        this.setState({
+          openHiddenDialog: true,
+          detailName: detailName,
+          hiddenDetailsDialogTitle: 'To see hidden details it will cost you some points',
+          hiddenDetailsDialogMessage: "It will cost you 50 points to view this driver's number, and you currently have "+userPoints+" points"
+       })
+      }
+      else{
+        this.setState({
+          openHiddenDialog: true,
+          detailName: detailName,
+          hiddenDetailsDialogTitle: 'To see hidden details it will cost you some points',
+          hiddenDetailsDialogMessage: "It will cost you 20 points to view this driver's number, and you currently have "+userPoints+" points"
+       })
+      }
+    }
+    else{
+        return
+    }
+    
+  }
  
   handleDialogOpen = (e)=>{
     e.preventDefault()
@@ -65,6 +124,46 @@ export default class UserProfile extends Component {
   handleDialogClose = ()=>{
     this.setState({
         openPhoneNumberDialog: false
+    })
+  }
+
+  handleHiddenDetailsDialogOpen = (e)=>{ // for now a driver isn't even allowed to view numbers
+    e.preventDefault()
+    let detailName
+    const itemName  = e.target.id
+    const loggedInUserProfile = this.props.loggedInUserProfile 
+    const userPoints = loggedInUserProfile.type === "driver"? loggedInUserProfile.driverProfile.application_points : loggedInUserProfile.carOwnerProfile.job_creation_points
+    if(itemName === "phone_number" || itemName === "icon-phone_number"){
+      detailName = "Phone Number"
+      if(loggedInUserProfile.type === "driver"){
+        this.setState({
+          openHiddenDialog: true,
+          detailName: detailName,
+          hiddenDetailsDialogTitle: 'To see hidden details it will cost you some points',
+          hiddenDetailsDialogMessage: "It will cost you 50 points to view this driver's number, and you currently have "+userPoints+" points"
+       })
+      }
+      else{
+        this.setState({
+          openHiddenDialog: true,
+          detailName: detailName,
+          hiddenDetailsDialogTitle: 'To see hidden details it will cost you some points',
+          hiddenDetailsDialogMessage: "It will cost you 20 points to view this driver's number, and you currently have "+userPoints+" points"
+       })
+      }
+    }
+    
+  }
+  
+  showHiddenItem = ()=>{
+      this.setState({
+         showHiddenItem: true
+      })
+  }
+
+  handleHiddenDetailsDialogClose = (e)=>{
+    this.setState({
+        openHiddenDialog: false
     })
   }
  
@@ -96,8 +195,14 @@ export default class UserProfile extends Component {
     return email
    }
 
-   hidValue = (value)=>{
-      return 'hidden'; // will add more context to this as the update rolls out
+   hidValue = (value,hide)=>{
+      if(hide){
+        return 'hidden'; // will add more context to this as the update rolls out
+      }
+      else{
+        return value
+      }
+      
    }
 
 
@@ -202,8 +307,11 @@ export default class UserProfile extends Component {
     }
    
     return (<> 
+         {this.state.showHiddenItem? <RedirectUser url={"/detailspage?detailname="+this.state.detailName+"&uid="+this.props.userProfile.id}/> : ''}
          <HtmlHead pageTitle={firstname}/>
+         <CheckShowNumber setShowNumberState={this.setShowNumberState}/>
          <PhoneNumberDialog openPhoneNumberDialog={this.state.openPhoneNumberDialog} handleDialogClose={this.handleDialogClose}/>
+         <HiddenDetailsDialog detailName={this.state.detailName} showHiddenItem={this.showHiddenItem} hiddenDetailsDialogTitle={this.state.hiddenDetailsDialogTitle} hiddenDetailsDialogMessage={this.state.hiddenDetailsDialogMessage} showHiddenDetailsDialog={this.state.openHiddenDialog} handleHiddenDetailsDialogClose={this.handleHiddenDetailsDialogClose}/>
          <ImageViewModal showCover={this.state.showCover} profilePhotoSrc={profilePhotoSrc} profileCoverSrc={profileCoverSrc} handleImageModalClose={this.handleImageModalClose} openImageModal={this.state.openImageModal}/>
         <div className="row">
         <div className="col-lg-12">
@@ -221,7 +329,7 @@ export default class UserProfile extends Component {
                     <p>{this.props.userProfile.type}</p>
                     </div>
                     <div className="profile-number px-2 pt-2">
-                    <h4 className="text-muted mb-0">{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(this.showDriverNumber(mobileNumber))}</h4>
+                    <h4 className="text-muted mb-0">{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(this.showDriverNumber(mobileNumber,this.state.hideDriverNumber))}</h4>
                     <p>Contact</p>
                     </div>
                     <div className="dropdown ms-auto">
@@ -285,7 +393,7 @@ export default class UserProfile extends Component {
                         <path d="M23 15C19.6227 15 16.875 17.7477 16.875 21.125C16.875 22.2061 17.1606 23.2689 17.701 24.1986C17.8269 24.4153 17.9677 24.6266 18.1196 24.8264L22.7339 31H23.2661L27.8804 24.8264C28.0322 24.6266 28.173 24.4154 28.299 24.1986C28.8394 23.2689 29.125 22.2061 29.125 21.125C29.125 17.7477 26.3773 15 23 15ZM23 23.1562C21.88 23.1562 20.9688 22.245 20.9688 21.125C20.9688 20.005 21.88 19.0938 23 19.0938C24.12 19.0938 25.0312 20.005 25.0312 21.125C25.0312 22.245 24.12 23.1562 23 23.1562Z" fill="#808080" />
                     </svg>
                     <div className="media-body text-left">
-                        <h4 className="fs-18 text-black font-w600 mb-0">{this.hidValue(locationDisplay)}</h4>
+                        <h4 className="fs-18 text-black font-w600 mb-0">{this.hidValue(locationDisplay,this.state.hideLocation)}</h4>
                         <span className="fs-14">Location</span>
                     </div>
                     </div>
@@ -308,7 +416,7 @@ export default class UserProfile extends Component {
                     <h5 className="f-w-500">Email <span className="pull-end">:</span>
                     </h5>
                 </div>
-                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(this.showEmail(email))}</span>
+                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(this.showEmail(email,this.state.hideEmail))}</span>
                 </div>
                 </div>
                 {this.props.userProfile.type === 'car-owner'? '' : <div className="row mb-2"><div className="col-sm-3 col-5"><h5 className="f-w-500">Availability <span className="pull-end">:</span></h5></div><div className="col-sm-9 col-7"><span className='text-success'><strong>{availability_display}</strong></span></div></div>}
@@ -346,7 +454,7 @@ export default class UserProfile extends Component {
                 <div className="col-sm-3 col-5">
                     <h5 className="f-w-500">Address <span className="pull-end">:</span></h5>
                 </div>
-                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(address)}</span>
+                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(address, this.state.hideAddress)}</span>
                 </div>
                 </div>
                 {this.props.userProfile.type === 'car-owner'? '' :<div className="row mb-2"><div className="col-sm-3 col-5"> <h5 className="f-w-500">Year Experience <span className="pull-end">:</span></h5></div><div className="col-sm-9 col-7"><span>{experience_display}</span></div></div>}
@@ -394,6 +502,38 @@ function PhoneNumberDialog(props) {
     );
   }
 
+  function HiddenDetailsDialog(props) {
+    return (
+      <div>
+        <Dialog
+          fullScreen={false}
+          open={props.showHiddenDetailsDialog}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle id="responsive-dialog-title">
+            {props.hiddenDetailsDialogTitle}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              {props.hiddenDetailsDialogMessage}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={props.handleHiddenDetailsDialogClose}>
+              Close
+            </Button>
+            <Link className='btn btn-sm btn-success' href="/points" autoFocus>
+              Buy Points
+            </Link>
+            <Link className='btn btn-sm btn-warning' onClick={props.showHiddenItem} href="#" autoFocus>
+              View {props.detailName}
+            </Link>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
+
 
 function ImageViewModal(props) {
     const ModalStyle = {
@@ -407,7 +547,6 @@ function ImageViewModal(props) {
         boxShadow: 24,
         p: 4,
       };
-console.log(props.profilePhotoUri)
   return (
     <div onClick={props.handleImageModalClose}>
       <Modal
@@ -425,4 +564,25 @@ console.log(props.profilePhotoUri)
       </Modal>
     </div>
   );
+}
+
+function RedirectUser(props){
+  const router = useRouter();
+  router.push(props.url)
+  return <></>
+}
+
+class CheckShowNumber extends React.Component{  
+     componentDidMount(){
+        const paths = window.location.search.split('&')
+        if(paths[paths.length - 1] === 'showNum'){
+            this.props.setShowNumberState(true)
+        }
+        else{
+            this.props.setShowNumberState(false)
+        }
+     }
+     render(){
+         return <></>
+     }
 }

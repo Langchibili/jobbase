@@ -100,7 +100,7 @@ export default function jobs_application(props) {
         if(data.loggedInUserProfile.driverProfile.application_points < 2){ 
             return (<> <HtmlHead pageTitle='Jobs | Application'/>
                          <UpAndBackButton/> 
-                         <Alert severity="error">You Have No Application Points To Apply To This or any other job, get your account verified or subscribe as a premium user to be able to apply to more jobs.</Alert> 
+                         <div><Alert severity="error">You Have No Application Points To Apply To This or any other job, get your account verified or subscribe as a premium user to be able to apply to more jobs.</Alert> <Link className="mt-2 btn btn-success" href="/points">Buy Points</Link></div>
                         <HtmlFoot/> </>)
         }
         

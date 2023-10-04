@@ -63,31 +63,31 @@ export default class Drivers extends Component {
     })
   }
 
-  renderDriverNumber = (phone_number,handleDialogOpen)=>{
+  renderDriverNumber = (profileUrl,handleDialogOpen)=>{
     if(this.props.loggedInUserProfile.type === "driver" || this.props.loggedInUserProfile === "logged-out"){
       return <a style={{color:"green"}} className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
     }
     if(this.props.loggedInUserProfile.profile_completion_percentage < 9){
       return <a style={{color:"green"}} className="contact-icon" href="#" onClick={handleDialogOpen}><i className="fa fa-phone" /></a>
     }
-    return <a style={{color:"green"}} className="contact-icon" href={"tel://"+phone_number}><i className="fa fa-phone" /></a>
+    return <Link style={{color:"green"}} className="contact-icon" href={profileUrl+'&showNum'} onClick={this.props.handlePageChange}><i className="fa fa-phone" /></Link>
   }
 
   renderDriverCategory = (driverCategory)=>{
     if(driverCategory === null) driverCategory = "other"
     if(driverCategory === "truck" || driverCategory === "canter" || driverCategory === "heavy-duty"){
-      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory}><i className="fa fa-truck" aria-hidden="true" /></Link>
+      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory} onClick={this.props.handlePageChange}><i className="fa fa-truck" aria-hidden="true" /></Link>
     }
     if(driverCategory === "taxi"){
-      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory}><i className="fa fa-car" aria-hidden="true" /></Link>
+      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory} onClick={this.props.handlePageChange}><i className="fa fa-car" aria-hidden="true" /></Link>
     }
     if(driverCategory === "tractor"){
-      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory}><i className="fa fa-truck" aria-hidden="true" /></Link>
+      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory} onClick={this.props.handlePageChange}><i className="fa fa-truck" aria-hidden="true" /></Link>
     }
     if(driverCategory === "mini-bus" || driverCategory === "big-bus" || driverCategory === "noah" ){
-      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory}><i className="fa fa-bus" aria-hidden="true" /></Link>
+      return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory} onClick={this.props.handlePageChange}><i className="fa fa-bus" aria-hidden="true" /></Link>
     }
-    return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory}><i className="fa fa-truck" aria-hidden="true" /></Link>
+    return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory} onClick={this.props.handlePageChange}><i className="fa fa-truck" aria-hidden="true" /></Link>
   }
 
   renderDriversList = ()=>{
@@ -170,7 +170,7 @@ export default class Drivers extends Component {
                         </div>
                         <div className="d-flex">
                           {this.renderDriverCategory(driverProfile.driver_category)}
-                          {this.renderDriverNumber(phone_number,this.handleDialogOpen)}
+                          {this.renderDriverNumber(profile_url,this.handleDialogOpen)}
                         </div>
                       </div>
                     </li>
@@ -222,3 +222,4 @@ export default class Drivers extends Component {
     </div>
   );
 }
+''

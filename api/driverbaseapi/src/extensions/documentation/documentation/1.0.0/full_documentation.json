@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2023-09-22T22:45:22.091Z"
+    "x-generation-date": "2023-10-03T22:46:14.538Z"
   },
   "x-strapi-config": {
     "path": "/documentation",
@@ -1963,6 +1963,16 @@
                               }
                             }
                           }
+                        },
+                        "job_duration": {
+                          "type": "string",
+                          "enum": [
+                            "fulltime",
+                            "part-time"
+                          ]
+                        },
+                        "pay": {
+                          "type": "string"
                         },
                         "createdAt": {
                           "type": "string",
@@ -4741,6 +4751,16 @@
                                                         }
                                                       }
                                                     }
+                                                  },
+                                                  "job_duration": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                      "fulltime",
+                                                      "part-time"
+                                                    ]
+                                                  },
+                                                  "pay": {
+                                                    "type": "string"
                                                   },
                                                   "createdAt": {
                                                     "type": "string",
@@ -8405,6 +8425,16 @@
                             }
                           }
                         },
+                        "job_duration": {
+                          "type": "string",
+                          "enum": [
+                            "fulltime",
+                            "part-time"
+                          ]
+                        },
+                        "pay": {
+                          "type": "string"
+                        },
                         "createdAt": {
                           "type": "string",
                           "format": "date-time"
@@ -11117,6 +11147,16 @@
                                                     }
                                                   }
                                                 },
+                                                "job_duration": {
+                                                  "type": "string",
+                                                  "enum": [
+                                                    "fulltime",
+                                                    "part-time"
+                                                  ]
+                                                },
+                                                "pay": {
+                                                  "type": "string"
+                                                },
                                                 "createdAt": {
                                                   "type": "string",
                                                   "format": "date-time"
@@ -11790,6 +11830,16 @@
                   ],
                   "example": "string or id"
                 }
+              },
+              "job_duration": {
+                "type": "string",
+                "enum": [
+                  "fulltime",
+                  "part-time"
+                ]
+              },
+              "pay": {
+                "type": "string"
               }
             }
           }
@@ -14063,6 +14113,16 @@
                                         }
                                       }
                                     },
+                                    "job_duration": {
+                                      "type": "string",
+                                      "enum": [
+                                        "fulltime",
+                                        "part-time"
+                                      ]
+                                    },
+                                    "pay": {
+                                      "type": "string"
+                                    },
                                     "createdAt": {
                                       "type": "string",
                                       "format": "date-time"
@@ -14193,6 +14253,16 @@
                 }
               }
             }
+          },
+          "job_duration": {
+            "type": "string",
+            "enum": [
+              "fulltime",
+              "part-time"
+            ]
+          },
+          "pay": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",
@@ -18425,6 +18495,16 @@
                                                                   }
                                                                 }
                                                               },
+                                                              "job_duration": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                  "fulltime",
+                                                                  "part-time"
+                                                                ]
+                                                              },
+                                                              "pay": {
+                                                                "type": "string"
+                                                              },
                                                               "createdAt": {
                                                                 "type": "string",
                                                                 "format": "date-time"
@@ -21329,6 +21409,16 @@
                                                                                   }
                                                                                 }
                                                                               }
+                                                                            },
+                                                                            "job_duration": {
+                                                                              "type": "string",
+                                                                              "enum": [
+                                                                                "fulltime",
+                                                                                "part-time"
+                                                                              ]
+                                                                            },
+                                                                            "pay": {
+                                                                              "type": "string"
                                                                             },
                                                                             "createdAt": {
                                                                               "type": "string",
@@ -24428,6 +24518,16 @@
                                                                     }
                                                                   }
                                                                 }
+                                                              },
+                                                              "job_duration": {
+                                                                "type": "string",
+                                                                "enum": [
+                                                                  "fulltime",
+                                                                  "part-time"
+                                                                ]
+                                                              },
+                                                              "pay": {
+                                                                "type": "string"
                                                               },
                                                               "createdAt": {
                                                                 "type": "string",

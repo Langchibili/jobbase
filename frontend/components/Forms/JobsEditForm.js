@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 
 class JobsEditForm extends Component {
   constructor(props) {
@@ -6,6 +8,8 @@ class JobsEditForm extends Component {
     this.state = {
       job: this.props.job.data.attributes,
       title: '',
+      jobDuration: '',
+      pay: '',
       error: null,
       submitting: false,
       submittingText:'Update',
@@ -18,6 +22,11 @@ class JobsEditForm extends Component {
     job.title = event.target.value
     this.setState({ job: job, error: null });
   };
+  setPay = (event) => {
+    const job = this.state.job
+    job.pay = event.target.value
+    this.setState({ job: job, error: null });
+  };
 
   handleChange = (event) => {
     const job = this.state.job
@@ -25,6 +34,11 @@ class JobsEditForm extends Component {
     this.setState({ job: job, error: null });
   };
 
+  handleFullTimeChange = (event) => {
+    const job = this.state.job
+    job.job_duration = event.target.value;
+    this.setState({ job: job, error: null })
+ };
 
   handleSubmit = async (event) => {
     event.preventDefault()
@@ -74,7 +88,19 @@ class JobsEditForm extends Component {
             value={job.body}
             onChange={this.handleChange}
           />
-          {error && <div className="text-danger">{error}</div>}
+          <Select
+          sx={{marginBottom:2}}
+          labelId="job-duration-simple-select-label"
+          id="job-duration-simple-select"
+          value={job.job_duration}
+          label="job-uration"
+          onChange={this.handleFullTimeChange}
+        >
+          <MenuItem value="fulltime">FullTIme</MenuItem>
+          <MenuItem value="part-time">PartTime</MenuItem>
+        </Select>
+        <input type='text' onChange={this.setPay} className='form-control sm-transparent' placeholder={job.pay}/>
+         {error && <div className="text-danger">{error}</div>}
           <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn btn-primary">{this.state.submittingText}</button>
         </div>
       </div>

@@ -32,6 +32,18 @@
       "relation": "manyToMany",
       "target": "api::driver-profile.driver-profile",
       "inversedBy": "jobs"
+    },
+    "job_duration": {
+      "type": "enumeration",
+      "enum": [
+        "fulltime",
+        "part-time"
+      ],
+      "default": "fulltime"
+    },
+    "pay": {
+      "type": "richtext",
+      "default": "1500 - 25000"
     }
   }
 }

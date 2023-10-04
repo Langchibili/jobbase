@@ -5,9 +5,7 @@ export default function Points() {
     return (
     <>
     <UpAndBackButton/>
-    <Alert severity="info">this page is under construction, 
-    it will be released on next app update.
-     Try to visit the drivers, jobs and car owners pages to find the user or job you are looking for</Alert>
+    <Alert severity="info">To buy points, please send a whatsapp message or call this number on whatsapp: +260954816277</Alert>
     </>
   )
 }

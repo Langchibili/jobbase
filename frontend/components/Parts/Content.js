@@ -83,7 +83,7 @@ class Content extends Component {
           <div className="col-xl-4 col-xxl-6 col-lg-6">
               <List 
               loggedInUserProfile={this.props.loggedInUserProfile}
-              handlePageChange={this.props.handlePageChange}
+              handlePageChange={this.handlePageChange}
               itemsName ='jobs'
               reqUrlPath='/jobs?populate=car_owner_profile&pagination[limit]=5&sort=id%3Adesc&meta=true'
               api_url={this.props.api_url}
@@ -93,17 +93,18 @@ class Content extends Component {
           <div className="col-xl-4 col-xxl-6 col-lg-6">
               <List 
               loggedInUserProfile={this.props.loggedInUserProfile}
-              handlePageChange={this.props.handlePageChange}
+              handlePageChange={this.handlePageChange}
               itemsName ='users'
               reqUrlPath={'/users?'+minimal_driver_populate_url+'&sort=id%3Adesc'}
               api_url={this.props.api_url}
               listType="drivers" 
               listTitle='Top Drivers'/>
-           </div>
+           </div> 
+
            <div className="col-xl-4 col-xxl-6 col-lg-6">
               <List 
               loggedInUserProfile={this.props.loggedInUserProfile}
-              handlePageChange={this.props.handlePageChange}
+              handlePageChange={this.handlePageChange}
               itemsName ='users'
               reqUrlPath={'/users?'+car_owner_populate_url+'&sort=id%3Adesc'}
               api_url={this.props.api_url}

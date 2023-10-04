@@ -147,10 +147,11 @@ export default class Jobs extends React.Component {
                           {this.dateCreated(job.attributes.createdAt)}
                         </Typography>
                       </Link>
-                      
+                      <div><small className="d-block font-w500"> {job.attributes.job_duration || 'fulltime'}: <span style={{color:'forestgreen',fontWeight:900}} className='font-w300'>{job.attributes.pay || "K1500 - K25000"}</span></small></div>
                     </React.Fragment>
                   }
                 />
+                
               {this.showLink(job)}
               </ListItem>
               <Divider variant="inset" component="li" />

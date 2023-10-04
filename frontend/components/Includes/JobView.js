@@ -130,17 +130,17 @@ export default class JobView extends React.Component {
                     <Link href={'/profile?uid='+this.state.carOwnerId+'&user_type=car-owner'}><img src={thumbnail} alt='image' style={{width:60,height:60}}/></Link>
                 </div>
                  <div><small className="d-block font-w500">Car Owner's Rating: {rating+' '}<span className='fa fa-star text-danger'></span></small></div>
-                 <div><small className="d-block font-w500"> Pays: <span className='text-primary font-w300'>K500 - K25,000</span></small></div>
+                 <div><small className="d-block font-w500"> Pays: <span style={{color:'forestgreen',fontWeight:900}} className='font-w300'>{job.pay || "K1500 - K25000"}</span></small></div>
                 
                  <div style={{height:1,backgroundColor:'lightgray',opacity:0.5}} className='mt-1 mb-2'></div>{/* line break */}
                  <p className="fs-14">{job.body}</p><div className="d-flex align-items-center mt-4">
-                <Link href={this.props.loggedInUserProfile !== 'logged-out'? '/job_application?jid='+this.props.jid : '/login'} className="btn btn-danger light btn-rounded me-auto" onClick={this.props.handlePageChange}>Apply</Link>
-                    <a href="#" >PART-TIME</a>
-                            <span className="text-black font-w500 ps-3">{this.dateCreated(job.createdAt)}</span>
+                <Link href={this.props.loggedInUserProfile !== 'logged-out'? '/job_application?jid='+this.props.jid : '/login'} className="btn btn-danger btn-rounded me-auto" onClick={this.props.handlePageChange}>Apply Now</Link>
+                    <a href="#" className='ps-2'>{job.job_duration === 'fulltime'? 'FULL-TIME': 'PART-TIME'}</a>
+                            <span style={{color:'cadetblue'}} className="font-w500 ps-2">{this.dateCreated(job.createdAt)}</span>
                     </div>
                 </div>
         </div>
-        {this.state.applicants.length > 1? <List
+        {this.state.applicants.length >= 1? <List
               loggedInUserProfile={this.props.loggedInUserProfile}
               handlePageChange={this.props.handlePageChange}
               itemsName ='users'

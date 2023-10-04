@@ -75,7 +75,7 @@ class JobApplicationForm extends Component {
       <div style={{marginTop:5}}>
         <div className="post-input">
         {this.state.errorExists? <Alert severity="error">{this.state.errorMessage}</Alert>: ''}
-          {this.state.errorExists? <Link href="/profile" className='btn btn-primary' style={{marginTop:10,marginBottom:10}}>Click Here To Update Profile</Link>: ''}
+          {this.state.errorExists? <Link href="/profile" className='btn btn-primary' style={{marginTop:10,marginBottom:10}}>Click Here To Update Profile</Link>&nbsp: ''}
           <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn btn-success">{this.state.submittingText}</button>
           
         </div>

@@ -7,7 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { AddBox,CarRental, Delete, DirectionsCar, Edit, Info, Mode, Work } from '@mui/icons-material';
+import { AddBox,CarRental, Delete, DirectionsCar, Edit, Info, Mode, Score, Work } from '@mui/icons-material';
 import { Home, Menu } from '@material-ui/icons';
 import { Fab } from '@mui/material';
 import { useRouter } from 'next/router'
@@ -40,13 +40,26 @@ export default function MobileSideBAr(props) {
         if(linkName === 'Create Job') return <AddBox sx={{color:'aquamarine'}}/>
         if(linkName === 'Edit Jobs') return <Edit />
         if(linkName === 'Delete Jobs') return <Delete sx={{color:'red'}}/>
+        if(linkName === 'Buy Points(JAPs)') return <Score sx={{color:'pink'}}/>
+        if(linkName === 'Buy Points(JCPs)') return <Score sx={{color:'pink'}}/>
         if(linkName === 'Home') return <Home color='primary'/>
   }
 
-  const renderLoggedInLinks = (texts,loggedInUserProfile)=>{
+  const renderLoggedInLinks = (texts,loggedInUserProfile,driverTexts)=>{
     if(loggedInUserProfile === 'logged-out') return <></>
     if(loggedInUserProfile.type === 'driver'){
-        return <></>
+      return (<List>
+        {driverTexts.map((text, index) => (
+        <ListItem key={text[0]} disablePadding onClick={(e)=>{router.push(text[1]); props.handlePageChange(e)}}>
+            <ListItemButton>
+            <ListItemIcon>
+                {renderLinkIcon(text[0])}
+            </ListItemIcon>
+            <ListItemText primary={text[0]} sx={{color:'slategray'}} />
+            </ListItemButton>
+        </ListItem>
+        ))}
+    </List>)
     }
     return (<List>
         {texts.map((text, index) => (
@@ -84,7 +97,7 @@ export default function MobileSideBAr(props) {
         ))}
       </List>
       <Divider />
-      {renderLoggedInLinks([['Create Job','/jobs?act=add'], ['Edit Jobs','/jobs?act=edit'], ['Delete Jobs','/jobs?act=delete']],props.loggedInUserProfile)}
+      {renderLoggedInLinks([['Create Job','/jobs?act=add'], ['Edit Jobs','/jobs?act=edit'], ['Delete Jobs','/jobs?act=delete'],['Buy Points(JCPs)','/points']],props.loggedInUserProfile,[['Buy Points(JAPs)','/points']])}
     </Box>
   );
 
