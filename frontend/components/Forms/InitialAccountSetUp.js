@@ -23,17 +23,15 @@ function RedirectUser(){
 
 function DriverWelcomeScreen(){
     return (<Alert severity='info'>
-            <h1>Welcome To Driverbase</h1>
-            <h3>Begin Your Journey Of Applying To Jobs With A Few Steps</h3>
-            <p>Click on the button below and update your profile with the important basic details like Your Names, Gender and Phone Number</p>
+            <h4>Begin Your Journey Of Applying To Jobs With A Few Steps</h4>
+            <p>Click on the button below and update your profile with the important basic details like Your <strong>Names</strong>, <strong>Gender</strong> and <strong>Phone Number</strong></p>
             <Link href="/profile" style={{display:'inline-block',border:'2px solid green',borderRadius:5,color:'green',textTransform:'uppercase',marginTop:5,fontWeight:600,padding:10}}>Update Your Profile</Link>
     </Alert>)
 }
 function CarOwnerWelcomeScreen(){
     return (<Alert severity='info'>
-        <h1>Welcome To Driverbase</h1>
-        <h3>Begin Your Journey Finding Posting Jobs and Finding the Suitable Drivers With A Few Steps</h3>
-        <p>Click on the button below and update your profile with the important basic details like Your Names, Gender and Phone Number</p>
+        <h4>Begin Your Journey Posting Jobs and Finding the Suitable Drivers With A Few Steps</h4>
+        <p>Click on the button below and update your profile with the important basic details like Your <strong>Names</strong>, <strong>Gender</strong> and <strong>Phone Number</strong></p>
         <Link href="/profile" style={{display:'inline-block',border:'2px solid green',borderRadius:5,color:'green',textTransform:'uppercase',marginTop:5,fontWeight:600,padding:10}}>Update Your Profile</Link>
 </Alert>)
 }

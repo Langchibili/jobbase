@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import React, { Component } from 'react';
+import { Alert } from '@mui/material';
+import CopyAndWhatsAppButtons from '../Includes/CopyAndWhatsAppButtons';
 const fakeStr1 = 'kahs3lahebblo2uwb00an~#va5lwi_ad_fgaljdj'; // security stuff
 const fakeStr2 ='klahewi_ad_fgalloanv;;aitalkjfajhsbbluwba==hn3vajd5j=+;'
         
@@ -8,7 +10,7 @@ class LoginForm extends Component {
     super(props);
     this.state = {
         error: <></>,
-        errorExists: true,
+        errorExists: false,
         submitting: false
     };
     this.username = React.createRef();
@@ -28,14 +30,8 @@ class LoginForm extends Component {
         })
     }
     else{
-        this.setState({
-            errorExists: false 
-        })
-    }
-    user.identifier = username
-    user.password = password
-    
-    if(this.state.errorExists === false){
+        user.identifier = username
+        user.password = password
         this.setState({submitting:true})// to disable button from re-requesting
         const response = await this.submitRequest(this.props.api_url,user) 
         const jwt = localStorage.getItem('jwt')
@@ -58,10 +54,18 @@ class LoginForm extends Component {
                 }
             }
             else{
-                this.setState({ submitting: false, error: <span className="text-danger">{response.error.message}</span> })
+                this.setState({ submitting: false, errorExists: true, error: <span className="text-danger">Failed to log you in, read the directions below</span> })
             }
         }
     }
+ }
+ handleChange = ()=>{
+    this.setState({
+        error: <></>,
+        errorExists: false,
+        submittingText: 'Login',
+        submitting: false
+    })
  }
 
   async submitRequest(url,user){
@@ -90,11 +94,11 @@ class LoginForm extends Component {
                 <form>
                 <div className="form-group">
                     <label className="mb-1 text-white"><strong>Username</strong></label>
-                    <input type="text" ref={this.username} className="form-control" placeholder="username" />
+                    <input onChange={this.handleChange} type="text" ref={this.username} className="form-control" placeholder="username" />
                 </div>
                 <div className="form-group">
                     <label className="mb-1 text-white"><strong>Password</strong></label>
-                    <input type="password" ref={this.password} className="form-control"/>
+                    <input onChange={this.handleChange} type="password" ref={this.password} className="form-control"/>
                 </div>
                 <div className="text-center mt-4">
                     <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn bg-white text-primary btn-block">{this.state.submitting? 'Logging you in...': 'Login'}</button>
@@ -104,6 +108,18 @@ class LoginForm extends Component {
                 <p className="text-white">Don't have an account? <Link className="text-white" href="/signup">Sign Up</Link></p>
                 </div>
                 <div>{this.state.error}</div>
+                <div style={{minHeight:5}}></div> {/* space */}
+                {this.state.errorExists? <><Alert severity='warning'>
+                            This is how to log in successfully<br/>
+                            Add your username and password<br/>
+                            Make sure you have opened an account with this username<br/>
+                            Do not add spaces at the end or start of your password if you didn't include them when signing up<br/>
+                            Make sure the password is exactly what you entered on sign up<br/>
+                            If any letter is capital, it should be entered as capital<br/>
+                        </Alert>
+                        <div style={{minHeight:5}}></div> {/* space */}
+                         <div style={{backgroundColor:'wheat'}}><CopyAndWhatsAppButtons buttonText="Text Us On WhatsApp" info={<><strong>Contact <span id="copyNumber">+260954816277</span> on WhatsApp; to reset your password, if you still fail to log in</strong></>}/>
+                        </div></>: ''}
             </div>
    );
 }

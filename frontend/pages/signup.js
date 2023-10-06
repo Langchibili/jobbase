@@ -5,6 +5,7 @@ import SignUpForm from  '@/components/Forms/SignUpForm'
 import { api_url } from '@/Constants';
 import UpAndBackButton from '@/components/Includes/UpAndBackButton';
 
+
 export default function signup(props) {
     const [userType, setType] = React.useState({typeSet: false, type: 'driver'});
 

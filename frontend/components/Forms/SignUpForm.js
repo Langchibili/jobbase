@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React, { Component } from 'react';
 import ContentLoader from '../Includes/ContentLoader';
+import { Alert } from '@mui/material';
 const fakeStr1 = 'kahs3lahebblo2uwb00an~#va5lwi_ad_fgaljdj'; // security stuff
 const fakeStr2 ='klahewi_ad_fgalloanv;;aitalkjfajhsbbluwba==hn3vajd5j=+;'
  
@@ -11,7 +12,7 @@ class SignUpForm extends Component {
         error: <></>,
         errorExists: true,
         submitting: false,
-        submittingText:'SignUp',
+        submittingText:'Sign Up',
         user_type: this.props.user_type || null
     };
     this.username = React.createRef();
@@ -22,6 +23,7 @@ class SignUpForm extends Component {
     this.setState({
         error: <></>,
         errorExists: false,
+        submittingText: 'Sign Up',
         submitting: false
     })
  }
@@ -55,14 +57,14 @@ class SignUpForm extends Component {
         const response = await this.submitRequest(user)
         if(response === undefined){
             this.setState({
-                error: <span class='text-danger'>network error!</span>,
+                error: <span class='text-danger'>Network error! Check your internet connection.</span>,
                 errorExists:true 
             })
             return
         }
         if('error' in response){
             this.setState({
-                error: <span class='text-danger'>{response.error.message}</span>,
+                error: <span class='text-danger'>Failed to sign you up, read the directions below</span>,
                 errorExists:true 
             })
             return
@@ -150,9 +152,6 @@ class SignUpForm extends Component {
         })
         .then(response => response.json())
         .then(data => data)
-        .catch(error => {
-            console.error('Error:', error);
-        });
         
         const jwt = localStorage.getItem('jwt')
         if(jwt === undefined || jwt === null){
@@ -178,9 +177,6 @@ class SignUpForm extends Component {
       })
       .then(response => response.json())
       .then(data => data)
-      .catch(error => {
-        console.error('Error:', error);
-      });
   }
 
   submitRequest = async (registerObject)=>{
@@ -193,9 +189,6 @@ class SignUpForm extends Component {
       })
       .then(response => response.json())
       .then(data => data)
-      .catch(error => {
-        console.error('Error:', error);
-      });
   }
   
   render() {
@@ -216,7 +209,7 @@ class SignUpForm extends Component {
                         </div> */}
                         <div className="form-group">
                             <label className="mb-1 text-white"><strong>Password</strong></label>
-                            <input type="password" ref={this.password} className="form-control"/>
+                            <input onChange={this.handleChange} type="password" ref={this.password} className="form-control"/>
                         </div>
                         <div className="text-center mt-4">
                             <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn bg-white text-primary btn-block">{this.state.submittingText}</button>
@@ -226,6 +219,19 @@ class SignUpForm extends Component {
                         <p className="text-white">Already have an account? <Link className="text-white" href="/login">Sign in</Link></p>
                         </div>
                         <div>{this.state.error}</div>
+                        <div style={{minHeight:5}}></div>
+                        {this.state.errorExists? <>
+                        <Alert severity='warning'>
+                            This is how to sign up successfully<br/>
+                            Add your username and password<br/>
+                            Make sure you have never opened an account with this username<br/>
+                            Do not add spaces at the end or start of your password<br/>
+                            Make sure the password is more than 9 characters<br/>
+                            An example password would be <strong>@password1234</strong><br/>
+                            <strong>After Signing up, do not forget your password...</strong><br/>
+                            </Alert>
+                            <div style={{minHeight:5}}></div> {/* space */}
+                            <div style={{backgroundColor:'wheat'}}><CopyAndWhatsAppButtons buttonText="Text Us On WhatsApp" info={<><strong>Contact <span id="copyNumber">+260954816277</span> on WhatsApp for help, if you still fail to sign up</strong></>}/> </div></>: ''}
                     </div>
    );
 }

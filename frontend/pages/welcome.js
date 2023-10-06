@@ -5,6 +5,7 @@ import InitialAccountSetUp from '@/components/Forms/InitialAccountSetUp';
 import PageLoader from '@/components/Includes/PageLoader';
 import ContentLoader from '@/components/Includes/ContentLoader';
 import { getLoggedInUserData } from '@/Constants';
+
 export default function Welcome() {
   const [data, setData] = React.useState({
     loading: true,
@@ -21,6 +22,7 @@ export default function Welcome() {
     }
     fetchData();
   }, []);
+
     return (
       data.loading? <><PageLoader /><ContentLoader text="DRIVERBASE"/></> : <>
       <UpAndBackButton/>

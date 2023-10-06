@@ -7,7 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { AddBox,CarRental, Delete, DirectionsCar, Edit, Info, Mode, Score, Work } from '@mui/icons-material';
+import { AddBox,CarRental, Delete, DirectionsCar, Edit, Info, Mode, QuestionMark, Score, Work } from '@mui/icons-material';
 import { Home, Menu } from '@material-ui/icons';
 import { Fab } from '@mui/material';
 import { useRouter } from 'next/router'
@@ -36,6 +36,7 @@ export default function MobileSideBAr(props) {
         if(linkName === 'Jobs') return <Work sx={{color:'green'}}/>
         if(linkName === 'Drivers') return <DirectionsCar sx={{color:'yellow'}}/>
         if(linkName === 'Car Owners') return <CarRental sx={{color:'violet'}}/>
+        if(linkName === 'Help') return <QuestionMark color='info'/>
         if(linkName === 'About') return <Info color='info'/>
         if(linkName === 'Create Job') return <AddBox sx={{color:'aquamarine'}}/>
         if(linkName === 'Edit Jobs') return <Edit />
@@ -84,7 +85,7 @@ export default function MobileSideBAr(props) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {[['Home','/'],['Jobs','/jobs?act=show-all'], ['Drivers','/drivers'], ['Car Owners','/car_owners'], ['About','/about']].map((text, index) => (
+        {[['Home','/'],['Jobs','/jobs?act=show-all'], ['Drivers','/drivers'], ['Car Owners','/car_owners'], ['Help','/ask'], ['About','/about']].map((text, index) => (
           window.location.pathname === "/" && text[0] === "Home"? '' :
           <ListItem key={text[0]} disablePadding onClick={(e)=>{router.push(text[1]); props.handlePageChange(e)}}>
             <ListItemButton>

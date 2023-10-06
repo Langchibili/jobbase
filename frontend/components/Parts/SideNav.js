@@ -41,6 +41,7 @@ class SideNav extends Component {
                 <li><Link onClick={this.props.handlePageChange} href="/drivers">All Drivers</Link></li>
                 <li><Link onClick={this.props.handlePageChange} href="/car_owners">All CarOwners</Link></li>
                {this.renderLoggedInLinks()} 
+                <li><Link onClick={this.props.handlePageChange} href="/ask">Help</Link></li>
                 <li><Link onClick={this.props.handlePageChange} href="/about">About Us</Link></li>
               </ul>
             </li>
