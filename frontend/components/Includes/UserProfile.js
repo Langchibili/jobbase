@@ -466,7 +466,7 @@ export default class UserProfile extends Component {
                         <h4 className="fs-18 mb-0 text-black font-w600">{reviewsCount}</h4>
                         <span className="fs-14">Reviews</span>
                     </div>
-                    <><Link href={"/reviews?uid="+this.props.userProfile.id+"&name="+nameDisplay}><Typography sx={{color:'green',marginRight:5,fontWeight:600}}>VIEW REVIEWS: SEE WHAT PEOPLE SAY ABOUT THIS USER.</Typography></Link> </>
+                    <><Link href={"/reviews?act=show&uid="+this.props.userProfile.id+"&name="+nameDisplay}><Typography sx={{color:'green',marginRight:5,fontWeight:600}}>VIEW REVIEWS: SEE WHAT PEOPLE SAY ABOUT THIS USER.</Typography></Link> </>
                     </div>
                     <div className="media mb-4">
                     <svg className="me-3 min-w46" width={46} height={46} viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">

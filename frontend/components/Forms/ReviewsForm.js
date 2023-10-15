@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import RatingForm from './RatingForm';
+import { api_url, getJwt } from '@/Constants';
 
 class ReviewsForm extends Component {
   constructor(props) {
@@ -47,22 +48,22 @@ class ReviewsForm extends Component {
      const review = newReview.data.attributes // get review data
      review.id = newReview.data.id // add review id
      user.user_reviews.push(review) // update old user_reviews object
-     const updatedUser =  await fetch(this.props.api_url+'/users/'+user.id, {
+     const updatedUser =  await fetch(api_url+'/users/'+user.id, {
      method: 'PUT',
      headers: {
       'Content-Type': 'application/json',
-     Authorization: `Bearer ${this.props.jwt}`
+     Authorization: `Bearer ${getJwt()}`
      },
      body: JSON.stringify(user),
    });
    
-   const ratingsUpdateUrl = user.type === 'driver'? this.props.api_url+'/driver-profiles/'+userProfile.id : this.props.api_url+'/car-owner-profiles/'+userProfile.id  
+   const ratingsUpdateUrl = user.type === 'driver'? api_url+'/driver-profiles/'+userProfile.id : api_url+'/car-owner-profiles/'+userProfile.id  
    const ratingsUpdate = {id: userProfile.id, data:{details: userProfile.details}}
    return await fetch(ratingsUpdateUrl, {
     method: 'PUT',
     headers: {
      'Content-Type': 'application/json',
-    Authorization: `Bearer ${this.props.jwt}`
+    Authorization: `Bearer ${getJwt()}`
     },
     body: JSON.stringify(ratingsUpdate),
   });
@@ -111,11 +112,11 @@ class ReviewsForm extends Component {
              // firstly add a review to the reviews backend then later to user's reviews
                 try {  
                   this.setState({submitting:true,submittingText:'Posting...'})// to disable button from re-requesting
-                  const newReview = await fetch(this.props.api_url+'/user-reviews', {
+                  const newReview = await fetch(api_url+'/user-reviews', {
                   method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',
-                      'Authorization': `Bearer ${this.props.jwt}`
+                      'Authorization': `Bearer ${getJwt()}`
                   },
                   body: JSON.stringify(reviewObject)
                 })

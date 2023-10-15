@@ -10,32 +10,58 @@ import HtmlFoot from '@/components/Meta/HtmlFoot';
 import { Button, Typography } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import Link from 'next/link';
+import ReviewsForm from '@/components/Forms/ReviewsForm';
 
+async function getUserProfile(act,uid,user_type) {
+  if(act === "show") return
+  let url,userProfile
+  if(uid && user_type){ // if queries object empty
+    if(user_type === 'driver') url = api_url+'/users/'+uid+'/?populate=user_reviews,driverProfile,driverProfile.details'
+    if(user_type === 'car-owner') url = api_url+'/users/'+uid+'/?populate=user_reviews,carOwnerProfile,carOwnerProfile.details'
+      userProfile = await fetchData(url);
+  }
+  if('error' in userProfile) return 'not-found' 
+  return userProfile
+}
+async function fetchData(url){
+    return fetch(url,{
+      headers: {
+        'Content-Type': 'application/json'
+      }
+     }).then(response => response.json())
+      .then(data => data)
+      .catch(error => console.error(error));
+  }
 
 export default function Reviews() {
     const router = useRouter();
-    const { uid,name } = router.query
+    const { act,uid,user_type,name } = router.query
     const [data, setData] = React.useState({ loading: true, loggedInUserProfile: null });
     
     React.useEffect(() => {
-      if (uid && uid !== undefined) {
+      if (act && act !== undefined) {
         async function fetchData() {
           const loggedInUserProfile = await getLoggedInUserData() 
-          setData({ loading: false, loggedInUserProfile: loggedInUserProfile });
+          const userProfile = await getUserProfile(act,uid,user_type)
+          setData({ loading: false, userProfile: userProfile, loggedInUserProfile: loggedInUserProfile });
         }
         fetchData();
       }
-    }, [uid]);
+    }, [act]);
     if(data.loading  || data.loggedInUserProfile === null) {
         return (<><PageLoader /> <HtmlHead pageTitle='User | Reviews'/><ContentLoader text='loading reviews...'/><HtmlFoot/> </>)
     }
     if(data.loggedInUserProfile === 'logged-out') window.location = '/login' // you should re-log in
-    
+    console.log(data.loggedInUserProfile, data.userProfile)
     return (<>
     <UpAndBackButton/>
-    <HtmlHead pageTitle={name+' | Reviews'}/>
-          <ReviewsDisplay uid={uid} name={name} loggedInUserProfile={data.loggedInUserProfile}/>
-    <HtmlFoot/>
+    {act === "show"?<><HtmlHead pageTitle={name+' | Reviews'}/>
+                          <ReviewsDisplay uid={uid} name={name} loggedInUserProfile={data.loggedInUserProfile}/>
+                    <HtmlFoot/></> : <><HtmlHead pageTitle='Add | Reviews'/>
+                                      <div style={{marginTop:20,padding:10}}><ReviewsForm loggedInUserProfile={data.loggedInUserProfile} userProfile={data.userProfile}/></div>
+                                      <HtmlFoot/> </>}
+    
+    
     </>
   )
 }
@@ -197,7 +223,7 @@ class Review extends React.Component{
       }
       else{
         this.setState({
-          reviewerPath: ()=> <Link href={'/profile?uid='+userProfile.id+'&user_Type='+userProfile.type}>Reviewer's Profile</Link>
+          reviewerPath: ()=> <Link style={{color:'blue'}} href={'/profile?uid='+userProfile.id+'&user_type='+userProfile.type}>Reviewer's Profile</Link>
         })
       }
   }
