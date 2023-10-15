@@ -47,7 +47,8 @@ class JobApplicationForm extends Component {
 
 
       if (updatedJob) {
-        const applicationPoints = user.driverProfile.application_points - 2 // reduce application points by one, coz you have applied to a job
+        // for now reduce by 0 coz all jobs are paid for with cash
+        const applicationPoints = user.driverProfile.application_points - 0 // reduce application points by one, coz you have applied to a job
         const jobs = user.driverProfile.jobs // grab job ids
         const driverProfileId = user.driverProfile.id // get car owner id
         jobs.push(jobId) // push new job id into car owner object

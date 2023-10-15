@@ -39,31 +39,31 @@ export default class Jobs extends React.Component {
 
 
    getJobNewStatus(dateInput) {
+    const newJobStyles = {
+      color: '#ffffff', // Text color
+      backgroundColor: '#ff5722', // Background color
+      padding: '4px 8px', // Padding for the text
+      borderRadius: '4px', // Rounded corners
+      fontWeight: 'bold', // Bold text
+    }
     const jobDate = new Date(dateInput);
     const currentDate = new Date();
     const fiveDaysAgo = new Date(currentDate);
     fiveDaysAgo.setDate(currentDate.getDate() - 5);
   
     if (jobDate >= fiveDaysAgo) {
-      return 'New';
+      return <span style={newJobStyles}>New</span>;
     } else {
-      return '';
+      return <></>;
     }
   }
 
   renderJobStatus(status,dateInput){
-      const newJobStyles = {
-        color: '#ffffff', // Text color
-        backgroundColor: '#ff5722', // Background color
-        padding: '4px 8px', // Padding for the text
-        borderRadius: '4px', // Rounded corners
-        fontWeight: 'bold', // Bold text
-      }
        if(status === 'closed'){
          return <><span className='text text-default'>Closed</span></>
        }
        else if(status === 'open'){
-         return <><span className='text text-success'>Open</span>&nbsp;<span style={newJobStyles}>{this.getJobNewStatus(dateInput)}</span></>
+         return <><span className='text text-success'>Open</span>&nbsp;{this.getJobNewStatus(dateInput)}</>
        }
        else{
          return <><span className='text text-default'>Closed</span></>

@@ -41,7 +41,8 @@ class JobsAddForm extends Component {
      console.log(user)
      const jobs = user.carOwnerProfile.jobs // grab job ids
      const carOwnerProfileId = user.carOwnerProfile.id // get car owner id
-     const jobCreationPoints = user.carOwnerProfile.job_creation_points - 5
+     // for now car owners shall post jobs for free
+     const jobCreationPoints = user.carOwnerProfile.job_creation_points - 0
      jobs.push(newJob.data.id) // push new job id into car owner object
      const carOwnerProfileJobsUpdate = {id : carOwnerProfileId, data:{jobs:  jobs,job_creation_points:jobCreationPoints}}
      return await fetch(this.props.api_url+'/car-owner-profiles/'+carOwnerProfileId, {
