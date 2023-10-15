@@ -6,7 +6,7 @@ export default function Points() {
     return (
     <>
     <UpAndBackButton/>
-    <CopyAndWhatsAppButtons buttonText="Text Us On WhatsApp" info={<>To buy points, please send a whatsapp message or call this number on whatsapp: <strong><span id="copyNumber">+260954816277</span></strong></>}/>
+    <CopyAndWhatsAppButtons buttonText="Text Us On WhatsApp" info={<>To buy points, please send a whatsapp message to: <strong><span id="copyNumber">+260966213952</span></strong></>}/>
     </>
   )
 }

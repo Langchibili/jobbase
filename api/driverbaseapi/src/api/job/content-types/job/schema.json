@@ -44,6 +44,24 @@
     "pay": {
       "type": "richtext",
       "default": "1500 - 25000"
+    },
+    "premium_applicants": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::driver-profile.driver-profile"
+    },
+    "activated_applicants": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::driver-profile.driver-profile"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "open",
+        "closed"
+      ],
+      "default": "open"
     }
   }
 }

@@ -35,9 +35,7 @@ export default class Drivers extends Component {
         if(driverProfile.details.firstname === null || driverProfile.details.lastname === null){
           eligibleForListing = false
         }
-        else{
-          eligibleForListing = true
-      }
+        eligibleForListing = true
     }
     else{ // if a shorter list
         driverProfile = driver.driverProfile // the profile
@@ -99,12 +97,14 @@ export default class Drivers extends Component {
     }
     else{
         let userId,fullname,phone_number,thumbnail,thumbnailUrl,profile_url,rating,ratingsCount,eligibleForListing,driverProfile
+    
         return drivers.map((driver)=>{
             if(this.props.listAll) { // set userId for user profiles
               userId = parseInt(driver.attributes.userid) // the userid
               driverProfile = driver.attributes // the profile if attributes property exists
             }
             else{
+              if(driver === undefined) return // if it's undefined, no need showing it
               userId = driver.id // the userid
               driverProfile = driver.driverProfile // the profile no attribute property
             }

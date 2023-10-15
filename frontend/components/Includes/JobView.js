@@ -12,6 +12,8 @@ export default class JobView extends React.Component {
     this.state = {
       requesting: true,
       applicants:[],
+      premiumApplicants:[],
+      activatedApplicants:[],
       carOwner: null,
       carOwnerProfile: null,
       carOwnerId: null,
@@ -30,7 +32,7 @@ export default class JobView extends React.Component {
   
 
   getJob = async (jid)=> {
-    return fetch(this.props.api_url+'/jobs/'+jid+'/?populate=applicants',{
+    return fetch(this.props.api_url+'/jobs/'+jid+'/?populate=applicants,premium_applicants,activated_applicants',{
         headers: {
           'Content-Type': 'application/json'
         }
@@ -90,16 +92,66 @@ export default class JobView extends React.Component {
         carOwnerProfile: carOwnerProfile.data.attributes.details,
         carOwnerId: parseInt(carOwner.data.attributes.userid)
       }, async () => { // get the users, use promise.all to furfill the array of promises that are returned
-            const applicants = await Promise.all(job.applicants.data.map(async (applicant) => {
-              return await this.getApplicants(applicant.attributes.userid);
+            // const applicants = await Promise.all(job.applicants.data.map(async (applicant) => {
+            //   return await this.getApplicants(applicant.attributes.userid);
+            // })) // FOR NOW NO NORMAL APPLICANTS
+            console.log('this the way the job is',job);
+
+            const premiumApplicants = await Promise.all(job.premium_applicants.data.map(async (premiumApplicant) => {
+              return await this.getApplicants(premiumApplicant.attributes.userid);
+            }))
+            const activatedApplicants = await Promise.all(job.activated_applicants.data.map(async (activatedApplicant) => {
+              return await this.getApplicants(activatedApplicant.attributes.userid);
             }))
             this.setState({
-              applicants: applicants,
+            /* applicants: applicants, */
+              premiumApplicants: premiumApplicants,
+              activatedApplicants: activatedApplicants,
               requesting: false
             })
       })
     })
     
+ }
+
+ renderApplicants = ()=>{
+      if(this.state.activatedApplicants.length >= 1 || this.state.premiumApplicants.length >= 1 /*|| this.state.applicants.length >= 1*/) {
+        return <>
+              {this.state.premiumApplicants.length >= 1?
+              <List
+              loggedInUserProfile={this.props.loggedInUserProfile}
+              handlePageChange={this.props.handlePageChange}
+              itemsName ='users'
+              items={this.state.premiumApplicants}
+              api_url={this.props.api_url}
+              listType='drivers' 
+              hideViewMoreButton={true}
+              listTitle='Recommended Drivers' /> : <></>}
+               
+              <List
+              loggedInUserProfile={this.props.loggedInUserProfile}
+              handlePageChange={this.props.handlePageChange}
+              itemsName ='users'
+              items={this.state.activatedApplicants}
+              api_url={this.props.api_url}
+              listType='drivers' 
+              listTitle='Applicants' />
+
+             {/*  AT THE MOMENT, ONLY PREMIUM AND ACTIVATED APPLICANTS ARE SHOWN
+             <List
+              loggedInUserProfile={this.props.loggedInUserProfile}
+              handlePageChange={this.props.handlePageChange}
+              itemsName ='users'
+              items={this.state.applicants}
+              api_url={this.props.api_url}
+              listType='drivers' 
+              listTitle='Applicants' />     */}
+        </>
+      }
+      else{
+        return <Alert severity="info" sx={{marginBottom:2}}>No applicants to this job yet</Alert>
+      }
+                
  }
 
   render() {
@@ -140,14 +192,7 @@ export default class JobView extends React.Component {
                     </div>
                 </div>
         </div>
-        {this.state.applicants.length >= 1? <List
-              loggedInUserProfile={this.props.loggedInUserProfile}
-              handlePageChange={this.props.handlePageChange}
-              itemsName ='users'
-              items={this.state.applicants}
-              api_url={this.props.api_url}
-              listType='drivers' 
-              listTitle='Applicants' /> : <Alert severity="info" sx={{marginBottom:2}}>No applicants to this job yet</Alert>}
+        {this.renderApplicants()}
     </div>)
   }
 }

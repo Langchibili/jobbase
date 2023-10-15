@@ -31,6 +31,45 @@ export default class Jobs extends React.Component {
      return datePart+' '+timePart[0]+ ':'+ timePart[1]
   }
   
+  parseTodayDate = ()=>{
+    let toDay = new Date().toString()
+    const year = parseInt(toDay[3])
+    const month = parseInt(toDay[2])
+  }
+
+
+   getJobNewStatus(dateInput) {
+    const jobDate = new Date(dateInput);
+    const currentDate = new Date();
+    const fiveDaysAgo = new Date(currentDate);
+    fiveDaysAgo.setDate(currentDate.getDate() - 5);
+  
+    if (jobDate >= fiveDaysAgo) {
+      return 'New';
+    } else {
+      return '';
+    }
+  }
+
+  renderJobStatus(status,dateInput){
+      const newJobStyles = {
+        color: '#ffffff', // Text color
+        backgroundColor: '#ff5722', // Background color
+        padding: '4px 8px', // Padding for the text
+        borderRadius: '4px', // Rounded corners
+        fontWeight: 'bold', // Bold text
+      }
+       if(status === 'closed'){
+         return <><span className='text text-default'>Closed</span></>
+       }
+       else if(status === 'open'){
+         return <><span className='text text-success'>Open</span>&nbsp;<span style={newJobStyles}>{this.getJobNewStatus(dateInput)}</span></>
+       }
+       else{
+         return <><span className='text text-default'>Closed</span></>
+       }
+  }
+
   showLink = (job)=>{
     const act = this.props.act
     if(act === 'edit'){
@@ -78,6 +117,7 @@ export default class Jobs extends React.Component {
       }
   }
   componentDidMount(){
+    
     async function updateCarOwnerProfileNames(jobs, ctx) { // show car owner names
       let carOwnerProfileNames = {};
       for (const job of jobs) {
@@ -106,6 +146,12 @@ export default class Jobs extends React.Component {
     
   }
   renderJob = ()=> {
+    const closedJObDivStyles = {
+      backgroundColor: '#f2f2f2', // Use a light gray color
+      opacity: 0.5, // Reduce opacity for a more subtle effect
+      pointerEvents: 'none', // Disable pointer events on the content
+    }; // if job is closed
+
     const jobs = this.props.jobs
     if(jobs.length === 0) return <p>Jobs Will Show Soon</p>
     return jobs.map((job)=>{
@@ -121,7 +167,7 @@ export default class Jobs extends React.Component {
       }
       const carOwnerName = carOwnerFirstName + ' ' +carOwnerLastName
       return (
-          <div key={job.id}>
+          <div key={job.id} style={job.attributes.status !== "open"? closedJObDivStyles: {}}>
             {this.state.gotToCarOwnerProfile? <RedirectUser carOwnerProfileUri={this.state.carOwnerProfileUri}/> : '' /* send a user to a car owner's profile */}
             <ListItem alignItems="flex-start" >
                 <ListItemAvatar>
@@ -148,6 +194,7 @@ export default class Jobs extends React.Component {
                         </Typography>
                       </Link>
                       <div><small className="d-block font-w500"> {job.attributes.job_duration || 'fulltime'}: <span style={{color:'forestgreen',fontWeight:900}} className='font-w300'>{job.attributes.pay || "K1500 - K25000"}</span></small></div>
+                     {this.renderJobStatus(job.attributes.status,job.attributes.createdAt)}
                     </React.Fragment>
                   }
                 />

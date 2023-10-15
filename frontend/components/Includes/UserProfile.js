@@ -12,8 +12,10 @@ import UpAndBackButton from './UpAndBackButton';
 import Alert from '@mui/material/Alert'; 
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
-import { IconButton } from '@mui/material';
-import { Cancel } from '@mui/icons-material';
+import { IconButton, Typography } from '@mui/material';
+import { Cancel, CancelOutlined, Check, CheckBoxRounded, CheckOutlined, Close, Recommend, RecommendRounded } from '@mui/icons-material';
+import Chip from '@mui/material/Chip';
+import Badge from '@mui/material/Badge';
 import { imageUrlFormat } from '@/Constants';
 import { useRouter } from 'next/router';
 
@@ -43,7 +45,7 @@ export default class UserProfile extends Component {
     if(this.props.loggedInUserProfile.type === "driver"){
         return 'Only Visible To Car Owners'
     }
-     return mobileNumber
+    return <Chip label="Click To View Number" id="chip-phone_number" onClick={this.handleHiddenDetailsDialogOpen} />
   }
 
 
@@ -133,7 +135,7 @@ export default class UserProfile extends Component {
     const itemName  = e.target.id
     const loggedInUserProfile = this.props.loggedInUserProfile 
     const userPoints = loggedInUserProfile.type === "driver"? loggedInUserProfile.driverProfile.application_points : loggedInUserProfile.carOwnerProfile.job_creation_points
-    if(itemName === "phone_number" || itemName === "icon-phone_number"){
+    if(itemName === "phone_number" || itemName === "icon-phone_number" || 'chip-phone_number'){
       detailName = "Phone Number"
       if(loggedInUserProfile.type === "driver"){
         this.setState({
@@ -204,7 +206,98 @@ export default class UserProfile extends Component {
       }
       
    }
+   
+   renderDriverCredentials = ()=>{
+    if(this.props.loggedInUserProfile.type === "car-owner"){
+      if(this.props.userProfile.type === "driver"){
+        const badgeStyles = {
+          marginTop:1,
+          marginRight:2
+        }
+        const driverProfile = this.props.userProfile.driverProfile
+        if(driverProfile === undefined || driverProfile === null){
+              <><Badge color="error" badgeContent={<Close/>} sx={badgeStyles}>
+              <Chip label="Licence" />
+              </Badge>
+              <Badge color="error" badgeContent={<Close/>} sx={badgeStyles}>
+                    <Chip label="Certificate" />
+              </Badge>
+              <Badge color="error" badgeContent={<Close/>} sx={badgeStyles}>
+                    <Chip label="Nrc" />
+              </Badge>
+              <Badge color="error" badgeContent={<Close/>} sx={badgeStyles}>
+                    <Chip label="Address" />
+              </Badge>
+              <Badge color="error" badgeContent={<Close/>} sx={badgeStyles}>
+                    <Chip label="Number" />
+              </Badge>
+              </>
+        }
+        else{
+          const LicenceAddedColor = driverProfile.driving_license_front === null && driverProfile.drivers_license_back === null? "error" : "success"
+          const CertificateAddedColor = driverProfile.driving_license_front === null && driverProfile.drivers_license_back === null? "error" : "success" 
+          const NrcAddedColor = driverProfile.nrc_front === null && driverProfile.nrc_back === null? "error" : "success" 
+          const LicenceAddedIcon = driverProfile.driving_license_front === null && driverProfile.drivers_license_back === null? ()=> <Close/>: ()=> <CheckOutlined/>
+          const CertificateAddedIcon = driverProfile.driving_license_front === null && driverProfile.drivers_license_back === null? ()=> <Close />: ()=> <CheckOutlined/>
+          const NrcAddedIcon = driverProfile.nrc_front === null && driverProfile.nrc_back === null? ()=> <Close /> : ()=> <CheckOutlined/> 
+          let AddressAddedColor,NumberAddedColor,AddressAddedIcon,NumberAddedIcon
+          if(driverProfile.details === null) {
+            AddressAddedColor = "error"
+            NumberAddedColor = "error"
+            AddressAddedIcon = ()=> <Close/>
+            NumberAddedIcon = ()=> <CheckOutlined/>
+          }
+          else{
+            AddressAddedColor = driverProfile.details.address === null? "error" : "success"
+            NumberAddedColor = driverProfile.details.phone_number === null? "error" : "success"
+            AddressAddedIcon = driverProfile.details.address === null? ()=> <Close /> : ()=> <CheckOutlined/> 
+            // NumberAddedIcon = driverProfile.details.phone_number === null? ()=> <Close /> : ()=> <CheckOutlined/> 
+          } 
+          const recommendationText = ()=>{ 
+            return <div style={{marginTop:20}}><Badge color="warning"  badgeContent={<Recommend/>} sx={badgeStyles}>
+                      <Chip label="Recommended" />
+                    </Badge>
+                    <Alert sx={{marginTop:1}} severity='success'>We highly recommend that you hire this user, because we have done all essential checks and verification on them</Alert>
+                    </div>
+          }
+          const verificationText = ()=>{ 
+            return <Badge color="success"  badgeContent={<CheckOutlined/>} sx={{marginTop:2}}>
+                      <Chip label="This user is verified by us." />
+                  </Badge>
+          }
 
+          return (
+            <><p style={{color:'darkcyan'}}>Details Provided By Driver </p>
+            <Badge color={LicenceAddedColor} badgeContent={LicenceAddedIcon()} sx={badgeStyles}>
+                <Chip label="Licence" />
+           </Badge>
+           <Badge color={CertificateAddedColor} badgeContent={CertificateAddedIcon()} sx={badgeStyles}>
+                <Chip label="Certificate" />
+           </Badge>
+           <Badge color={NrcAddedColor} badgeContent={NrcAddedIcon()} sx={badgeStyles}>
+                <Chip label="Nrc" />
+           </Badge>
+           <Badge color={AddressAddedColor} badgeContent={AddressAddedIcon()} sx={badgeStyles}>
+                <Chip label="Address" />
+           </Badge>
+           {/* <Badge color={NumberAddedColor} badgeContent={NumberAddedIcon()} sx={badgeStyles}>
+                <Chip label="Number" />
+           </Badge> */}
+           <></>
+           {driverProfile.premium_user?  recommendationText() : <></>}
+           {driverProfile.details.verified? verificationText() : <></>}
+           <Alert severity='info' sx={{marginTop:2}}>Please note that all these details are hidden, in order to get these details you have to click on the <strong>phone icon</strong> or the "<strong>Click To View Number</strong>" button. This is because these details can only be given to you by the driver themself, so you have to call them in order to get the details</Alert>
+           </>)
+        }
+      }
+      else{
+        return <></>
+      }
+    }
+    else{
+      return <></>
+    }
+   }
 
   render() {
     /* HANFLING CASES WHERE USER PROFILE IS NOT YET SET */
@@ -305,7 +398,6 @@ export default class UserProfile extends Component {
     if(email.split('_unset').length > 1){// it mean the email address is not set
       email = 'unset'
     }
-   
     return (<> 
          {this.state.showHiddenItem? <RedirectUser url={"/detailspage?detailname="+this.state.detailName+"&uid="+this.props.userProfile.id}/> : ''}
          <HtmlHead pageTitle={firstname}/>
@@ -343,6 +435,7 @@ export default class UserProfile extends Component {
                     </div>
                     </div>
                     </div>
+                     {this.renderDriverCredentials()}
                 </div>
                 </div>
             </div>
@@ -373,6 +466,7 @@ export default class UserProfile extends Component {
                         <h4 className="fs-18 mb-0 text-black font-w600">{reviewsCount}</h4>
                         <span className="fs-14">Reviews</span>
                     </div>
+                    <><Link href={"/reviews?uid="+this.props.userProfile.id+"&name="+nameDisplay}><Typography sx={{color:'green',marginRight:5,fontWeight:600}}>VIEW REVIEWS: SEE WHAT PEOPLE SAY ABOUT THIS USER.</Typography></Link> </>
                     </div>
                     <div className="media mb-4">
                     <svg className="me-3 min-w46" width={46} height={46} viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -393,7 +487,7 @@ export default class UserProfile extends Component {
                         <path d="M23 15C19.6227 15 16.875 17.7477 16.875 21.125C16.875 22.2061 17.1606 23.2689 17.701 24.1986C17.8269 24.4153 17.9677 24.6266 18.1196 24.8264L22.7339 31H23.2661L27.8804 24.8264C28.0322 24.6266 28.173 24.4154 28.299 24.1986C28.8394 23.2689 29.125 22.2061 29.125 21.125C29.125 17.7477 26.3773 15 23 15ZM23 23.1562C21.88 23.1562 20.9688 22.245 20.9688 21.125C20.9688 20.005 21.88 19.0938 23 19.0938C24.12 19.0938 25.0312 20.005 25.0312 21.125C25.0312 22.245 24.12 23.1562 23 23.1562Z" fill="#808080" />
                     </svg>
                     <div className="media-body text-left">
-                        <h4 className="fs-18 text-black font-w600 mb-0">{this.hidValue(locationDisplay,this.state.hideLocation)}</h4>
+                        <h4 className="fs-18 text-black font-w600 mb-0">{this.hidValue(locationDisplay,true)}</h4>
                         <span className="fs-14">Location</span>
                     </div>
                     </div>
@@ -416,7 +510,7 @@ export default class UserProfile extends Component {
                     <h5 className="f-w-500">Email <span className="pull-end">:</span>
                     </h5>
                 </div>
-                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(this.showEmail(email,this.state.hideEmail))}</span>
+                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(this.showEmail(email,this.state.hideEmail),true)}</span>
                 </div>
                 </div>
                 {this.props.userProfile.type === 'car-owner'? '' : <div className="row mb-2"><div className="col-sm-3 col-5"><h5 className="f-w-500">Availability <span className="pull-end">:</span></h5></div><div className="col-sm-9 col-7"><span className='text-success'><strong>{availability_display}</strong></span></div></div>}
@@ -454,7 +548,7 @@ export default class UserProfile extends Component {
                 <div className="col-sm-3 col-5">
                     <h5 className="f-w-500">Address <span className="pull-end">:</span></h5>
                 </div>
-                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(address, this.state.hideAddress)}</span>
+                <div className="col-sm-9 col-7"><span>{this.props.userProfile.type === 'car-owner'? 'hidden' : this.hidValue(address, true)}</span>
                 </div>
                 </div>
                 {this.props.userProfile.type === 'car-owner'? '' :<div className="row mb-2"><div className="col-sm-3 col-5"> <h5 className="f-w-500">Year Experience <span className="pull-end">:</span></h5></div><div className="col-sm-9 col-7"><span>{experience_display}</span></div></div>}

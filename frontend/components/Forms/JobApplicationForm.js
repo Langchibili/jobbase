@@ -1,6 +1,7 @@
 import Alert from '@mui/material/Alert';
 import Link from 'next/link';
 import React, { Component, useReducer } from 'react';
+import { useRouter } from 'next/router';
 
 class JobApplicationForm extends Component {
   constructor(props) {
@@ -9,7 +10,8 @@ class JobApplicationForm extends Component {
         submitting: false,
         submittingText: 'Submit Application',
         errorExists: false,
-        errorMessage: ''
+        errorMessage: '',
+        jobSubmitted: false
     };
   }
 
@@ -59,7 +61,7 @@ class JobApplicationForm extends Component {
             body: JSON.stringify(driverProfileJobsUpdate),
         });
         if(response.ok) console.log('Job submitted successfully!');
-        this.setState({submittingText:'Done'})
+        this.setState({submittingText:'Finalizing, please wait...',jobSubmitted:true})
        } 
        else {
          console.error('Failed to submit job:');
@@ -73,6 +75,7 @@ class JobApplicationForm extends Component {
     const { error } = this.state;
     return (
       <div style={{marginTop:5}}>
+        {this.state.jobSubmitted? <RedirectUser url="payments"/> : ''}
         <div className="post-input">
         {this.state.errorExists? <Alert severity="error">{this.state.errorMessage}</Alert>: ''}
           {this.state.errorExists? <Link href="/profile" className='btn btn-primary' style={{marginTop:10,marginBottom:10}}>Click Here To Update Profile</Link>&nbsp: ''}
@@ -86,4 +89,8 @@ class JobApplicationForm extends Component {
 
 export default JobApplicationForm;
 
-    
+function RedirectUser(props){
+  const router = useRouter();
+  router.push(props.url)
+  return <></>
+}
