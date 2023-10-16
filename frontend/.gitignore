@@ -16,6 +16,7 @@ features-list.txt
 alpha-release-build.txt
 changes-made-to-api.txt
 settings-page-concept.txt
+pages/drivers_numbers.js
 # production
 /build
 

@@ -116,7 +116,7 @@ export default class JobView extends React.Component {
 
  renderApplicants = ()=>{
       if(this.state.activatedApplicants.length >= 1 || this.state.premiumApplicants.length >= 1 /*|| this.state.applicants.length >= 1*/) {
-        return <>
+        return (<>
               {this.state.premiumApplicants.length >= 1?
               <List
               loggedInUserProfile={this.props.loggedInUserProfile}
@@ -128,6 +128,7 @@ export default class JobView extends React.Component {
               hideViewMoreButton={true}
               listTitle='Recommended Drivers' /> : <></>}
                
+              {this.state.activatedApplicants.length >= 1?
               <List
               loggedInUserProfile={this.props.loggedInUserProfile}
               handlePageChange={this.props.handlePageChange}
@@ -135,7 +136,8 @@ export default class JobView extends React.Component {
               items={this.state.activatedApplicants}
               api_url={this.props.api_url}
               listType='drivers' 
-              listTitle='Applicants' />
+              hideViewMoreButton={true}
+              listTitle='Applicants' />: <></>}
 
              {/*  AT THE MOMENT, ONLY PREMIUM AND ACTIVATED APPLICANTS ARE SHOWN
              <List
@@ -146,7 +148,7 @@ export default class JobView extends React.Component {
               api_url={this.props.api_url}
               listType='drivers' 
               listTitle='Applicants' />     */}
-        </>
+        </>)
       }
       else{
         return <Alert severity="info" sx={{marginBottom:2}}>No applicants to this job yet</Alert>
@@ -191,6 +193,7 @@ export default class JobView extends React.Component {
                             <span style={{color:'cadetblue'}} className="font-w500 ps-2">{this.dateCreated(job.createdAt)}</span>
                     </div>
                 </div>
+             
         </div>
         {this.renderApplicants()}
     </div>)

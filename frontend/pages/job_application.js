@@ -97,12 +97,12 @@ export default function jobs_application(props) {
                        <HtmlFoot/> </>)
         }
         if(checkIfHasAppliedBefore(data.job, data.loggedInUserProfile)) return <Alert severity="error"><UpAndBackButton />You have already applied to this Job</Alert>
-        if(data.loggedInUserProfile.driverProfile.application_points < 2){ 
-            return (<> <HtmlHead pageTitle='Jobs | Application'/>
-                         <UpAndBackButton/> 
-                         <div><Alert severity="error">You Have No Application Points To Apply To This or any other job, get your account verified or subscribe as a premium user to be able to apply to more jobs.</Alert> <Link className="mt-2 btn btn-success" href="/points">Buy Points</Link></div>
-                        <HtmlFoot/> </>)
-        }
+        // if(data.loggedInUserProfile.driverProfile.application_points < 2){ 
+        //     return (<> <HtmlHead pageTitle='Jobs | Application'/>
+        //                  <UpAndBackButton/> 
+        //                  <div><Alert severity="error">You Have No Application Points To Apply To This or any other job, get your account verified or subscribe as a premium user to be able to apply to more jobs.</Alert> <Link className="mt-2 btn btn-success" href="/points">Buy Points</Link></div>
+        //                 <HtmlFoot/> </>)
+        // }  // AT the moment, all users can apply without points, because are paid for with a fee
         
         return (
          <> 
@@ -114,8 +114,8 @@ export default function jobs_application(props) {
                         <div className="row no-gutters">
                             <div className="col-xl-12" >
                                <Alert severity="info">
-                                Before You apply, make sure you have updated your profile enough to stand out from other applicants.
-                                And note that when you apply to this job, your Job Application Points(JAPs) will reduce by one
+                                Before You apply, make sure you have updated your profile enough to stand out from other applicants when the job owner views your profile.
+                                {/* And note that when you apply to this job, your Job Application Points(JAPs) will reduce by one */}
                                 </Alert>
 
                                <div style={{marginTop:5, textAlign: 'center'}}><Alert severity="warning">Are You Sure You Want To Apply To This Job?</Alert>

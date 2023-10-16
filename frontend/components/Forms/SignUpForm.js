@@ -53,7 +53,7 @@ class SignUpForm extends Component {
     if(!this.state.errorExists){
         this.setState({
             submitting: true,
-            submittingText: 'siging you up...'
+            submittingText: 'signing you up, please wait...'
         })
         const response = await this.submitRequest(user)
         if(response === undefined){
@@ -66,7 +66,8 @@ class SignUpForm extends Component {
         if('error' in response){
             this.setState({
                 error: <span class='text-danger'>Failed to sign you up, read the directions below</span>,
-                errorExists:true 
+                errorExists:true,
+                submittingText: 'Retry' 
             })
             return
         }
@@ -223,13 +224,14 @@ class SignUpForm extends Component {
                         <div style={{minHeight:5}}></div>
                         {this.state.errorExists? <>
                         <Alert severity='warning'>
-                            This is how to sign up successfully<br/>
-                            Add your username and password<br/>
-                            Make sure you have never opened an account with this username<br/>
-                            Do not add spaces at the end or start of your password<br/>
-                            Make sure the password is more than 9 characters<br/>
-                            An example password would be <strong>@password1234</strong><br/>
-                            <strong>After Signing up, do not forget your password...</strong><br/>
+                            This is how to sign up successfully. Please read the guidelines very carefully.<br/>
+                            1. Add your username and password<br/>
+                            2. Make sure you have never opened an account with this username<br/>
+                            3. Make sure not to add usernames in this format: <strong>John Banda</strong>, but add them in the format: <strong>JohnBanda</strong> without any space<br/>
+                            4. Do not add spaces at the end or start of your password<br/>
+                            5. Make sure the password is more than 9 characters, it should contain at least a symbol, a capital letter and a number<br/>
+                            6. An example password would be <strong>@Password9</strong><br/>
+                            7. <strong>After Signing up, do not forget your password, make sure to save it somewhere...</strong><br/>
                             </Alert>
                             <div style={{minHeight:5}}></div> {/* space */}
                             <div style={{backgroundColor:'wheat'}}><CopyAndWhatsAppButtons buttonText="Text Us On WhatsApp" info={<><strong>Contact <span id="copyNumber">+260954816277</span> on WhatsApp for help, if you still fail to sign up</strong></>}/> </div></>: ''}

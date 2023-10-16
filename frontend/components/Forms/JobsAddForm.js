@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+// import ImageUploader from './ImageUploader';
 
 class JobsAddForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       jobBody: '',
+      newJob: null,
       jobDuration: 'fulltime',
       title: '',
       pay:'',
@@ -38,7 +40,6 @@ class JobsAddForm extends Component {
  };
    // add a new job to the user(car-owner) jobs array
  updateUserWIthNewJob = async (user,newJob)=>{
-     console.log(user)
      const jobs = user.carOwnerProfile.jobs // grab job ids
      const carOwnerProfileId = user.carOwnerProfile.id // get car owner id
      // for now car owners shall post jobs for free
@@ -54,6 +55,12 @@ class JobsAddForm extends Component {
             body: JSON.stringify(carOwnerProfileJobsUpdate),
      });
   }
+
+  // imageThumbnail = ()=>{
+  //   const image = null
+  //   if(this.state.userProfile.carOwnerProfile.details.profile_cover_image === null) return image
+  //   return this.state.userProfile.carOwnerProfile.details.profile_cover_image
+  // }
 
   handleSubmit = async (event) => {
     event.preventDefault();
@@ -95,7 +102,7 @@ class JobsAddForm extends Component {
       if (newJob) {
         const response = await this.updateUserWIthNewJob(user,newJob) // update user object
         if(response.ok) console.log('Job submitted successfully!');
-        this.setState({submittingText:'Done'})// to disable button from re-requesting
+        this.setState({newJob:newJob,submittingText:'Done'})// to disable button from re-requesting
       } else {
         console.error('Failed to submit job:');
       }
@@ -137,6 +144,16 @@ class JobsAddForm extends Component {
         
         <p className='text text-info' id="demo-simple-select-label">How much will this job pay? We will show a range of 1500 to 25000 if not set.</p>
         <input type='text' onChange={this.setPay} className='form-control sm-transparent' placeholder='Pay of Job'/>
+          
+          {/* {this.state.newJob !== null? <ImageUploader  
+                  api_url={this.props.api_url}
+                  refName="api::job.job"
+                  refId={this.state.newJob.data.id}
+                  imageName='Add A Job Advert Image'
+                  fieldName="job_image"
+                  image={this.imageThumbnail()}
+                  jwt={this.props.jwt}/> : <></>} */}
+
           {error && <div className="text-danger">{error}</div>}
           <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn btn-primary">{this.state.submittingText}</button>
         </div>
@@ -146,5 +163,3 @@ class JobsAddForm extends Component {
 }
 
 export default JobsAddForm;
-
-    

@@ -10,10 +10,26 @@ class HtmlHead extends Component {
     this.state = {
       windowLoaded: false,
       linkClicked: false,
-      loggedInUserProfile: 'logged-out'
+      loggedInUserProfile: 'logged-out',
+      pageDescription: "driverbase | your number one portal for finding jobs as a driver",
+      pageImage: "/DriverBaseTransparentBackground.png"
     };
   }
   async componentDidMount(){
+    if(this.props.customPageDescription){ // if page has a custom description
+      const pageDescription = this.props.customPageDescription
+      this.setState({
+        pageDescription: pageDescription
+      })
+    }
+
+    if(this.props.customPageImage){ // if page has a custom description
+      const pageImage = this.props.customPageImage
+      this.setState({
+        pageImage: pageImage
+      })
+    }
+
     const loggedInUserProfile =  await getLoggedInUserData()
     this.setState({
       windowLoaded: true,
@@ -52,8 +68,8 @@ class HtmlHead extends Component {
               <meta name="author" content="" />
               <meta name="robots" content="" />
               <meta name="viewport" content="width=device-width, initial-scale=1" />
-              <meta name="description" content="driverbase : your number one portal for finding jobs as a driver" />
-              <meta property="og:image" content="social-image.png" />
+              <meta name="description" content={this.state.pageDescription} />
+              <meta property="og:image" content={this.state.pageImage} />
               <meta name="format-detection" content="telephone=no" />
               <title>{this.props.pageTitle+' | DriverBase'}</title>
               {/* Favicon icon */}

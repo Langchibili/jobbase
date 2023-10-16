@@ -11,7 +11,8 @@ class LoginForm extends Component {
     this.state = {
         error: <></>,
         errorExists: false,
-        submitting: false
+        submitting: false,
+        submittingText: 'Login'
     };
     this.username = React.createRef();
     this.password = React.createRef();
@@ -23,16 +24,18 @@ class LoginForm extends Component {
     let user = {}
     const username = this.username.current.value;
     const password = this.password.current.value;
+    this.setState({submitting:true,submittingText:'Checking credentials...'})// to disable button from re-requesting
     if(username.length < 1 || password.length < 1){
         this.setState({
             error: <span className='text-danger'>username or password empty!</span>,
-            errorExists: true 
+            errorExists: true,
+            submittingText: 'Login'
         })
     }
     else{
         user.identifier = username
         user.password = password
-        this.setState({submitting:true})// to disable button from re-requesting
+        this.setState({submitting:true,submittingText:'Login you in...'})// to disable button from re-requesting
         const response = await this.submitRequest(this.props.api_url,user) 
         const jwt = localStorage.getItem('jwt')
         if(jwt === undefined || jwt === null){
@@ -101,7 +104,7 @@ class LoginForm extends Component {
                     <input onChange={this.handleChange} type="password" ref={this.password} className="form-control"/>
                 </div>
                 <div className="text-center mt-4">
-                    <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn bg-white text-primary btn-block">{this.state.submitting? 'Logging you in...': 'Login'}</button>
+                    <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn bg-white text-primary btn-block">{this.state.submitting? this.state.submittingText : 'Login'}</button>
                 </div>
                 </form>
                 <div className="new-account mt-3">
@@ -111,11 +114,12 @@ class LoginForm extends Component {
                 <div style={{minHeight:5}}></div> {/* space */}
                 {this.state.errorExists? <><Alert severity='warning'>
                             This is how to log in successfully<br/>
-                            Add your username and password<br/>
-                            Make sure you have opened an account with this username<br/>
-                            Do not add spaces at the end or start of your password if you didn't include them when signing up<br/>
-                            Make sure the password is exactly what you entered on sign up<br/>
-                            If any letter is capital, it should be entered as capital<br/>
+                            1. Add your username and password<br/>
+                            2. Make sure you have opened an account with this username<br/>
+                            3. Do not add spaces at the end or start of your password if you didn't include them when signing up<br/>
+                            4. Make sure the password is exactly what you entered on sign up<br/>
+                            5. If any letter is capital, it should be entered as capital<br/>
+                            5. If you have forgotten your passwor, text us on whatsapp providing your username<br/>
                         </Alert>
                         <div style={{minHeight:5}}></div> {/* space */}
                          <div style={{backgroundColor:'wheat'}}><CopyAndWhatsAppButtons buttonText="Text Us On WhatsApp" info={<><strong>Contact <span id="copyNumber">+260954816277</span> on WhatsApp; to reset your password, if you still fail to log in</strong></>}/>

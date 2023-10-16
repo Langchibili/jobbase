@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class HtmlFoot extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
   componentDidMount() {
     // remove the template's floating buttons
@@ -17,8 +17,7 @@ class HtmlFoot extends Component {
   
   render() {
     return (
-      <React.Fragment>
-               
+      <React.Fragment>    
         <script src="/template/vendor/global/global.min.js"></script>
         <script src="/template/vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
         {/* <script src="/template/vendor/chart.js/Chart.bundle.min.js"></script> */}

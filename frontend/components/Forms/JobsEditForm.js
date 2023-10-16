@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
+// import ImageUploader from './ImageUploader';
 
 class JobsEditForm extends Component {
   constructor(props) {
@@ -100,6 +101,15 @@ class JobsEditForm extends Component {
           <MenuItem value="part-time">PartTime</MenuItem>
         </Select>
         <input type='text' onChange={this.setPay} className='form-control sm-transparent' placeholder={job.pay}/>
+        {/* <ImageUploader  
+                  userProfile = {this.state.userProfile} 
+                  api_url={this.props.api_url}
+                  refName="api::job.job"
+                  refId={this.props.job.data.id}
+                  imageName='Job Ad Image'
+                  fieldName="job_image"
+                  image={this.imageThumbnail('nrc_back')}
+                  jwt={this.props.jwt}/>  */}
          {error && <div className="text-danger">{error}</div>}
           <button disabled={this.state.submitting} onClick={this.handleSubmit} className="btn btn-primary">{this.state.submittingText}</button>
         </div>
