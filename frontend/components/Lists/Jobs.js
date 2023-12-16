@@ -7,6 +7,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { Button } from '@mui/material';
 
 export default class Jobs extends React.Component {
   constructor(props) {
@@ -71,12 +72,18 @@ export default class Jobs extends React.Component {
   }
 
   showLink = (job)=>{
+    const selectJobToManage = ()=>{ // pass job to be managed
+      this.props.selectJobToManage(job)
+    }
     const act = this.props.act
     if(act === 'edit'){
        return <Link href={this.props.loggedInUserProfile !== 'logged-out'? '/jobs_manage?type=edit&jid='+job.id : '/login'} className='btn btn-sm btn-info' onClick={this.props.handlePageChange}>Edit</Link>
     }
     else if(act === 'delete'){
       return <Link href={this.props.loggedInUserProfile !== 'logged-out'? '/jobs_manage?type=delete&jid='+job.id : '/login'} className='btn btn-sm btn-danger' onClick={this.props.handlePageChange}>Delete</Link>
+    }
+    else if(act === 'manage'){
+      return <Button onClick={selectJobToManage}>Manage</Button> 
     }
     return <Link href={this.props.loggedInUserProfile !== 'logged-out'? '/job_application?jid='+job.id : '/login'} className='btn btn-sm btn-danger' onClick={this.props.handlePageChange}>Apply</Link> 
   }
@@ -102,7 +109,7 @@ export default class Jobs extends React.Component {
          }).then(response => response.json())
           .then(data => data)
           .catch(error => console.error(error))
-        //  console.log('the car owner',carOwner)
+        //  console.log('the job owner',carOwner)
           if(carOwner.profile_update_percentage <= 5){
             carOwnerProfileNames[jobId] = {
               firstname:'Unknown',
@@ -118,7 +125,7 @@ export default class Jobs extends React.Component {
   }
   componentDidMount(){
     
-    async function updateCarOwnerProfileNames(jobs, ctx) { // show car owner names
+    async function updateCarOwnerProfileNames(jobs, ctx) { // show job owner names
       let carOwnerProfileNames = {};
       for (const job of jobs) {
         carOwnerProfileNames = await ctx.getJobCarOwnersNames(job.id, carOwnerProfileNames);
@@ -126,7 +133,7 @@ export default class Jobs extends React.Component {
       ctx.setState({
         carOwnerProfileNames: carOwnerProfileNames,
       }, () => {
-        for (const job of jobs) { // add click events to car owner names
+        for (const job of jobs) { // add click events to job owner names
           const carOwnerProfileName = document.getElementById('job-id-'+job.id)
           carOwnerProfileName.style.textTransform = "capitalize"
           carOwnerProfileName.addEventListener('click',()=>{
@@ -160,6 +167,10 @@ export default class Jobs extends React.Component {
       if(job.id in this.state.carOwnerProfileNames){
            carOwnerFirstName = this.state.carOwnerProfileNames[job.id].firstname
            carOwnerLastName = this.state.carOwnerProfileNames[job.id].lastname
+           if(carOwnerFirstName === null || carOwnerLastName === null){
+              carOwnerFirstName = 'Unknown'
+              carOwnerLastName = 'CarOwner'
+           }
       }
       else{
         carOwnerFirstName = 'Unknown'
@@ -168,7 +179,7 @@ export default class Jobs extends React.Component {
       const carOwnerName = carOwnerFirstName + ' ' +carOwnerLastName
       return (
           <div key={job.id} style={job.attributes.status !== "open"? closedJObDivStyles: {}}>
-            {this.state.gotToCarOwnerProfile? <RedirectUser carOwnerProfileUri={this.state.carOwnerProfileUri}/> : '' /* send a user to a car owner's profile */}
+            {this.state.gotToCarOwnerProfile? <RedirectUser carOwnerProfileUri={this.state.carOwnerProfileUri}/> : '' /* send a user to a job owner's profile */}
             <ListItem alignItems="flex-start" >
                 <ListItemAvatar>
                 <Link href={'/jobs?act=show&jid='+job.id} onClick={this.props.handlePageChange}>

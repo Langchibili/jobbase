@@ -10,6 +10,21 @@ export default class DriversCount extends React.Component {
       };
     }
     async componentDidMount(){
+         let driverBaseCount  = await fetch('https://api.driverbase.app/api/driver-profiles',{
+            headers: {
+              'Content-Type': 'application/json'
+            }
+           }).then(response => response.json())
+            .then(data => data)
+            .catch(error => console.error(error))
+            if(driverBaseCount === undefined) driverBaseCount = 0    
+            if('meta' in driverBaseCount){
+                driverBaseCount = driverBaseCount.meta.pagination.total
+            }
+            else{
+                driverBaseCount = 0 
+            } // getting drivers count from driverbase
+
          let count = await fetch(this.props.api_url+'/driver-profiles',{
             headers: {
               'Content-Type': 'application/json'
@@ -20,8 +35,8 @@ export default class DriversCount extends React.Component {
             if(count === undefined) return    
             if('meta' in count){
                 this.setState({
-                    driversCount: count.meta.pagination.total
-                })
+                    driversCount: driverBaseCount + count.meta.pagination.total
+                }) // total users from the count
             }
     }
 
@@ -39,7 +54,7 @@ export default class DriversCount extends React.Component {
                         </svg>
                     </span>
                     <div className="media-body text-end">
-                        <p className="fs-18 text-white mb-2">Drivers Registered</p>
+                        <p className="fs-18 text-white mb-2">Professionals Registered</p>
                         <span className="fs-48 text-white font-w600">{this.state.driversCount? this.state.driversCount : <ContentLoader />}</span>
                     </div>
                     </div>

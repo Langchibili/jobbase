@@ -12,7 +12,7 @@ class Footer extends Component {
     return (
         <div className="footer">
             <div className="copyright">
-                <p>Copyright © <a href="/" target="_blank">DriverBase</a> 2023</p>
+                <p>Copyright © <a href="/" target="_blank">JobBase</a> 2023</p>
             </div>
         </div>
    );

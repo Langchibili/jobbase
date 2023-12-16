@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "chat_rooms",
+  "info": {
+    "singularName": "chat-room",
+    "pluralName": "chat-rooms",
+    "displayName": "ChatRoom",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "unique": true
+    },
+    "participants": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
+    },
+    "messages": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::message.message"
+    },
+    "recent_message_text": {
+      "type": "string"
+    },
+    "messagesCount": {
+      "type": "biginteger",
+      "default": "0"
+    },
+    "chatDetails": {
+      "type": "json"
+    }
+  }
+}

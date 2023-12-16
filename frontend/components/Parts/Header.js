@@ -3,7 +3,7 @@ import { Search } from '@material-ui/icons';
 import Link from 'next/link';
 import { Fab } from '@mui/material';
 import { LoginRounded, PersonAdd } from '@mui/icons-material';
-import { imageUrlFormat } from '@/Constants';
+import { backEndUrl, imageUrlFormat } from '@/Constants';
 //import { SearchOutlined } from '@mui/icons-material';
 
 class Header extends Component {
@@ -40,7 +40,6 @@ class Header extends Component {
         profileDetails = this.props.loggedInUserProfile.carOwnerProfile.details
     }
     if(profileDetails.profile_thumbnail_image !== null){
-        const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
         profile_photo =  backEndUrl+imageUrlFormat(profileDetails.profile_thumbnail_image,'thumbnail')   
     }
     else{
@@ -61,7 +60,7 @@ class Header extends Component {
                      <Fab size="small"  aria-label="add" sx={{marginRight:1}}><img style={{border:'2px solid lightgrey'}} src={this.loggedInUserProfileIconSrc()} width={20} alt /></Fab>
                     <div style={{ borderLeft:'none',paddingLeft:10,marginRight:20}} className="header-info">
                     <span className="text-black">{loggedInUserProfile.username}</span>
-                     <p className="fs-12 mb-0" style={{textTransform:'capitalize'}}>{loggedInUserProfile.type}</p>
+                     <p className="fs-12 mb-0" style={{textTransform:'capitalize'}}>{loggedInUserProfile.type === "driver"? "Professional" : "Job Owner"}</p>
                     
                     </div>
                   </a>

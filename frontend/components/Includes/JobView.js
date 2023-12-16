@@ -4,7 +4,7 @@ import Link from 'next/link';
 import ContentLoader from './ContentLoader';
 import List from '../Lists/List';
 import Alert from '@mui/material/Alert'; 
-import { getJwt, imageUrlFormat, minimal_car_owner_populate_url, minimal_driver_populate_url } from '@/Constants';
+import { backEndUrl, getJwt, imageUrlFormat, minimal_car_owner_populate_url, minimal_driver_populate_url } from '@/Constants';
 
 export default class JobView extends React.Component {
   constructor(props) {
@@ -32,7 +32,7 @@ export default class JobView extends React.Component {
   
 
   getJob = async (jid)=> {
-    return fetch(this.props.api_url+'/jobs/'+jid+'/?populate=applicants,premium_applicants,activated_applicants',{
+    return fetch(this.props.api_url+'/jobs/'+jid+'/?populate=*',{
         headers: {
           'Content-Type': 'application/json'
         }
@@ -119,6 +119,7 @@ export default class JobView extends React.Component {
         return (<>
               {this.state.premiumApplicants.length >= 1?
               <List
+
               loggedInUserProfile={this.props.loggedInUserProfile}
               handlePageChange={this.props.handlePageChange}
               itemsName ='users'
@@ -126,7 +127,9 @@ export default class JobView extends React.Component {
               api_url={this.props.api_url}
               listType='drivers' 
               hideViewMoreButton={true}
-              listTitle='Recommended Drivers' /> : <></>}
+              listingType="applicants"
+              job={this.state.job}
+              listTitle='Recommended Professionals' /> : <></>}
                
               {this.state.activatedApplicants.length >= 1?
               <List
@@ -137,6 +140,8 @@ export default class JobView extends React.Component {
               api_url={this.props.api_url}
               listType='drivers' 
               hideViewMoreButton={true}
+              listingType="applicants"
+              job={this.state.job}
               listTitle='Applicants' />: <></>}
 
              {/*  AT THE MOMENT, ONLY PREMIUM AND ACTIVATED APPLICANTS ARE SHOWN
@@ -164,7 +169,6 @@ export default class JobView extends React.Component {
     const rating = carOwnerProfile.average_rating? carOwnerProfile.average_rating : ''
     let thumbnail,thumbnailUrl // to be filled later
     // the thumbnail stuff
-     const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
     if(carOwnerProfile.profile_thumbnail_image.data === null) { 
       thumbnail = '/default-profile.png' 
     }
@@ -183,7 +187,7 @@ export default class JobView extends React.Component {
                     <h4 className="fs-20">{carOwnerProfile.verified? <strong><span className="text-green">Verified&#x2714; </span></strong>: <span className="text-orange">unverified</span>}</h4></div>
                     <Link href={'/profile?uid='+this.state.carOwnerId+'&user_type=car-owner'}><img src={thumbnail} alt='image' style={{width:60,height:60}}/></Link>
                 </div>
-                 <div><small className="d-block font-w500">Car Owner's Rating: {rating+' '}<span className='fa fa-star text-danger'></span></small></div>
+                 <div><small className="d-block font-w500">Job Owner's Rating: {rating+' '}<span className='fa fa-star text-danger'></span></small></div>
                  <div><small className="d-block font-w500"> Pays: <span style={{color:'forestgreen',fontWeight:900}} className='font-w300'>{job.pay || "K1500 - K25000"}</span></small></div>
                 
                  <div style={{height:1,backgroundColor:'lightgray',opacity:0.5}} className='mt-1 mb-2'></div>{/* line break */}

@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Link from 'next/link';
+import { textHasEmailAddress, textHasPhoneNumber } from '@/Constants';
 
 class ProfileUpdateForm extends Component {
   constructor(props) {
@@ -297,6 +298,27 @@ class ProfileUpdateForm extends Component {
             // setting up updateObject
              updateObject.data = {...userProfile.carOwnerProfile}
         }
+
+        if(textHasPhoneNumber(this.about.current.value)){ // no phone numbers in description
+            this.setState({
+                errorExists: true,
+                updating: false,
+                submittingText: 'retry',
+                snapBackOpen: true,
+                errorMessage: "You cannot add a phone number into the description. Please remove the phone number to update the descrition."
+            })
+            return
+        }
+        if(textHasEmailAddress(this.about.current.value)){ // cannot add email address into description
+            this.setState({
+                errorExists: true,
+                updating: false,
+                submittingText: 'retry',
+                snapBackOpen: true,
+                errorMessage: "You cannot add an email address into the description. Please remove the email address to update the description."
+            })
+            return
+        }
         
         this.setState({
             userProfile: userProfile,
@@ -417,6 +439,7 @@ class ProfileUpdateForm extends Component {
         delete updateObject.data.driving_certificate_back
         delete updateObject.data.nrc_front
         delete updateObject.data.nrc_back
+        // delete updateObject.data.driver_category // testing
          
         // only delete any of the follwing when not being updated, otherwise leave to update
         if(!this.state.updatingProfileCover) delete updateObject.data.details.profile_cover_image
@@ -462,7 +485,7 @@ class ProfileUpdateForm extends Component {
      if(this.state.userProfile.type === 'driver'){
         return(<div className="card">
             <div className="card-header">
-             <h4 className="card-title">Update Driver Details</h4>
+             <h4 className="card-title">Update Professional Details</h4>
             </div>
             <div className="card-body">
             {this.props.userProfile.type !== null? <div className="mb-5">
@@ -474,17 +497,46 @@ class ProfileUpdateForm extends Component {
                                 <input ref={this.experience} type="number" className="form-control" placeholder="Enter Experience" />
                             </div>
                             <div className="form-group">
-                                <label>Type Of Driver You Are &nbsp;</label>
+                                <label>Type Of Professional You Are &nbsp;</label>
                                 <select ref={this.category} >
                                     <option value="">-- Select Category --</option>
-                                    <option value="truck">Truck</option>
-                                    <option value="taxi">Taxi</option>
-                                    <option value="tractor">Tractor</option>
-                                    <option value="canter">Canter</option>
-                                    <option value="noah">Noah</option>
-                                    <option value="big-bus">Big-Bus</option>
-                                    <option value=" mini-bus"> Mini-Bus</option>
-                                    <option value="heavy-duty">Heavy-Duty</option>
+                                    <option value="musician">Musician</option>
+                                    <option value="dancer">Dancer</option>
+                                    <option value="actor">Actor</option>
+                                    <option value="journalist">Journalist</option>
+                                    <option value="editor">Editor</option>
+                                    <option value="driver">Driver</option>
+                                    <option value="it-software-developer">IT Software Developer</option>
+                                    <option value="it-specialist">IT Specialist</option>
+                                    <option value="it-system-administrator">IT System Administrator</option>
+                                    <option value="agricultural-laborer">Agricultural Laborer</option>
+                                    <option value="tour-guide">Tour Guide</option>
+                                    <option value="hotel-staff">Hotel Staff</option>
+                                    <option value="restaurant-worker">Restaurant Worker</option>
+                                    <option value="farmer">Farmer</option>
+                                    <option value="mechanic">Mechanic</option>
+                                    <option value="carpenter">Carpenter</option>
+                                    <option value="blacksmith">Blacksmith</option>
+                                    <option value="artisan">Artisan</option>
+                                    <option value="doctor">Doctor</option>
+                                    <option value="nurse">Nurse</option>
+                                    <option value="pharmacist">Pharmacist</option>
+                                    <option value="teacher">Teacher</option>
+                                    <option value="entrepreneur">Entrepreneur</option>
+                                    <option value="accountant">Accountant</option>
+                                    <option value="firefighter">Firefighter</option>
+                                    <option value="broadcaster">Broadcaster</option>
+                                    <option value="construction-worker">Construction Worker</option>
+                                    <option value="shopkeeper">Shopkeeper</option>
+                                    <option value="engineer">Engineer</option>
+                                    <option value="architect">Architect</option>
+                                    <option value="miner">Miner</option>
+                                    <option value="environmental-scientist">Environmental Scientist</option>
+                                    <option value="factory-worker">Factory Worker</option>
+                                    <option value="lawyer">Lawyer</option>
+                                    <option value="salesperson">Salesperson</option>
+                                    <option value="other">other</option>
+                                    
                                 </select>
                             </div>
                             <Button disabled={this.state.updating} onClick={this.handleSubmit} variant="contained" component="label">
@@ -522,7 +574,7 @@ class ProfileUpdateForm extends Component {
                             api_url={this.props.api_url}
                             refName={this.state.refName}
                             refId={this.state.profileId}
-                            imageName="Driving License Front"
+                            imageName="Secondary Education Certificate (Optional)"
                             fieldName="driving_license_front"
                             image={this.imageThumbnail('driving_license_front')}
                             jwt={this.props.jwt} 
@@ -534,7 +586,7 @@ class ProfileUpdateForm extends Component {
                             api_url={this.props.api_url}
                             refName={this.state.refName}
                             refId={this.state.profileId}
-                            imageName="Drivers License Back"
+                            imageName="Tertiary Education Certificate (Optional)"
                             fieldName="drivers_license_back"
                             image={this.imageThumbnail('drivers_license_back')}
                             jwt={this.props.jwt}/>
@@ -545,7 +597,7 @@ class ProfileUpdateForm extends Component {
                             api_url={this.props.api_url}
                             refName={this.state.refName}
                             refId={this.state.profileId}
-                            imageName="Driving Certificate Front"
+                            imageName="Other Education Certificate (Optional)"
                             fieldName="driving_certificate_front"
                             image={this.imageThumbnail('driving_certificate_front')}
                             jwt={this.props.jwt}/>
@@ -556,7 +608,7 @@ class ProfileUpdateForm extends Component {
                             api_url={this.props.api_url}
                             refName={this.state.refName}
                             refId={this.state.profileId}
-                            imageName="Driving Certificate Back"
+                            imageName="Other Education Certificate (Optional)"
                             fieldName="driving_certificate_back"
                             image={this.imageThumbnail('driving_certificate_back')}
                             jwt={this.props.jwt}/>
@@ -660,7 +712,7 @@ class ProfileUpdateForm extends Component {
                         <div className="form-group">
                         <label>Province &nbsp;</label>
                         <select ref={this.province} >
-                            <option value="">-- Select a city or town --</option>
+                            <option value="">-- Select a Province --</option>
                             <option value="central">Central</option>
                             <option value="copperbelt">Copperbelt</option>
                             <option value="eastern">Eastern</option>

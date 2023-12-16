@@ -1,0 +1,151 @@
+{
+  "kind": "collectionType",
+  "collectionName": "driver_profiles",
+  "info": {
+    "singularName": "driver-profile",
+    "pluralName": "driver-profiles",
+    "displayName": "DriverProfile",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "userid": {
+      "type": "biginteger"
+    },
+    "premium_user": {
+      "type": "boolean",
+      "default": false
+    },
+    "certified": {
+      "type": "boolean",
+      "default": false
+    },
+    "licensed": {
+      "type": "boolean",
+      "default": false
+    },
+    "driving_license_front": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "drivers_license_back": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "driving_certificate_front": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "driving_certificate_back": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "details": {
+      "type": "component",
+      "repeatable": false,
+      "component": "users.user-profile"
+    },
+    "experience": {
+      "type": "integer"
+    },
+    "available_for_hire": {
+      "type": "boolean",
+      "default": true
+    },
+    "jobs": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::job.job",
+      "mappedBy": "applicants"
+    },
+    "application_points": {
+      "type": "integer",
+      "default": 10
+    },
+    "nrc_front": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "nrc_back": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "job_applications": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::job-application.job-application"
+    },
+    "driver_category": {
+      "type": "enumeration",
+      "enum": [
+        "musician",
+        "dancer",
+        "actor",
+        "journalist",
+        "editor",
+        "driver",
+        "it-software-developer",
+        "it-specialist",
+        "it-system-administrator",
+        "agricultural-laborer",
+        "tour-guide",
+        "hotel-staff",
+        "restaurant-worker",
+        "farmer",
+        "mechanic",
+        "carpenter",
+        "blacksmith",
+        "artisan",
+        "doctor",
+        "nurse",
+        "pharmacist",
+        "teacher",
+        "entrepreneur",
+        "accountant",
+        "firefighter",
+        "broadcaster",
+        "construction-worker",
+        "shopkeeper",
+        "engineer",
+        "architect",
+        "miner",
+        "environmental-scientist",
+        "factory-worker",
+        "lawyer",
+        "salesperson",
+        "other"
+      ]
+    }
+  }
+}

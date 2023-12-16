@@ -10,20 +10,35 @@ export default class CarOwnersCount extends React.Component {
       };
     }
     async componentDidMount(){
-         let count = await fetch(this.props.api_url+'/car-owner-profiles',{
-            headers: {
-              'Content-Type': 'application/json'
-            }
-           }).then(response => response.json())
-            .then(data => data)
-            .catch(error => console.error(error))
-            if(count === undefined) return
-            if('meta' in count){
-                this.setState({
-                    carOwnersCount: count.meta.pagination.total
-                })
-            }
-    }
+        let driverBaseCount  = await fetch('https://api.driverbase.app/api/car-owner-profiles',{
+           headers: {
+             'Content-Type': 'application/json'
+           }
+          }).then(response => response.json())
+           .then(data => data)
+           .catch(error => console.error(error))
+           if(driverBaseCount === undefined) driverBaseCount = 0    
+           if('meta' in driverBaseCount){
+               driverBaseCount = driverBaseCount.meta.pagination.total
+           }
+           else{
+               driverBaseCount = 0 
+           } // getting car owners count from driverbase
+
+        let count = await fetch(this.props.api_url+'/car-owner-profiles',{
+           headers: {
+             'Content-Type': 'application/json'
+           }
+          }).then(response => response.json())
+           .then(data => data)
+           .catch(error => console.error(error))
+           if(count === undefined) return    
+           if('meta' in count){
+               this.setState({
+                    carOwnersCount: driverBaseCount + count.meta.pagination.total
+               }) // total users from the count
+           }
+   }
 
     render(){
         return(
@@ -40,7 +55,7 @@ export default class CarOwnersCount extends React.Component {
                         </svg>
                     </span>
                     <div className="media-body text-end">
-                        <p className="fs-18 text-white mb-2">Car Owners Registered</p>
+                        <p className="fs-18 text-white mb-2">Job Owners Registered</p>
                         <span className="fs-48 text-white font-w600">{this.state.carOwnersCount? this.state.carOwnersCount : <ContentLoader />}</span>
                     </div>
                     </div>

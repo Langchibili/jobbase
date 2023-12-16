@@ -88,7 +88,7 @@ export default class ChangePassword extends Component {
     return (
         <div className="auth-form">
                 <div className="text-center mb-3">
-                <Link href="/"><img style={{width:60,height:60}} src="/DriverBaseTransparentBackground.png" alt /></Link>
+                <Link href="/"><img style={{width:60,height:60}} src="/JobBaseTransparentBackground.png" alt /></Link>
                 </div>
                 <h4 className="text-center mb-4 text-white">Log Into Your Account</h4>
                 <form>

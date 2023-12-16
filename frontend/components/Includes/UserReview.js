@@ -15,11 +15,11 @@ class UserReview extends Component {
     
     let profileDetails
     if(this.props.userProfile.type === 'driver') {
-        if(this.props.userProfile.driverProfile === null) return <div><p>Driver Still Buiding Profile, Check Again Soon</p></div>
+        if(this.props.userProfile.driverProfile === null) return <div><p>Professional Still Buiding Profile, Check Again Soon</p></div>
         profileDetails = this.props.userProfile.driverProfile.details
     }
     if(this.props.userProfile.type === 'car-owner') {
-        if(this.props.userProfile.carOwnerProfile === null) return <div><p>Car Owner Still Buiding Profile, Check Again Soon</p></div>
+        if(this.props.userProfile.carOwnerProfile === null) return <div><p>Job Owner Still Buiding Profile, Check Again Soon</p></div>
         profileDetails = this.props.userProfile.carOwnerProfile.details
     }
     

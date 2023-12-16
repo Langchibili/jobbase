@@ -115,7 +115,7 @@ class List extends Component {
      <div className="card">
       <div className="card-header  border-0 pb-0">
         <h4 className="card-title">{this.props.listTitle}</h4>
-        {this.props.listTitle === "Recommended Drivers" && !this.state.requesting? <img src='/recomendedimage.png' style={{width:50,height:50}} alt="badge"/> : ''}
+        {this.props.listTitle === "Recommended Professionals" && !this.state.requesting? <img src='/recomendedimage.png' style={{width:50,height:50}} alt="badge"/> : ''}
       </div>
       <div className="card-body"> 
           {this.state.requesting? <ContentLoader/> : this.renderList()}

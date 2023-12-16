@@ -85,12 +85,12 @@ async componentDidMount(){
     return
    }
    
-   if(user.type === 'car-owner'){ // car owner profile percent updates
+   if(user.type === 'car-owner'){ // job owner profile percent updates
       if(user.carOwnerProfile === null){
         this.setState({
             profile_completion_percentage: '3%',
             color:'danger', // red
-            message:'This profile is too empty, please add some data, as it stands, you cannot create a job or get listed as a car owner'
+            message:'This profile is too empty, please add some data, as it stands, you cannot create a job or get listed as a job owner'
         })
         if(parseInt(user.profile_completion_percentage) ===  3) return // don't make update then
         this.updateUser(3)
@@ -113,7 +113,7 @@ async componentDidMount(){
         this.setState({
             profile_completion_percentage:'7%',
             color: 'danger',
-            message:'!Please add a firstname and lastname to be listed as a driver'
+            message:'!Please add a firstname and lastname to be listed as a professional'
         })
         if(parseInt(user.profile_completion_percentage) ===  7) return // don't make update then
         this.updateUser(7)
@@ -187,7 +187,7 @@ async componentDidMount(){
         this.setState({
             profile_completion_percentage:'7%',
             color: 'danger',
-            message:'!Please add a firstname and lastname to be listed as a driver'
+            message:'!Please add a firstname and lastname to be listed as a professional'
         })
         if(parseInt(user.profile_completion_percentage) ===  7) return // don't make update then
         this.updateUser(7)
@@ -228,28 +228,29 @@ async componentDidMount(){
         this.setState({
             profile_completion_percentage:'30%',
             color: 'info',
-            message:'Please add an Address, and Nrc Front and Back photos to stand out on profile and job listing and potentially get verified by DriverBase'
+            message:'Please add an Address, and Nrc Front and Back photos to stand out on profile and job listing and potentially get verified by JobBase'
         })
         if(parseInt(user.profile_completion_percentage) ===  30) return // don't make update then
         this.updateUser(30)
         return
       }
-      if(driverProfile.drivers_license_front === null || driverProfile.drivers_license_back === null || driverProfile.driving_certificate_front === null || driverProfile.driving_certificate_back === null){
+      
+
+      if(driverProfile.experience === null /*|| driverProfile.categories.length < 0*/){
         this.setState({
             profile_completion_percentage:'65%',
             color: 'info',
-            message:'Please add a driving license front and driving license back to stand out on profile and job listings'
+            message:'You Are Almost Done! Please your experience working as a professional to stand out on job application listings'
         })
         if(parseInt(user.profile_completion_percentage) ===  65) return // don't make update then
         this.updateUser(65)
         return
       }
-
-      if(driverProfile.experience === null /*|| driverProfile.categories.length < 0*/){
+      if(driverProfile.drivers_license_front === null || driverProfile.drivers_license_back === null || driverProfile.driving_certificate_front === null || driverProfile.driving_certificate_back === null){
         this.setState({
             profile_completion_percentage:'70%',
             color: 'info',
-            message:'You Are Almost Done! Please add a profile photo and cover photo to stand out on profile and job listings'
+            message: "Please add Certificates You Have Like, Secondary Education Certificate to stand out on profile and job listings. If you have no certificates it's ok"
         })
         if(parseInt(user.profile_completion_percentage) ===  70) return // don't make update then
         this.updateUser(70)

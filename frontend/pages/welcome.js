@@ -24,7 +24,7 @@ export default function Welcome() {
   }, []);
 
     return (
-      data.loading? <><PageLoader /><ContentLoader text="DRIVERBASE"/></> : <>
+      data.loading? <><PageLoader /><ContentLoader text="JOBBASE"/></> : <>
       <UpAndBackButton/>
       <InitialAccountSetUp loggedInUserProfile={data.loggedInUserProfile}/>
       </>

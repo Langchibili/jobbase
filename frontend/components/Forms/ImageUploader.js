@@ -23,7 +23,7 @@ export default class ImageUploader extends React.Component{
         this.strapi = new Strapi(this.props.api_url);
      }
      componentDidMount(){
-       const uploads_url = this.props.api_url.replace('driverbase.app/api','driverbase.app')
+       const uploads_url = this.props.api_url.replace('jobbase.app/api','jobbase.app')
        const image = this.props.image
 
        if(image === null || image === undefined) return
@@ -60,7 +60,7 @@ export default class ImageUploader extends React.Component{
         if(this.props.fieldName === 'profile_thumbnail_image' || this.props.fieldName === 'profile_cover_image'){
            this.props.updateProfileImages(response[0],this.props.fieldName,this.props.userProfile,this.props.updateRequest)
         }
-        const uploads_url = this.props.api_url.replace('driverbase.app/api','driverbase.app')
+        const uploads_url = this.props.api_url.replace('Jobbase.app/api','Jobbase.app')
         this.setState({
           uploading: false,
           imageSrc: uploads_url+response[0].formats.thumbnail.url,

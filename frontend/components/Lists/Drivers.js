@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { imageUrlFormat } from '@/Constants';
+import { api_url, backEndUrl, imageUrlFormat } from '@/Constants';
 import Link from 'next/link';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -8,13 +8,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import RatingDisplay from '../Includes/RatingDisplay';
+import { Chip } from '@mui/material';
 
 export default class Drivers extends Component {
   constructor(props) {
     super(props);
     this.state = {
-       openPhoneNumberDialog: false
-    };
+       openPhoneNumberDialog: false,
+       currentDriverOffer: null
+    }
   }
 
   dateCreated = (dateInput)=>{
@@ -23,22 +25,34 @@ export default class Drivers extends Component {
     date = new Date(date)
     return date.toDateString()
   }
+
+  showDriverOffer = (driverProfileId)=>{
+    if(this.props.loggedInUserProfile.type === "driver") return <></> // only job owners can see drivers offers on jobs
+    if(this.props.listingType === "applicants"){
+      
+      let offer = this.props.job.job_applications.data.filter((job_application)=>{
+        return parseInt(job_application.attributes.driverProfileId) === parseInt(driverProfileId)
+      })
+      if(offer.length === 1){
+          return <OfferDisplay offer={offer[0].attributes}/>
+      }
+      else{
+        return <></>
+      }
+    }
+    else{
+      return <></>
+    }
+  }
+
   
   checkEligibility = (driver)=>{
     let eligibleForListing = false
-    let driverProfile
-    if(this.props.listAll) { // if on list all page
-        driverProfile = driver.attributes // the profile
-        if(driverProfile.details === null || driverProfile.details === undefined) { 
-          return false // you aren't eligible
-        }
-        if(driverProfile.details.firstname === null || driverProfile.details.lastname === null){
-          eligibleForListing = false
-        }
+    if(this.props.listAll) { // if on list all  page - coz we already filter in the itemslistall page
         eligibleForListing = true
     }
     else{ // if a shorter list
-        driverProfile = driver.driverProfile // the profile
+       // driverProfile = driver.driverProfile // the profile
         if(driver.profile_completion_percentage < 9){
           eligibleForListing = false
         }
@@ -88,10 +102,21 @@ export default class Drivers extends Component {
     return <Link style={{color:"cadetblue"}} className="contact-icon me-3" href={'/drivers/'+driverCategory} onClick={this.props.handlePageChange}><i className="fa fa-truck" aria-hidden="true" /></Link>
   }
 
+  renderChatLink = (userId)=>{
+    return <Link style={{color:"darkcyan"}} className="contact-icon me-3" href={'/chat?uid='+userId} onClick={this.props.handlePageChange}><i className="fa fa-comment" aria-hidden="true" /></Link>
+  }
+
+  enlistDriverButtons = (userId)=>{
+    return (<div>
+            <Button disabled={this.props.submitting} onClick={()=>{ this.props.enlistDriver(userId)}}>Enlist Professional</Button>
+            <Button disabled={this.props.submitting} onClick={()=>{ this.props.enlistDriverAsRecommended(userId)}} color='secondary'>Enlist Professional As Recommended</Button>
+          </div>)
+  }
+
   renderDriversList = ()=>{
     const listFormat = this.props.listFormat;
     const drivers = this.props.drivers
-    if(drivers.length === 0) return <p>No Drivers Registered Yet</p>
+    if(drivers.length === 0) return <p>No Professionals Registered Yet</p>
     if(listFormat === 'grid'){
         return <></>;
     }
@@ -112,10 +137,14 @@ export default class Drivers extends Component {
             eligibleForListing = this.checkEligibility(driver) // check driver listing eligibility
             if(eligibleForListing){ // check if user has a profile 
                 // FULLNAME  
-                fullname = driverProfile.details.firstname? driverProfile.details.firstname +' '+ driverProfile.details.lastname || '' : ''
+                if(driverProfile.details.firstname === null || driverProfile.details.lastname === null){
+                    fullname = "UnNamed Professional"
+                }
+                else{
+                    fullname = driverProfile.details.firstname? driverProfile.details.firstname +' '+ driverProfile.details.lastname || '' : ''
+                }
                 // THUMBNAIL
                 if(driverProfile.details.profile_thumbnail_image !== null){ // check if thumbnail exists
-                    const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
                     if(this.props.listAll) {
                         if(driverProfile.details.profile_thumbnail_image.data === null) { 
                           thumbnail = '/default-profile.png' 
@@ -169,12 +198,15 @@ export default class Drivers extends Component {
                         {/* <RatingDisplay rating={rating}/> */}
                         </div>
                         <div className="d-flex">
-                          {this.renderDriverCategory(driverProfile.driver_category)}
+                          {/* {this.renderDriverCategory(driverProfile.driver_category)} */}
+                          {this.renderChatLink(userId)}
                           {this.renderDriverNumber(profile_url,this.handleDialogOpen)}
                         </div>
                       </div>
                     </li>
                   </ul>
+                  {this.props.actionTotake === "activate"? <>{this.enlistDriverButtons(driverProfile.id)} <div>Professional Profile Id: <strong>{driverProfile.id}</strong></div><div>Professional Usernname: <strong>{driver.username}</strong></div></>: ""}
+                  {driver.driverProfile !== undefined && driver.driverProfile !== null? this.showDriverOffer(driver.driverProfile.id) : <></>}
                   </div>
               </div>
             )
@@ -198,13 +230,13 @@ export default class Drivers extends Component {
         aria-labelledby="responsive-dialog-title"
       >
         <DialogTitle id="responsive-dialog-title">
-          {"!Sorry. Only Car Owners Can View Drivers' Contact Details"}
+          {"!Sorry. Only Job Owners Can View Professionals' Contact Details"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Phone numbers for drivers are only accessible to registered car owners, 
-            in order to view this driver's phone number, 
-            create an account as a car owner or log into an already existing car owner account
+            Phone numbers for professionals are only accessible to registered job owners, 
+            in order to view this professional's phone number, 
+            create an account as a job owner or log into an already existing job owner account
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -222,4 +254,36 @@ export default class Drivers extends Component {
     </div>
   );
 }
-''
+
+class OfferDisplay extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = {
+        showMore: false,
+        showMoreText: "View More"
+    }
+  }
+  handleShowCoverLetter = ()=>{
+       const showMore = this.state.showMore
+       if(showMore){
+          this.setState({
+            showMore: false,
+            showMoreText: "View More"
+          })
+       }
+       else{
+        this.setState({
+          showMore: true,
+          showMoreText: "Hide"
+        })
+       }
+  }
+  render(){
+    return (<>
+      <small style={{display:"inline-block",marginRight:"4px"}}>this driver has offered to be paid: <strong style={{color:'forestgreen'}}>{this.props.offer.payment_offer}</strong></small>
+      {this.props.offer.cover_letter.length > 0? <>
+      <Chip label={this.state.showMoreText} variant="outlined" onClick={this.handleShowCoverLetter} />
+      {this.state.showMore? <div>{this.props.offer.cover_letter}</div> : <></>} </> : <></>}
+      </>)
+  }
+}

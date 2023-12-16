@@ -16,7 +16,7 @@ import { IconButton, Typography } from '@mui/material';
 import { Cancel, CancelOutlined, Check, CheckBoxRounded, CheckOutlined, Close, Recommend, RecommendRounded } from '@mui/icons-material';
 import Chip from '@mui/material/Chip';
 import Badge from '@mui/material/Badge';
-import { imageUrlFormat } from '@/Constants';
+import { backEndUrl, imageUrlFormat } from '@/Constants';
 import { useRouter } from 'next/router';
 
 
@@ -41,9 +41,9 @@ export default class UserProfile extends Component {
   }
 
   showDriverNumber = (mobileNumber)=>{
-    if(this.props.loggedInUserProfile === "logged-out") return 'Only Visible To Car Owners'
+    if(this.props.loggedInUserProfile === "logged-out") return 'Only Visible To Job Owners'
     if(this.props.loggedInUserProfile.type === "driver"){
-        return 'Only Visible To Car Owners'
+        return 'Only Visible To Job Owners'
     }
     return <Chip label="Click To View Number" id="chip-phone_number" onClick={this.handleHiddenDetailsDialogOpen} />
   }
@@ -99,7 +99,7 @@ export default class UserProfile extends Component {
           openHiddenDialog: true,
           detailName: detailName,
           hiddenDetailsDialogTitle: 'To see hidden details it will cost you some points',
-          hiddenDetailsDialogMessage: "It will cost you 50 points to view this driver's number, and you currently have "+userPoints+" points"
+          hiddenDetailsDialogMessage: "It will cost you 50 points to view this professional's number, and you currently have "+userPoints+" points"
        })
       }
       else{
@@ -107,7 +107,7 @@ export default class UserProfile extends Component {
           openHiddenDialog: true,
           detailName: detailName,
           hiddenDetailsDialogTitle: 'To see hidden details it will cost you some points',
-          hiddenDetailsDialogMessage: "It will cost you 20 points to view this driver's number, and you currently have "+userPoints+" points"
+          hiddenDetailsDialogMessage: "It will cost you 20 points to view this professional's number, and you currently have "+userPoints+" points"
        })
       }
     }
@@ -142,7 +142,7 @@ export default class UserProfile extends Component {
           openHiddenDialog: true,
           detailName: detailName,
           hiddenDetailsDialogTitle: 'To see hidden details it will cost you some points',
-          hiddenDetailsDialogMessage: "It will cost you 50 points to view this driver's number, and you currently have "+userPoints+" points"
+          hiddenDetailsDialogMessage: "It will cost you 50 points to view this professional's number, and you currently have "+userPoints+" points"
        })
       }
       else{
@@ -150,7 +150,7 @@ export default class UserProfile extends Component {
           openHiddenDialog: true,
           detailName: detailName,
           hiddenDetailsDialogTitle: 'To see hidden details it will cost you some points',
-          hiddenDetailsDialogMessage: "It will cost you 20 points to view this driver's number, and you currently have "+userPoints+" points"
+          hiddenDetailsDialogMessage: "It will cost you 20 points to view this professional's number, and you currently have "+userPoints+" points"
        })
       }
     }
@@ -190,9 +190,9 @@ export default class UserProfile extends Component {
   }
 
   showEmail = (email)=>{
-    if(this.props.loggedInUserProfile === 'logged-out') return 'Only Visible To Car Owners'
+    if(this.props.loggedInUserProfile === 'logged-out') return 'Only Visible To Job Owners'
     if(this.props.loggedInUserProfile.type === "driver" && this.props.userProfile.type === "driver"){
-        return 'Only Visible To Car Owners'
+        return 'Only Visible To Job Owners'
     }
     return email
    }
@@ -204,7 +204,6 @@ export default class UserProfile extends Component {
       else{
         return value
       }
-      
    }
    
    renderDriverCredentials = ()=>{
@@ -216,7 +215,8 @@ export default class UserProfile extends Component {
         }
         const driverProfile = this.props.userProfile.driverProfile
         if(driverProfile === undefined || driverProfile === null){
-              <><Badge color="error" badgeContent={<Close/>} sx={badgeStyles}>
+              <>
+              <Badge color="error" badgeContent={<Close/>} sx={badgeStyles}>
               <Chip label="Licence" />
               </Badge>
               <Badge color="error" badgeContent={<Close/>} sx={badgeStyles}>
@@ -267,7 +267,7 @@ export default class UserProfile extends Component {
           }
 
           return (
-            <><p style={{color:'darkcyan'}}>Details Provided By Driver </p>
+            <><p style={{color:'darkcyan'}}>Details Provided By Professional </p>
             <Badge color={LicenceAddedColor} badgeContent={LicenceAddedIcon()} sx={badgeStyles}>
                 <Chip label="Licence" />
            </Badge>
@@ -286,7 +286,7 @@ export default class UserProfile extends Component {
            <></>
            {driverProfile.premium_user?  recommendationText() : <></>}
            {driverProfile.details.verified? verificationText() : <></>}
-           <Alert severity='info' sx={{marginTop:2}}>Please note that all these details are hidden, in order to get these details you have to click on the <strong>phone icon</strong> or the "<strong>Click To View Number</strong>" button. This is because these details can only be given to you by the driver themself, so you have to call them in order to get the details</Alert>
+           <Alert severity='info' sx={{marginTop:2}}>Please note that all these details are hidden, in order to get these details you have to click on the <strong>phone icon</strong> or the "<strong>Click To View Number</strong>" button. This is because these details can only be given to you by the professional themself, so you have to call them in order to get the details</Alert>
            </>)
         }
       }
@@ -350,10 +350,10 @@ export default class UserProfile extends Component {
     // profile images stuff
     let cover_photo,profileCoverSrc 
     if(profileDetails.profile_cover_image !== null){
-        const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
+        
         const coverPhotoUrl = imageUrlFormat(profileDetails.profile_cover_image,'large')
         cover_photo = backEndUrl+coverPhotoUrl
-        profileCoverSrc = this.props.api_url.replace('driverbase.app/api','driverbase.app') + profileDetails.profile_cover_image.url
+        profileCoverSrc = backEndUrl + profileDetails.profile_cover_image.url
     }
     else{
         cover_photo = profileCoverSrc = '/no-cover-photo.jpg' 
@@ -370,10 +370,9 @@ export default class UserProfile extends Component {
     let profile_photo,profilePhotoSrc 
 
     if(profileDetails.profile_thumbnail_image !== null){
-        const backEndUrl = this.props.api_url.replace('driverbase.app/api','driverbase.app')
         const profilePhotoUrl = imageUrlFormat(profileDetails.profile_thumbnail_image,'thumbnail')
         profile_photo =  backEndUrl+profilePhotoUrl  
-        profilePhotoSrc = this.props.api_url.replace('driverbase.app/api','driverbase.app') + profileDetails.profile_thumbnail_image.url
+        profilePhotoSrc = backEndUrl + profileDetails.profile_thumbnail_image.url
     }
     else{
         profile_photo = profilePhotoSrc = '/default-profile.png' 
@@ -571,13 +570,13 @@ function PhoneNumberDialog(props) {
           aria-labelledby="responsive-dialog-title"
         >
           <DialogTitle id="responsive-dialog-title">
-            {"!Sorry. Only Car Owners Can View Drivers' Contact Details"}
+            {"!Sorry. Only Job Owners Can View Professionals' Contact Details"}
           </DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Contact Details Like Phone numbers ad Emails for drivers are only accessible to registered car owners, 
-              in order to view this driver's phone number, 
-              create an account as a car owner or log into an already existing car owner account
+              Contact Details Like Phone numbers ad Emails for professionals are only accessible to registered job owners, 
+              in order to view this user's phone number, 
+              create an account as a job owner or log into an already existing job owner account
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -635,11 +634,11 @@ function ImageViewModal(props) {
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        maxWidth: '90%',
+        maxWidth: '95%',
         bgcolor: 'background.paper',
         border: '2px solid #000',
         boxShadow: 24,
-        p: 4,
+        p: 3,
       };
   return (
     <div onClick={props.handleImageModalClose}>
@@ -649,7 +648,7 @@ function ImageViewModal(props) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={ModalStyle}>
-          {/* {props.showCover? <img src={props.profileCoverSrc}/>: <img src={props.profilePhotoSrc}/>} */}{/* This code allows full view of cover photos, to be released later as an update */} 
+          {/*props.showCover? <img src={props.profileCoverSrc}/>: <img src={props.profilePhotoSrc}/>*/} {/* This code allows full view of cover photos, to be released later as an update */} 
           <img src={props.profilePhotoSrc} width='100%'/>
           <IconButton onClick={props.handleImageModalClose} aria-label="cancel">
             <Cancel />

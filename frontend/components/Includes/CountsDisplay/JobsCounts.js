@@ -9,25 +9,40 @@ export default class JobsCounts extends React.Component {
           jobsCount: NaN
       };
     }
+    
     async componentDidMount(){
-         let count = await fetch(this.props.api_url+'/jobs',{
-            headers: {
-              'Content-Type': 'application/json'
-            }
-           }).then(response => response.json())
-            .then(data => data)
-            .catch(error => console.error(error))
-            if(count === undefined) return
-            if('meta' in count){
-                this.setState({
-                    jobsCount: count.meta.pagination.total
-                })
-            }
-    }
+        let driverBaseCount  = await fetch('https://api.driverbase.app/api/jobs',{
+           headers: {
+             'Content-Type': 'application/json'
+           }
+          }).then(response => response.json())
+           .then(data => data)
+           .catch(error => console.error(error))
+           if(driverBaseCount === undefined) driverBaseCount = 0    
+           if('meta' in driverBaseCount){
+               driverBaseCount = driverBaseCount.meta.pagination.total
+           }
+           else{
+               driverBaseCount = 0 
+           } // getting jobs count from driverbase
+
+        let count = await fetch(this.props.api_url+'/jobs',{
+           headers: {
+             'Content-Type': 'application/json'
+           }
+          }).then(response => response.json())
+           .then(data => data)
+           .catch(error => console.error(error))
+           if(count === undefined) return    
+           if('meta' in count){
+               this.setState({
+                  jobsCount: driverBaseCount + count.meta.pagination.total
+               }) // total jobs from the count
+           }
+   }
 
     render(){
         return(
-            
             <div className="col-xl-3 col-xxl-6 col-sm-6">
               <Link href="/jobs?act=show-all" onClick={this.props.handlePageChange}>
                 <div className="card bg-secondary">
