@@ -8,7 +8,7 @@ const { Server } = require("socket.io");
  // /*testserver: */ environment = 'test'
  
  if(environment === 'local'){
-   /*localhost: */  clienturls = ['http://localhost:3000','http://localhost:3001']
+   /*localhost: */  clienturls = ['http://localhost:3001','http://localhost:3000']
  }
  else if(environment === 'live'){
    /*liveserver: */ clienturls = ['https://driverbase.app','http://driverbase.app'] // for production's sake
@@ -37,4 +37,4 @@ io.on("connection", (socket) => {
     
 });
 
-httpServer.listen(3002);
+httpServer.listen(3003);

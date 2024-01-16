@@ -45,7 +45,7 @@ export const fakeStr2 ='klahewi_ad_fgalloanv;;aitalkjfajhsbbluwba==hn3vajd5j=+;'
 
 
 if(environment === 'local'){
-  /*localhost: */  socketurl = 'http://localhost:3002'
+  /*localhost: */  socketurl = 'http://localhost:3003'
 }
 else if(environment === 'live'){
   /*liveserver: */ socketurl = 'https://socket.driverbase.app' // for production's sake
@@ -59,7 +59,7 @@ else{
 
 
 if(environment === 'local'){
-  /*localhost: */  clienturl = 'http://localhost:3000'
+  /*localhost: */  clienturl = 'http://localhost:3001'
 }
 else if(environment === 'live'){
   /*liveserver: */ clienturl = 'https://driverbase.app' // for production's sake
