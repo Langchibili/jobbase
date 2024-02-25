@@ -113,7 +113,7 @@ export default class Jobs extends React.Component {
           if(carOwner.profile_update_percentage <= 5){
             carOwnerProfileNames[jobId] = {
               firstname:'Unknown',
-              lastname:'CarOwner'
+              lastname:'JobOwner'
             }
           }
           carOwnerProfileNames[jobId] = {
@@ -169,12 +169,12 @@ export default class Jobs extends React.Component {
            carOwnerLastName = this.state.carOwnerProfileNames[job.id].lastname
            if(carOwnerFirstName === null || carOwnerLastName === null){
               carOwnerFirstName = 'Unknown'
-              carOwnerLastName = 'CarOwner'
+              carOwnerLastName = 'JobOwner'
            }
       }
       else{
         carOwnerFirstName = 'Unknown'
-        carOwnerLastName = 'CarOwner'
+        carOwnerLastName = 'JobOwner'
       }
       const carOwnerName = carOwnerFirstName + ' ' +carOwnerLastName
       return (
