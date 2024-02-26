@@ -160,6 +160,7 @@ export default class Jobs extends React.Component {
     }; // if job is closed
 
     const jobs = this.props.jobs
+    if(jobs === null) return <p>Jobs Will Show Soon</p>
     if(jobs.length === 0) return <p>Jobs Will Show Soon</p>
     return jobs.map((job)=>{
       let carOwnerFirstName

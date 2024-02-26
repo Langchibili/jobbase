@@ -20,13 +20,13 @@ export const fakeStr2 ='klahewi_ad_fgalloanv;;aitalkjfajhsbbluwba==hn3vajd5j=+;'
    /*localhost: */  apiurl = 'http://localhost:1338/api'
  }
  else if(environment === 'live'){
-   /*liveserver: */ apiurl = 'https://api.driverbase.app/api' // for production's sake
+   /*liveserver: */ apiurl = 'https://api.jobbase.app/api' // for production's sake
  }
  else if(environment === 'test'){
-  /*testserver: */  apiurl = 'https://testapi.driverbase.app/api' // the api to be used when deployed to the test site
+  /*testserver: */  apiurl = 'https://testapi.jobbase.app/api' // the api to be used when deployed to the test site
  }
  else{
-    /*liveserver: */ apiurl = 'https://api.driverbase.app/api' // for production's sake
+    /*liveserver: */ apiurl = 'https://api.jobbase.app/api' // for production's sake
  }
 
  // for removing the api part when handling /uploads and the like
@@ -34,13 +34,13 @@ export const fakeStr2 ='klahewi_ad_fgalloanv;;aitalkjfajhsbbluwba==hn3vajd5j=+;'
   /*localhost: */  backendUrl = apiurl.replace('http://localhost:1338/api','http://localhost:1338')
  }
  else if(environment === 'live'){
-  /*liveserver: */ backendUrl =  apiurl.replace('driverbase.app/api','driverbase.app') // for production's sake
+  /*liveserver: */ backendUrl =  apiurl.replace('jobbase.app/api','jobbase.app') // for production's sake
  }
  else if(environment === 'test'){
-  /*testserver: */ backendUrl =  apiurl.replace('testapi.driverbase.app/api','testapi.driverbase.app') // the api to be used when deployed to the test site
+  /*testserver: */ backendUrl =  apiurl.replace('testapi.jobbase.app/api','testapi.jobbase.app') // the api to be used when deployed to the test site
  }
  else{
-  /*liveserver: */ backendUrl =  apiurl.replace('driverbase.app/api','driverbase.app') // for production's sake
+  /*liveserver: */ backendUrl =  apiurl.replace('jobbase.app/api','jobbase.app') // for production's sake
  }
 
 
@@ -48,13 +48,13 @@ if(environment === 'local'){
   /*localhost: */  socketurl = 'http://localhost:3003'
 }
 else if(environment === 'live'){
-  /*liveserver: */ socketurl = 'https://socket.driverbase.app' // for production's sake
+  /*liveserver: */ socketurl = 'https://socket.jobbase.app' // for production's sake
 }
 else if(environment === 'test'){
- /*testserver: */  socketurl = 'https://testsocket.driverbase.app' // the api to be used when deployed to the test site
+ /*testserver: */  socketurl = 'https://testsocket.jobbase.app' // the api to be used when deployed to the test site
 }
 else{
-   /*liveserver: */ socketurl = 'https://socket.driverbase.app' // for production's sake
+   /*liveserver: */ socketurl = 'https://socket.jobbase.app' // for production's sake
 }
 
 
@@ -62,13 +62,13 @@ if(environment === 'local'){
   /*localhost: */  clienturl = 'http://localhost:3001'
 }
 else if(environment === 'live'){
-  /*liveserver: */ clienturl = 'https://driverbase.app' // for production's sake
+  /*liveserver: */ clienturl = 'https://jobbase.app' // for production's sake
 }
 else if(environment === 'test'){
- /*testserver: */  clienturl = 'https://test.driverbase.app' // the api to be used when deployed to the test site
+ /*testserver: */  clienturl = 'https://test.jobbase.app' // the api to be used when deployed to the test site
 }
 else{
-   /*liveserver: */ clienturl = 'https://driverbase.app' // for production's sake
+   /*liveserver: */ clienturl = 'https://jobbase.app' // for production's sake
 }
 
 
@@ -298,7 +298,7 @@ export async function getLoggedInUserData(populateExtension={carOwnerProfile: ''
     socket.emit(eventType, data)
   } 
 
-export async function sendNotification(title,body,target,publish_status="publish",type="single",payload="",topic="newjob",image="https://jobbase.app/DriverBaseTransparentBackground.png"){
+export async function sendNotification(title,body,target,publish_status="publish",type="single",payload="",topic="newjob",image="https://jobbase.app/jobbaseTransparentBackground.png"){
   const targetType = type === "single"? "tokens" : "topics"
   let targetDevice,uid,notificationObject 
   if(type === "single"){ 
